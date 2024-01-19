@@ -2,14 +2,12 @@ import { StatusBar } from 'expo-status-bar'
 import { StyleSheet, Text, View } from 'react-native'
 import { AntDesign } from '@expo/vector-icons'
 import { primaryColor } from './components/Tab'
+import Login from './screens/Login'
+import Message from './screens/Message'
 
 export default function App() {
     return (
-        <View style={styles.container}>
-            <Text>Open up App.js to start working on your app!</Text>\
-            <AntDesign name="stepforward" size={24} color="black" />
-            <StatusBar style="auto" />
-        </View>
+        <Message/>
     )
 }
 

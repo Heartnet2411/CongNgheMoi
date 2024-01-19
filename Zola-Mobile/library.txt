@@ -1,0 +1,2 @@
+npm i @expo-google-fonts/k2d
+npm i @expo-google-fonts/inter
