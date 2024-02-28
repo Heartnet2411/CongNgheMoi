@@ -1,4 +1,5 @@
-const Account = require('../models/Account')
+import Account from '../models/Account.js'
+import { HTTP_STATUS_BAD_REQUEST } from '../../util/erorCode.js'
 
 class AccountController {
     // GET /login
@@ -9,7 +10,7 @@ class AccountController {
         if (account) {
             res.json(account)
         } else {
-            res.json('Account not found')
+            res.status(HTTP_STATUS_BAD_REQUEST).json('Account not found!!!')
         }
     }
 
@@ -27,6 +28,17 @@ class AccountController {
                 res.json('Register failure!!!')
             })
     }
+
+    async findByID(req, res) {
+        const id = req.query.id
+
+        const account = await Account.findOne({ _id: id })
+        if (account) {
+            res.json(account)
+        } else {
+            res.status(HTTP_STATUS_BAD_REQUEST).json('Account not found!!!')
+        }
+    }
 }
 
-module.exports = new AccountController()
+export default new AccountController()

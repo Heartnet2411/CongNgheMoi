@@ -1,10 +1,10 @@
-const express = require('express')
+import express from 'express'
 const router = express.Router()
 
-const accountController = require('../app/controllers/AccountController')
+import accountController from '../app/controllers/AccountController.js'
 
 router.get('/login', accountController.login)
-router.post('/register', accountController.register)
-// router.get('/logout', accountController.logout)
+router.post('/add-account', accountController.register)
+router.get('/find', accountController.findByID)
 
-module.exports = router
+export default router
