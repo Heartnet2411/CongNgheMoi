@@ -2,9 +2,9 @@
   display: flex;
   flex-direction: column;
   margin: auto;
-  width: 400px;
-  height: 450px;
-  margin-top: 150px;
+  width: 500px;
+  height: 650px;
+  margin-top: 30px;
   padding-bottom: 10px;
   background-color: #f5f5f5;
 }
@@ -14,7 +14,7 @@
   align-items: center;
   gap: 5px;
   width: 100%;
-  margin-top: 10px;
+  margin-top: 5px;
 }
 .text {
   font-size: 35px;
@@ -29,19 +29,49 @@
 .label {
   font-size: 15px;
   margin-left: 25px;
-  margin-top: 15px;
+  margin-top: 10px;
 }
 .form {
   display: flex;
   flex-direction: column;
-  margin-top: 15px;
+  margin-top: 5px;
 }
 .input {
   display: flex;
   align-items: center;
   margin-left: 25px;
-  width: 350px;
-  height: 35px;
+  width: 400px;
+  height: 30px;
+  margin-top: 8px;
+  background: #eaeaea;
+  border-radius: 10px;
+}
+.inputA {
+  display: flex;
+  align-items: center;
+  margin-left: 25px;
+  width: 400px;
+  height: 30px;
+  margin-top: 8px;
+  background: #f5f5f5;
+  border-radius: 10px;
+}
+.inputC {
+  display: flex;
+  align-items: center;
+  margin-left: 25px;
+  width: 400px;
+  height: 30px;
+  margin-top: 8px;
+  background: #f5f5f5;
+  border-radius: 10px;
+}
+.inputB {
+  display: flex;
+  align-items: center;
+
+  width: 250px;
+  height: 30px;
   margin-top: 8px;
   background: #eaeaea;
   border-radius: 10px;
@@ -123,4 +153,18 @@
   cursor: pointer;
   text-align: right;
   margin-right: 25px;
+}
+.select {
+  align-items: center;
+  margin-left: 25px;
+  width: 100px;
+  height: 30px;
+  margin-top: 8px;
+  background: #eaeaea;
+  border-radius: 10px;
+}
+.form-select {
+  display: flex;
+  flex-direction: column;
+  margin-top: 5px;
 }
