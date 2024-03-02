@@ -3,18 +3,18 @@ import './Login.css'
 export const Login = () => {
   const [action, setAction] = React.useState('Sign In')
   return (
-    <div className="container">
+    <div className="container1">
       <div className="header">
         <div className="text">{action}</div>
         <div className="subtext">Sign in to continue to Zola.</div>
       </div>
       <div className="form">
         <div className="label">PhoneNumber</div>
-        <div className="input">
+        <div className="input1">
           <input type="phone" placeholder="Enter PhoneNumber" />
         </div>
         <div className="label">Password</div>
-        <div className="input">
+        <div className="input1">
           <input type="password" placeholder="Enter Password" />
         </div>
         <div className="form-group forgot-password">

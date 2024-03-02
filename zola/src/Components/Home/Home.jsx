@@ -31,8 +31,8 @@ export const Home = ({ userId, alt, size }) => {
     fetchAvatar()
   }, [userId])
   return (
-    <div className="container1">
-      <div className="header1">
+    <div className="container11">
+      <div className="header11">
         <div className="subtext">Zalo - </div>
       </div>
       <div className="main">
