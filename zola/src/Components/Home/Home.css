@@ -9,6 +9,29 @@
   background-color: #d9d9d9;
   border: 0.5px solid #ccc;
 }
+m {
+  margin-top: 18px;
+  margin-left: 5px;
+}
+m:hover {
+  cursor: pointer;
+}
+p:hover {
+  color: #eeeeee;
+  cursor: pointer;
+}
+t {
+  margin-right: 20px;
+  text-align: center;
+}
+v {
+  margin-left: 20px;
+  text-align: center;
+  margin-top: 10px;
+}
+t:hover {
+  cursor: pointer;
+}
 .main {
   display: flex;
   flex-direction: 1;
@@ -18,13 +41,14 @@
   background-color: #f5f5f5;
   border: 0.5px solid #ccc;
 }
-.icon {
+.row {
   display: flex;
   flex-direction: column;
   align-items: center;
   width: 60px;
   height: 100%;
   background-color: #5ab9fe;
+  text-align: center;
 }
 .people {
   width: 320px;
@@ -74,6 +98,11 @@
   height: 80px;
   background-color: #f8f7f7;
   border: 0.5px solid #ccc;
+  display: flex;
+  flex-direction: 1;
+  align-items: center;
+  margin-top: auto;
+  text-align: center;
 }
 .avatar {
   display: inline-block;
@@ -86,6 +115,7 @@
   height: 100%;
   object-fit: cover;
   margin-left: 20px;
+  border-radius: 50%;
 }
 .label {
   font-size: 15px;
@@ -132,6 +162,7 @@
   height: 100%;
   object-fit: cover;
   align-items: center;
+  border-radius: 50%;
 }
 .textinfo {
   color: #050505;
@@ -159,12 +190,14 @@
   display: flex;
   flex-direction: 1;
   margin-top: 20px;
+  text-align: center;
+  cursor: pointer;
 }
 .textin1 {
   width: 200px;
   height: 35px;
   background-color: #f5f5f5;
-  margin-left: 20px;
+  margin-left: 10px;
   margin-top: 13px;
 }
 .avata {
@@ -178,6 +211,7 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
+  border-radius: 50%;
   align-items: center;
 }
 .chat1 {
@@ -190,9 +224,14 @@
   align-items: center;
   margin-top: 595px;
 }
-.input1 {
+.inputchat {
   width: 100%;
-  height: 60px;
+  height: 100%;
+  background-color: #f5f5f5;
   align-items: center;
   margin-top: 30px;
+  border-style: none;
+  border: none;
+  outline: none;
+  margin-left: 10px;
 }

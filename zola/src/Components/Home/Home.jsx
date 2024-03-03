@@ -1,14 +1,16 @@
 import React, { useState, useEffect } from 'react'
 import './Home.css'
-import chat1 from '../Assets/chat.png'
-import people from '../Assets/people.png'
-import cloud from '../Assets/cloud.png'
-import setting from '../Assets/setting.png'
-import find from '../Assets/find.png'
-import add from '../Assets/add.png'
-import adds from '../Assets/adds.png'
-import dinhkem from '../Assets/dinhkem.png'
-import send from '../Assets/send.png'
+import { BsChatDots } from 'react-icons/bs'
+import { IoMdSend } from 'react-icons/io'
+import { PiChatCircleText } from 'react-icons/pi'
+import { CiCloudOn } from 'react-icons/ci'
+import { IoSettingsOutline } from 'react-icons/io5'
+import { CiSearch } from 'react-icons/ci'
+import { MdOutlinePersonAddAlt1 } from 'react-icons/md'
+import { ImAttachment } from 'react-icons/im'
+import { BsFillFilePersonFill } from 'react-icons/bs'
+import { MdPeopleOutline } from 'react-icons/md'
+import demo from '../Assets/demo.png'
 export const Home = ({ userId, alt, size }) => {
   const [avatarUrl, setAvatarUrl] = useState('')
   useEffect(() => {
@@ -36,44 +38,34 @@ export const Home = ({ userId, alt, size }) => {
         <div className="subtext">Zalo - </div>
       </div>
       <div className="main">
-        <div className="icon">
-          <div className={`avata ${size}`}>
-            <img src={avatarUrl} alt={alt} className="avata-img" />
+        <div className="row">
+          <div className="col-sm-auto min-vh-100 bg-light d-flex">
+            {/* <div className={`avata ${size}`}>
+              <img src={avatarUrl} alt={alt} className="avata-img" />
+            </div> */}
+            <div className={`avata ${size}`}>
+              <img src={demo} alt={demo} className="avata-img" />
+            </div>
+            <p>
+              <PiChatCircleText size="2rem" />{' '}
+            </p>
+            <p>
+              <BsFillFilePersonFill size="2rem" />
+            </p>
+            <p>
+              <CiCloudOn size="2rem" />
+            </p>
           </div>
-
-          <img
-            src={chat1}
-            alt=""
-            style={{ width: '30px', height: '30px', marginTop: '30px' }}
-          />
-          <img
-            src={people}
-            alt=""
-            style={{ width: '25px', height: '25px', marginTop: '30px' }}
-          />
-          <img
-            src={cloud}
-            alt=""
-            style={{ width: '32px', height: '32px', marginTop: '30px' }}
-          />
-          <img
-            src={setting}
-            alt=""
-            style={{ width: '35px', height: '35px', marginTop: '400px' }}
-          />
+          <p>
+            <IoSettingsOutline size="2rem" />
+          </p>
         </div>
+
         <div className="people">
           <div className="search">
-            <img
-              src={find}
-              alt=""
-              style={{
-                width: '20px',
-                height: '20px',
-                marginTop: '15px',
-                marginLeft: '5px'
-              }}
-            />
+            <m>
+              <CiSearch size="1.5rem" />
+            </m>
             <input
               type="text"
               placeholder="Search"
@@ -84,26 +76,12 @@ export const Home = ({ userId, alt, size }) => {
                 marginLeft: '10px'
               }}
             />
-            <img
-              src={add}
-              alt=""
-              style={{
-                width: '20px',
-                height: '20px',
-                marginTop: '15px',
-                marginLeft: '15px'
-              }}
-            />
-            <img
-              src={adds}
-              alt=""
-              style={{
-                width: '20px',
-                height: '20px',
-                marginTop: '15px',
-                marginLeft: '15px'
-              }}
-            />
+            <m>
+              <MdOutlinePersonAddAlt1 size="1.5rem" />
+            </m>
+            <m>
+              <MdPeopleOutline size="1.8rem" />
+            </m>
           </div>
 
           <div className="nameP">
@@ -135,32 +113,18 @@ export const Home = ({ userId, alt, size }) => {
             <div className="text1">Nguyen Thuy Tinh</div>
           </div>
           <div className="chat1">
-            <div className="input1">
+            <div className="inputchat">
               <input
                 type="tin nhan"
                 placeholder="Nhap tin nhan                                 "
               />
             </div>
-            <img
-              src={dinhkem}
-              alt=""
-              style={{
-                width: '25px',
-                height: '25px',
-                marginTop: '10px',
-                marginLeft: '20px'
-              }}
-            />
-            <img
-              src={send}
-              alt=""
-              style={{
-                width: '25px',
-                height: '25px',
-                marginTop: '10px',
-                marginLeft: '20px'
-              }}
-            />
+            <t>
+              <ImAttachment size="1.3rem" />
+            </t>
+            <t>
+              <IoMdSend size="1.3rem" />
+            </t>
           </div>
         </div>
         <div className="info">
@@ -173,16 +137,9 @@ export const Home = ({ userId, alt, size }) => {
           </div>
           <div className="textinfo">Nguyen Thuy Tinh</div>
           <div className="textin">
-            <img
-              src={adds}
-              alt=""
-              style={{
-                width: '20px',
-                height: '20px',
-                marginTop: '15px',
-                marginLeft: '15px'
-              }}
-            />
+            <v>
+              <MdPeopleOutline size="1.8rem" />
+            </v>
             <div className="textin1">Tạo nhóm trò chuyện</div>
           </div>
         </div>

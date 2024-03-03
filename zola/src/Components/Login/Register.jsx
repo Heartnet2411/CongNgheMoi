@@ -1,7 +1,10 @@
 import React from 'react'
 import './Register.css'
+import DatePicker from 'react-datepicker'
+import 'react-datepicker/dist/react-datepicker.css'
 export const Register = () => {
   const [action, setAction] = React.useState('Register')
+  const [startDate, setStartDate] = React.useState(null)
   return (
     <div className="register-container">
       <div className="container">
@@ -11,21 +14,28 @@ export const Register = () => {
         </div>
         <div className="form">
           <div className="label">First Name</div>
-          <div className="input">
+          <div className="inputI">
             <input type="firstname" placeholder="Enter First Name" />
           </div>
           <div className="label">Last Name</div>
-          <div className="input">
+          <div className="inputI">
             <input type="lastname" placeholder="Enter Last Name" />
           </div>
           <div className="label">NumberPhone</div>
-          <div className="input">
+          <div className="inputI">
             <input type="numberphone" placeholder="Enter NumberPhone" />
           </div>
           <div className="label">Date of Birth</div>
           <div className="inputA">
             <div className="inputB">
-              <input type="numberphone" placeholder="Enter Date of Birth" />
+              <DatePicker
+                //showIcon
+                placeholderText="Click to select a date"
+                selected={startDate}
+                onChange={(date) => setStartDate(date)}
+                dateFormat="dd/MM/yyyy"
+                showYearDropdown
+              />
             </div>
             <div className="inputC">
               <div>
@@ -40,21 +50,23 @@ export const Register = () => {
           </div>
 
           <div className="label">Password</div>
-          <div className="input">
-            <input type="numberphone" placeholder="Enter Password" />
+          <div className="inputI">
+            <input type="password" placeholder="Enter Password" />
           </div>
           <div className="label">Confirm Password</div>
-          <div className="input">
-            <input type="numberphone" placeholder="Enter Confirm Password" />
+          <div className="inputI">
+            <input type="password" placeholder="Enter Confirm Password" />
           </div>
-          <div className="summit">
-            <div
-              className={action === 'Register' ? 'button blue' : 'button'}
-              onClick={() => {
-                setAction('Register')
-              }}
-            >
-              Register
+          <div className="user-re">
+            <div className="col-xl-12 col-md-10 col-sm-12 col-12">
+              <div
+                className={action === 'Register' ? 'button blue' : 'button'}
+                onClick={() => {
+                  setAction('Register')
+                }}
+              >
+                Register
+              </div>
             </div>
           </div>
           <div className="form-group user-register">
