@@ -9,7 +9,7 @@ export const Login = () => {
         <div className="subtext">Sign in to continue to Zola.</div>
       </div>
       <div className="form">
-        <div className="label">PhoneNumber</div>
+        <div className="labelI">PhoneNumber</div>
         <div className="input1">
           <input type="phone" placeholder="Enter PhoneNumber" />
         </div>

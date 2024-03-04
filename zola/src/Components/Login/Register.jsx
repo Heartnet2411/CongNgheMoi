@@ -8,18 +8,24 @@ export const Register = () => {
   return (
     <div className="register-container">
       <div className="container">
-        <div className="header">
+        <div className="header-re">
           <div className="text">{action}</div>
           <div className="subtext">Get your Zola account now.</div>
         </div>
         <div className="form">
-          <div className="label">First Name</div>
-          <div className="inputI">
-            <input type="firstname" placeholder="Enter First Name" />
-          </div>
-          <div className="label">Last Name</div>
-          <div className="inputI">
-            <input type="lastname" placeholder="Enter Last Name" />
+          <div className="labelA">
+            <div className="inputA">
+              <div className="labelA">First Name</div>
+              <div className="labelAB">Last Name</div>
+            </div>
+            <div className="inputA">
+              <div className="inputIA">
+                <input type="firstname" placeholder="Enter First Name" />
+              </div>
+              <div className="inputIAB">
+                <input type="lastname" placeholder="Enter Last Name" />
+              </div>
+            </div>
           </div>
           <div className="label">NumberPhone</div>
           <div className="inputI">
@@ -50,11 +56,11 @@ export const Register = () => {
           </div>
 
           <div className="label">Password</div>
-          <div className="inputI">
+          <div className="inputIB">
             <input type="password" placeholder="Enter Password" />
           </div>
           <div className="label">Confirm Password</div>
-          <div className="inputI">
+          <div className="inputIB">
             <input type="password" placeholder="Enter Confirm Password" />
           </div>
           <div className="user-re">

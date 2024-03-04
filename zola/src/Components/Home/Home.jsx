@@ -8,8 +8,9 @@ import { IoSettingsOutline } from 'react-icons/io5'
 import { CiSearch } from 'react-icons/ci'
 import { MdOutlinePersonAddAlt1 } from 'react-icons/md'
 import { ImAttachment } from 'react-icons/im'
-import { BsFillFilePersonFill } from 'react-icons/bs'
+import { BsPersonLinesFill } from 'react-icons/bs'
 import { MdPeopleOutline } from 'react-icons/md'
+import { LuInfo } from 'react-icons/lu'
 import demo from '../Assets/demo.png'
 export const Home = ({ userId, alt, size }) => {
   const [avatarUrl, setAvatarUrl] = useState('')
@@ -50,7 +51,7 @@ export const Home = ({ userId, alt, size }) => {
               <PiChatCircleText size="2rem" />{' '}
             </p>
             <p>
-              <BsFillFilePersonFill size="2rem" />
+              <BsPersonLinesFill size="2rem" />
             </p>
             <p>
               <CiCloudOn size="2rem" />
@@ -113,10 +114,11 @@ export const Home = ({ userId, alt, size }) => {
             <div className="text1">Nguyen Thuy Tinh</div>
           </div>
           <div className="chat1">
-            <div className="inputchat">
+            <div className="inputchat-wrap">
               <input
                 type="tin nhan"
-                placeholder="Nhap tin nhan                                 "
+                placeholder="Nhap tin nhan "
+                className="inputChat"
               />
             </div>
             <t>
@@ -136,6 +138,12 @@ export const Home = ({ userId, alt, size }) => {
             <img src={avatarUrl} alt={alt} className="avatar-img1" />
           </div>
           <div className="textinfo">Nguyen Thuy Tinh</div>
+          <div className="textin">
+            <v>
+              <LuInfo size="1.8rem" />
+            </v>
+            <div className="textin1">Thông tin tài khoản</div>
+          </div>
           <div className="textin">
             <v>
               <MdPeopleOutline size="1.8rem" />
