@@ -42,6 +42,43 @@ class UserController {
         const users = await User.find()
         res.json(users)
     }
+
+    // get /findUser
+    async findUserByAccountID(req, res) {
+        const account_id = req.query.account_id
+
+        const user = await User.findOne({ account_id: account_id })
+        if (user) {
+            res.json(user)
+        } else {
+            res.json('User not found!!!')
+        }
+    }
+
+    // put /addFriend
+    async addFriend(req, res) {
+        const account_id = req.body.account_id
+        const friend_id = req.body.friend_id
+
+        const user = await User.findOne({ account_id: account_id })
+        const friend = await User.findOne({ account_id: friend_id })
+
+        if (user && friend) {
+            user.friends.push(friend_id)
+            friend.friends.push(account_id)
+
+            await user
+                .save()
+                .then(() => {
+                    res.json('Add friend successfully!!!')
+                })
+                .catch((err) => {
+                    res.json('Add friend failure!!!')
+                })
+        } else {
+            res.json('Add friend failure!!!')
+        }
+    }
 }
 
 export default new UserController()

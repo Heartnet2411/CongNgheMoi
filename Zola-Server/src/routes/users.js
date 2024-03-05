@@ -7,4 +7,8 @@ router.post('/register', userController.register)
 
 router.get('/findAllUsers', userController.findAllUsers)
 
+router.get('/findUser', userController.findUserByAccountID)
+
+router.put('/addFriend', userController.addFriend)
+
 export default router

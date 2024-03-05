@@ -30,7 +30,7 @@ class AccountController {
     }
 
     async findByID(req, res) {
-        const id = req.query.id
+        const id = req.query.account_id
 
         const account = await Account.findOne({ _id: id })
         if (account) {

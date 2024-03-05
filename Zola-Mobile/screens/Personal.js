@@ -48,7 +48,10 @@ const Login = ({ navigation, route }) => {
                             Đổi thông tin tài khoản
                         </Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.button}>
+                    <TouchableOpacity
+                        style={styles.button}
+                        onPress={() => navigation.navigate('EditPassword')}
+                    >
                         <Entypo name="lock" size={24} color="blue" />
                         <Text style={styles.buttonText}>Đổi mật khẩu</Text>
                     </TouchableOpacity>
