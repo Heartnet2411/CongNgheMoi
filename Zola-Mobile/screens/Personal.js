@@ -52,7 +52,9 @@ const Login = ({ navigation, route }) => {
                         <Entypo name="lock" size={24} color="blue" />
                         <Text style={styles.buttonText}>Đổi mật khẩu</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.button}>
+                    <TouchableOpacity style={styles.button} onPress={()=>{
+                        navigation.navigate('Login');
+                    }}>
                         <Entypo name="log-out" size={24} color="blue" />
                         <Text style={styles.buttonText}>Đăng xuất</Text>
                     </TouchableOpacity>

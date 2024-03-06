@@ -7,10 +7,12 @@ import {
     TouchableOpacity,
     FlatList,
     Dimensions,
+    ScrollView,
 } from 'react-native'
 import React from 'react'
 import { Inter_600SemiBold, useFonts } from '@expo-google-fonts/inter'
 import Tab from '../components/Tab'
+import { EvilIcons,MaterialCommunityIcons,Ionicons} from '@expo/vector-icons';
 
 const Message = ({ navigation, route }) => {
     const listMess = [
@@ -112,25 +114,17 @@ const Message = ({ navigation, route }) => {
             <View>
                 <View style={styles.header}>
                     <TouchableOpacity style={styles.search}>
-                        <Image
-                            source={require('../image/search.png')}
-                            style={styles.iconSearch}
-                        />
+                    <EvilIcons name="search" style={styles.iconSearch} size={30} color="white" />
                         <Text style={styles.txtSearch}>Tìm kiếm</Text>
                     </TouchableOpacity>
                     <TouchableOpacity>
-                        <Image
-                            source={require('../image/qrcode-scan.png')}
-                            style={styles.iconQR}
-                        />
+                    <MaterialCommunityIcons style={styles.iconQR} name="qrcode-scan" size={25} color="white" />
                     </TouchableOpacity>
                     <TouchableOpacity>
-                        <Image
-                            source={require('../image/add.png')}
-                            style={styles.iconAdd}
-                        />
+                    <Ionicons name="add" style={styles.iconAdd} size={30} color="white" />
                     </TouchableOpacity>
                 </View>
+                <ScrollView>
                 <View style={styles.list}>
                     {listMess.map((item) => {
                         return (
@@ -188,7 +182,8 @@ const Message = ({ navigation, route }) => {
                         )
                     })}
                 </View>
-                <Tab />
+                </ScrollView>
+                <Tab/>
             </View>
         </SafeAreaView>
     )
@@ -217,8 +212,6 @@ const styles = StyleSheet.create({
         width: 280,
     },
     iconSearch: {
-        width: 35,
-        height: 35,
         marginLeft: 10,
     },
     txtSearch: {
