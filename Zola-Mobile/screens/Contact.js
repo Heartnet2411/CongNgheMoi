@@ -3,46 +3,50 @@ import {
     StyleSheet,
     Text,
     View,
-    TouchableOpacity,Dimensions,Image,ScrollView
+    TouchableOpacity,
+    Dimensions,
+    Image,
+    ScrollView,
 } from 'react-native'
 import React from 'react'
-import { MaterialIcons, EvilIcons,AntDesign } from '@expo/vector-icons'
+import { MaterialIcons, EvilIcons, AntDesign } from '@expo/vector-icons'
+import Tab from '../components/Tab'
 
 const Contact = () => {
-    const listContact=[{
-        id:1,
-        name:'Nguyễn Văn A',
-        avatar:require('../image/avatar.png')
-    },
-    {
-        id:2,
-        name:'Nguyễn Văn B',
-        avatar:require('../image/avatar.png')
-    },
-    {
-        id:3,
-        name:'Nguyễn Văn C',
-        avatar:require('../image/avatar.png')
-    },
-    {
-        id:4,
-        name:'Nguyễn Văn D',
-        avatar:require('../image/avatar.png')
-    },
-    {
-        id:5,
-        name:'Nguyễn Văn E',
-        avatar:require('../image/avatar.png')
-    },
-    {
-        id:6,
-        name:'Nguyễn Văn F',
-        avatar:require('../image/avatar.png')
-    
-    }]
+    const listContact = [
+        {
+            id: 1,
+            name: 'Nguyễn Văn A',
+            avatar: require('../image/avatar.png'),
+        },
+        {
+            id: 2,
+            name: 'Nguyễn Văn B',
+            avatar: require('../image/avatar.png'),
+        },
+        {
+            id: 3,
+            name: 'Nguyễn Văn C',
+            avatar: require('../image/avatar.png'),
+        },
+        {
+            id: 4,
+            name: 'Nguyễn Văn D',
+            avatar: require('../image/avatar.png'),
+        },
+        {
+            id: 5,
+            name: 'Nguyễn Văn E',
+            avatar: require('../image/avatar.png'),
+        },
+        {
+            id: 6,
+            name: 'Nguyễn Văn F',
+            avatar: require('../image/avatar.png'),
+        },
+    ]
     return (
-        <SafeAreaView>
-            <View>
+        <SafeAreaView style={styles.container}>
                 <View style={styles.header}>
                     <TouchableOpacity style={styles.search}>
                         <EvilIcons
@@ -71,28 +75,37 @@ const Contact = () => {
                     </TouchableOpacity>
                 </View>
                 <ScrollView>
-                <View style={styles.list}>
-                    {listContact.map((item) => {
-                        return (
-                            <View  key={item.id}>
-                                <TouchableOpacity style={styles.contact}>
-                                    <Image
-                                        source={item.avatar}
-                                        style={styles.avatar}
-                                    />
-                                
-                                <Text style={styles.name}>{item.name}</Text>
-                                <TouchableOpacity style={styles.message}>
-                                <AntDesign  name="message1" size={24} color="black" />
-                                </TouchableOpacity>
-                                </TouchableOpacity>
-                            </View>
-                        )
-                    })}
-                </View>
-            </ScrollView>
-                    <View/>
-            </View>
+                    <View style={styles.list}>
+                        {listContact.map((item) => {
+                            return (
+                                <View key={item.id}>
+                                    <TouchableOpacity style={styles.contact}>
+                                        <Image
+                                            source={item.avatar}
+                                            style={styles.avatar}
+                                        />
+
+                                        <Text style={styles.name}>
+                                            {item.name}
+                                        </Text>
+                                        <TouchableOpacity
+                                            style={styles.message}
+                                        >
+                                            <AntDesign
+                                                name="message1"
+                                                size={24}
+                                                color="black"
+                                            />
+                                        </TouchableOpacity>
+                                    </TouchableOpacity>
+                                </View>
+                            )
+                        })}
+                    </View>
+                </ScrollView>
+                
+                <View />
+                <Tab />
         </SafeAreaView>
     )
 }
@@ -101,6 +114,10 @@ export default Contact
 const windowWidth = Dimensions.get('window').width
 const windowHeight = Dimensions.get('window').height
 const styles = StyleSheet.create({
+    container: {
+      flex: 1,
+      backgroundColor: '#fff',
+    },
     header: {
         width: windowWidth,
         height: 60,
@@ -125,19 +142,16 @@ const styles = StyleSheet.create({
     iconAdd: {
         width: 28,
         height: 28,
-
     },
-  add :{
-    marginLeft:60
-  }
-    ,
+    add: {
+        marginLeft: 60,
+    },
     option: {
         flexDirection: 'row',
         justifyContent: 'space-around',
-        alignItems:'center',
-        height:30,
-        backgroundColor:'#ECEBEB'
-
+        alignItems: 'center',
+        height: 30,
+        backgroundColor: '#ECEBEB',
     },
     txtOption: {
         fontFamily: 'Inter_600SemiBold',
@@ -167,6 +181,5 @@ const styles = StyleSheet.create({
     message: {
         position: 'absolute',
         right: 20,
-        
     },
 })

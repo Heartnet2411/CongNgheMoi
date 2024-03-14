@@ -9,25 +9,38 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import Login2 from './screens/Login2'
 import Contact from './screens/Contact'
 import ChatMessage from './screens/Cloud'
+import Cloud from './screens/Cloud'
 
 export default function App() {
     const Stack = createNativeStackNavigator()
-    const LoginStack = createNativeStackNavigator();
+    //const LoginStack = createNativeStackNavigator();
 
     return (
-       /* <NavigationContainer>
+        <NavigationContainer>
             <Stack.Navigator initialRouteName="Login">
                 <Stack.Screen
                     name="Login"
                     component={Login}
                     options={{ headerShown: false }}
                 />
-                <Stack.Screen name='Login2'
-                component={Login2}
-                options={{ headerShown: false }}/>
+                <Stack.Screen
+                    name="Login2"
+                    component={Login2}
+                    options={{ headerShown: false }}
+                />
                 <Stack.Screen
                     name="Message"
                     component={Message}
+                    options={{ headerShown: false }}
+                />
+                <Stack.Screen
+                    name="Contact"
+                    component={Contact}
+                    options={{ headerShown: false }}
+                />
+                <Stack.Screen
+                    name="Cloud"
+                    component={Cloud}
                     options={{ headerShown: false }}
                 />
                 <Stack.Screen
@@ -46,8 +59,7 @@ export default function App() {
                     options={{ title: 'Thay đổi thông tin tài khoản' }}
                 />
             </Stack.Navigator>
-        </NavigationContainer>*/
-        <ChatMessage/>
+        </NavigationContainer>
     )
 }
 

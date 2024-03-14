@@ -10,9 +10,10 @@ import {
 } from 'react-native'
 import React, { useState, useEffect } from 'react'
 import { AntDesign, Entypo, MaterialIcons } from '@expo/vector-icons'
+import Tab from '../components/Tab'
 const Cloud = () => {
     return (
-        <SafeAreaView>
+        <SafeAreaView style={styles.container}>
             <View style={styles.header}>
                 <AntDesign
                     style={styles.iconCloud}
@@ -48,7 +49,9 @@ const Cloud = () => {
                 >
                     <MaterialIcons name="send" size={30} color="black" />
                 </TouchableOpacity>
+                
             </View>
+            <Tab/>
         </SafeAreaView>
     )
 }
@@ -57,6 +60,10 @@ export default Cloud
 const windowWidth = Dimensions.get('window').width
 const windowHeight = Dimensions.get('window').height
 const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        backgroundColor:'white',
+        },
     header: {
         height: 60,
         width: windowWidth,
@@ -76,7 +83,7 @@ const styles = StyleSheet.create({
     },
     body: {
         width: windowWidth,
-        height: 550,
+        height: 500,
         backgroundColor: '#fff',
     },
     chat: {
