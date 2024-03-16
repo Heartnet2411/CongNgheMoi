@@ -83,7 +83,10 @@ const Login = ({ navigation, route }) => {
                         </TouchableOpacity>
                         <TouchableOpacity
                             style={styles.button}
-                            onPress={() => navigation.navigate('EditInfo')}
+                            onPress={() => {
+                                navigation.navigate('EditInfo')
+                                setModalVisible(!modalVisible)
+                            }}
                         >
                             <Text style={styles.buttonText}>Đổi thông tin</Text>
                         </TouchableOpacity>

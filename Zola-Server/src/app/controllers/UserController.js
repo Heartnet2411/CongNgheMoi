@@ -33,7 +33,8 @@ class UserController {
                 res.json('Register successfully!!!')
             })
             .catch((err) => {
-                res.json('Register failure!!!')
+                console.log(err)
+                res.status(200).json(err)
             })
     }
 
@@ -57,26 +58,20 @@ class UserController {
 
     // put /addFriend
     async addFriend(req, res) {
+        const user_id = req.query.user_id
+
         const account_id = req.body.account_id
-        const friend_id = req.body.friend_id
+        const name = req.body.name
+        const avatar = req.body.avatar
 
-        const user = await User.findOne({ account_id: account_id })
-        const friend = await User.findOne({ account_id: friend_id })
+        const user = await User.findOne({ _id: user_id })
 
-        if (user && friend) {
-            user.friends.push(friend_id)
-            friend.friends.push(account_id)
-
-            await user
-                .save()
-                .then(() => {
-                    res.json('Add friend successfully!!!')
-                })
-                .catch((err) => {
-                    res.json('Add friend failure!!!')
-                })
+        if (user) {
+            user.friend.push({ friend_id: account_id, name, avatar })
+            await user.save()
+            res.json('Add friend successfully!!!')
         } else {
-            res.json('Add friend failure!!!')
+            res.json('User doesn`t exits !!!')
         }
     }
 }
