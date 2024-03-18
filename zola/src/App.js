@@ -6,8 +6,8 @@ import { Register } from './Components/Login/Register'
 function App() {
   return (
     <div>
-      <Login />
-      {/* <Home /> */}
+      {/* <Login /> */}
+      <Home />
       {/* <Register /> */}
     </div>
   )

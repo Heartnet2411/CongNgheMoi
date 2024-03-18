@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import './Home.css'
+import Modal from 'react-responsive-modal'
 import { BsChatDots } from 'react-icons/bs'
 import { IoMdSend } from 'react-icons/io'
 import { PiChatCircleText } from 'react-icons/pi'
@@ -33,6 +34,14 @@ export const Home = ({ userId, alt, size }) => {
 
     fetchAvatar()
   }, [userId])
+  const [info, setInfo] = useState('')
+  const onOpenModalLogin = () => {
+    setInfo(true)
+  }
+  const onCloseModalclose = () => {
+    setInfo(false)
+  }
+
   return (
     <div className="container11">
       <div className="header11">
@@ -142,13 +151,73 @@ export const Home = ({ userId, alt, size }) => {
             <v>
               <LuInfo size="1.8rem" />
             </v>
-            <div className="textin1">Thông tin tài khoản</div>
+
+            <button
+              type="button"
+              class="textin1"
+              data-bs-toggle="modal"
+              data-bs-target="#exampleModal"
+              data-bs-whatever="@mdo"
+              onClick={onOpenModalLogin}
+            >
+              Thông tin tài khoản
+            </button>
+            <Modal open={info} onClose={onCloseModalclose}>
+              <div className="modal-body">
+                <h2>
+                  Login and Get <span>Started</span>
+                </h2>
+                <span className="subtitle">Just fill in the form below</span>
+                <form
+                  className="contact-form form-validate4"
+                  novalidate="novalidate"
+                >
+                  <div className="form-group">
+                    <input
+                      className="form-control"
+                      type="email"
+                      name="email"
+                      placeholder="E-mail"
+                      required=""
+                      autocomplete="off"
+                      aria-required="true"
+                    />
+                  </div>
+                  <div className="form-group">
+                    <input
+                      type="password"
+                      name="pass"
+                      className="form-control"
+                      placeholder="Password"
+                      required=""
+                      autocomplete="off"
+                      aria-required="true"
+                    />
+                  </div>
+                  <input
+                    className="btn btn-md btn-primary btn-center"
+                    id="login_btn"
+                    type="button"
+                    value="Login"
+                  />
+                </form>
+              </div>
+            </Modal>
           </div>
+
           <div className="textin">
             <v>
               <MdPeopleOutline size="1.8rem" />
             </v>
-            <div className="textin1">Tạo nhóm trò chuyện</div>
+            <button
+              type="button"
+              class="textin1"
+              data-bs-toggle="modal"
+              data-bs-target="#exampleModal"
+              data-bs-whatever="@mdo"
+            >
+              Tạo nhóm trò chuyện
+            </button>
           </div>
         </div>
       </div>
