@@ -1,14 +1,16 @@
 import './App.css'
-import { Home } from './Components/Home/Home'
-import { Login } from './Components/Login/Login'
-import { Register } from './Components/Login/Register'
+import { Login } from './Layout/Login/Login'
+import { Register } from './Layout/Login/Register'
+import DashBoard from './Layout/Dashboard/index'
+import ListFriend from './Layout/listFriend'
 
 function App() {
   return (
     <div>
       {/* <Login /> */}
-      <Home />
       {/* <Register /> */}
+      <DashBoard />
+      {/* <ListFriend /> */}
     </div>
   )
 }
