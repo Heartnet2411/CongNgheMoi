@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
-import { BsPersonLinesFill } from 'react-icons/bs'
+import { IoPeopleOutline } from 'react-icons/io5'
 import { SlArrowDown } from 'react-icons/sl'
 import { BsArrowDownUp } from 'react-icons/bs'
 import { CiFilter } from 'react-icons/ci'
-const MainFriend = () => {
+const TeamList = () => {
   const [names, setNames] = useState([])
   const sortNames = () => {
     const sortedNames = [...names].sort((a, b) => a.localeCompare(b))
@@ -38,14 +38,14 @@ const MainFriend = () => {
           }}
         >
           <label>
-            <BsPersonLinesFill size="1.5rem" />
+            <IoPeopleOutline size="1.5rem" />
           </label>
           <label
             style={{
               fontSize: 18
             }}
           >
-            Danh sách bạn bè
+            Danh sách nhóm
           </label>
         </div>
       </div>
@@ -60,7 +60,7 @@ const MainFriend = () => {
           justifyContent: 'space-between'
         }}
       >
-        <label style={{ fontSize: 15, marginLeft: 15 }}>Bạn bè ( )</label>
+        <label style={{ fontSize: 15, marginLeft: 15 }}>Nhóm ( )</label>
       </div>
       <div
         style={{
@@ -165,4 +165,4 @@ const MainFriend = () => {
     </div>
   )
 }
-export default MainFriend
+export default TeamList

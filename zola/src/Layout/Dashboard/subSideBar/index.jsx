@@ -4,7 +4,7 @@ import { AiOutlineUsergroupAdd } from 'react-icons/ai'
 const SubSideBar = () => {
   return (
     <div
-      style={{ width: 300, height: '106.3%', backgroundColor: 'whitesmoke' }}
+      style={{ width: 350, height: '106.3%', backgroundColor: 'whitesmoke' }}
     >
       <div style={{ display: 'flex', gap: 10, marginTop: 20 }}>
         <input

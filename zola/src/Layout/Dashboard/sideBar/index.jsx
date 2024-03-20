@@ -1,7 +1,8 @@
 import { PiChatCircleText } from 'react-icons/pi'
 import { BsPersonLinesFill } from 'react-icons/bs'
 import { CiCloudOn } from 'react-icons/ci'
-
+import { Link, Route } from 'react-router-dom'
+import Cloud from '../../Cloud/index'
 import { IoSettingsOutline } from 'react-icons/io5'
 const SideBar = () => {
   return (
@@ -36,7 +37,7 @@ const SideBar = () => {
             backgroundColor: 'grey'
           }}
         />
-        <div style={{}}>
+        <div>
           <PiChatCircleText size="2rem" />
         </div>
         <div>

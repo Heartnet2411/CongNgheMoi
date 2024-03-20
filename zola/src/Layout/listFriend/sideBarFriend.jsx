@@ -6,7 +6,7 @@ import { CiMail } from 'react-icons/ci'
 const SideBarFriend = () => {
   return (
     <div
-      style={{ width: 300, height: '106.3%', backgroundColor: 'whitesmoke' }}
+      style={{ width: 350, height: '106.3%', backgroundColor: 'whitesmoke' }}
     >
       <div style={{ display: 'flex', gap: 10, marginTop: 20, height: 50 }}>
         <input
