@@ -4,6 +4,7 @@ import Message from './screens/Message'
 import Personal from './screens/Personal'
 import Tab from './components/Tab'
 import EditInfo from './components/EditInfo'
+import EditPassword from './components/EditPassword'
 import { NavigationContainer } from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import Login2 from './screens/Login2'
@@ -57,6 +58,11 @@ export default function App() {
                     name="EditInfo"
                     component={EditInfo}
                     options={{ title: 'Thay đổi thông tin tài khoản' }}
+                />
+                <Stack.Screen
+                    name="EditPassword"
+                    component={EditPassword}
+                    options={{ title: 'Thay đổi mật khẩu' }}
                 />
             </Stack.Navigator>
         </NavigationContainer>
