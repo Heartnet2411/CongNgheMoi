@@ -16,7 +16,7 @@ const Message = ({ navigation, route }) => {
     const listMess = [
         {
             id: 1,
-            name: 'Nguyễn Văn A',
+            name: 'Nguyễn Văn Thuận',
             avatar: require('../image/avatar.png'),
             time: '10:00',
             content: 'Chào bạn',

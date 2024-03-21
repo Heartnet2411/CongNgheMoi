@@ -37,7 +37,7 @@ const Login = ({ navigation, route }) => {
                         style={styles.avatar}
                     />
                 </View>
-                <Text style={styles.userName}>Nguyễn Văn Thuận </Text>
+                <Text style={styles.userName}>Nguyễn Văn Thuận</Text>
                 <View style={{ marginTop: 40 }}>
                     <TouchableOpacity
                         style={styles.button}

@@ -5,6 +5,9 @@ import Personal from './screens/Personal'
 import Tab from './components/Tab'
 import EditInfo from './components/EditInfo'
 import EditPassword from './components/EditPassword'
+import Register from './screens/Register'
+import ConfirmCode from './components/ConfirmCode'
+import PhoneInput from './components/PhoneInput'
 import { NavigationContainer } from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 
@@ -43,6 +46,21 @@ export default function App() {
                     name="EditPassword"
                     component={EditPassword}
                     options={{ title: 'Thay đổi mật khẩu' }}
+                />
+                <Stack.Screen
+                    name="Register"
+                    component={Register}
+                    options={{ headerShown: false }}
+                />
+                <Stack.Screen
+                    name="ConfirmCode"
+                    component={ConfirmCode}
+                    options={{ headerShown: false }}
+                />
+                <Stack.Screen
+                    name="PhoneInput"
+                    component={PhoneInput}
+                    options={{ headerShown: false }}
                 />
             </Stack.Navigator>
         </NavigationContainer>
