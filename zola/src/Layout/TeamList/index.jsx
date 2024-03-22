@@ -1,6 +1,6 @@
 import SideBar from '../Dashboard/sideBar/index.jsx'
 import Team from '../TeamList/teamlist.jsx'
-import SideBarFriend from '../listFriend/sideBarFriend.jsx'
+import SideBarFriend from '../ListFriend/sideBarFriend.jsx'
 
 const TeamList = () => {
   return (

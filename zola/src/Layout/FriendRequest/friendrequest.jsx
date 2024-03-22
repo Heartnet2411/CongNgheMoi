@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import SideBar from '../Dashboard/sideBar/index.jsx'
-import SideBarFriend from '../listFriend/sideBarFriend.jsx'
+import SideBarFriend from '../ListFriend/sideBarFriend.jsx'
 import { CiMail } from 'react-icons/ci'
 const FriendRQ = () => {
   const [names, setNames] = useState([])
