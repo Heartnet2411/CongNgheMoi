@@ -1,9 +1,8 @@
-import MainCloud from './main.jsx'
 import SideBar from '../Dashboard/sideBar/index.jsx'
-import SubSideBar from '../Dashboard/subSideBar/index.jsx'
-import { BrowserRouter as Router } from 'react-router-dom'
+import FriendRQ from './friendrequest.jsx'
+import SideBarFriend from '../listFriend/sideBarFriend.jsx'
 
-const Cloud = () => {
+const FriendRequest = () => {
   return (
     <div
       style={{
@@ -14,10 +13,10 @@ const Cloud = () => {
       }}
     >
       <SideBar />
-      <SubSideBar />
-      <MainCloud />
+      <SideBarFriend />
+      <FriendRQ />
     </div>
   )
 }
 
-export default Cloud
+export default FriendRequest

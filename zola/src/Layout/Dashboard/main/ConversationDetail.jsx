@@ -15,7 +15,7 @@ const ConversationDetail = () => {
       style={{
         width: 280,
         height: '94.5%',
-        backgroundColor: 'whitesmoke',
+        backgroundColor: 'white',
         display: 'flex',
         flexDirection: 'column',
         justifyContent: '',
@@ -24,14 +24,25 @@ const ConversationDetail = () => {
         padding: 20
       }}
     >
-      Thông tin hội thoại
+      <label
+        style={{
+          fontSize: 18,
+          fontWeight: 'bold'
+        }}
+      >
+        Thông tin hội thoại
+      </label>
+
       <div>
         <img
+          src="https://www.w3schools.com/howto/img_avatar.png"
+          alt="demo"
           style={{
-            width: 100,
-            height: 100,
+            width: 80,
+            height: 80,
             borderRadius: 100,
-            backgroundColor: 'grey'
+            backgroundColor: 'grey',
+            marginTop: 15
           }}
         />
       </div>
@@ -49,7 +60,7 @@ const ConversationDetail = () => {
             width: 25,
             height: 25,
             borderRadius: 100,
-            backgroundColor: 'lightgrey',
+            backgroundColor: 'whitesmoke',
             alignItems: 'center',
             display: 'flex',
             flexDirection: 'column'
@@ -78,7 +89,7 @@ const ConversationDetail = () => {
               width: 33,
               height: 33,
               borderRadius: 100,
-              backgroundColor: 'lightgrey',
+              backgroundColor: 'whitesmoke',
               alignItems: 'center',
               display: 'flex',
               flexDirection: 'column'
@@ -100,7 +111,7 @@ const ConversationDetail = () => {
               width: 33,
               height: 33,
               borderRadius: 100,
-              backgroundColor: 'lightgrey',
+              backgroundColor: 'whitesmoke',
               alignItems: 'center',
               display: 'flex',
               flexDirection: 'column'
@@ -108,7 +119,7 @@ const ConversationDetail = () => {
           >
             <CiBellOn size="1.7rem" />
           </label>
-          <label style={{ fontSize: 14 }}>Tắt thong báo</label>
+          <label style={{ fontSize: 14 }}>Tắt thông báo</label>
         </div>
         <div
           style={{
@@ -122,7 +133,7 @@ const ConversationDetail = () => {
               width: 33,
               height: 33,
               borderRadius: 100,
-              backgroundColor: 'lightgrey',
+              backgroundColor: 'whitesmoke',
               alignItems: 'center',
               display: 'flex',
               flexDirection: 'column'
@@ -138,7 +149,7 @@ const ConversationDetail = () => {
           width: 320,
           borderBottomWidth: 3,
           borderBottomStyle: 'solid',
-          borderBottomColor: 'lightgrey'
+          borderBottomColor: 'whitesmoke'
         }}
       ></div>
       <div
@@ -146,7 +157,7 @@ const ConversationDetail = () => {
           width: 320,
           borderBottomWidth: 3,
           borderBottomStyle: 'solid',
-          borderBottomColor: 'lightgrey',
+          borderBottomColor: 'whitesmoke',
           display: 'flex',
           gap: 10
         }}
@@ -161,7 +172,7 @@ const ConversationDetail = () => {
           width: 320,
           borderBottomWidth: 3,
           borderBottomStyle: 'solid',
-          borderBottomColor: 'lightgrey',
+          borderBottomColor: 'whitesmoke',
           display: 'flex',
           gap: 10,
           flexDirection: 'column'
@@ -194,7 +205,7 @@ const ConversationDetail = () => {
           width: 320,
           borderBottomWidth: 3,
           borderBottomStyle: 'solid',
-          borderBottomColor: 'lightgrey',
+          borderBottomColor: 'whitesmoke',
           display: 'flex',
           gap: 10,
           flexDirection: 'column'
@@ -227,7 +238,7 @@ const ConversationDetail = () => {
           width: 320,
           borderBottomWidth: 3,
           borderBottomStyle: 'solid',
-          borderBottomColor: 'lightgrey',
+          borderBottomColor: 'whitesmoke',
           display: 'flex',
           gap: 10,
           flexDirection: 'column'

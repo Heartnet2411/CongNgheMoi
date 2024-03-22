@@ -15,7 +15,7 @@ const MainFriend = () => {
       style={{
         width: '100%',
         height: '106.3%',
-        backgroundColor: 'lightgrey'
+        backgroundColor: 'whitesmoke'
       }}
     >
       <div
@@ -54,7 +54,7 @@ const MainFriend = () => {
         style={{
           width: '100%',
           height: 60,
-          backgroundColor: 'lightgrey',
+          backgroundColor: 'whitesmoke',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between'
@@ -88,7 +88,7 @@ const MainFriend = () => {
               width: '27%',
               height: 20,
               alignItems: 'center',
-              backgroundColor: 'white',
+              backgroundColor: 'whitesmoke',
               borderRadius: 5,
               display: 'flex',
               flexDirection: 'column',
@@ -106,7 +106,7 @@ const MainFriend = () => {
               alignItems: 'center',
               display: 'flex',
               borderRadius: 5,
-              backgroundColor: 'lightgrey'
+              backgroundColor: 'whitesmoke'
             }}
           >
             <BsArrowDownUp size="1rem" />
@@ -116,7 +116,7 @@ const MainFriend = () => {
                 width: '80%',
                 height: 26,
                 borderRadius: 5,
-                backgroundColor: 'lightgrey',
+                backgroundColor: 'whitesmoke',
                 border: 'none'
               }}
             >
@@ -131,7 +131,7 @@ const MainFriend = () => {
               alignItems: 'center',
               display: 'flex',
               borderRadius: 5,
-              backgroundColor: 'lightgrey'
+              backgroundColor: 'whitesmoke'
             }}
           >
             <CiFilter size="1rem" />
@@ -141,7 +141,7 @@ const MainFriend = () => {
                 width: '80%',
                 height: 26,
                 borderRadius: 5,
-                backgroundColor: 'lightgrey',
+                backgroundColor: 'whitesmoke',
                 border: 'none'
               }}
             >

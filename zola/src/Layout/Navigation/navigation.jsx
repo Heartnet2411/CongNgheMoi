@@ -1,26 +1,31 @@
-import React from 'react'
-import { BrowserRouter as Routes, Route, Link } from 'react-router-dom'
-import DashBoard from '../Dashboard'
-import ListFriend from '../listFriend'
-import { PiChatCircleText } from 'react-icons/pi'
-import { BsPersonLinesFill } from 'react-icons/bs'
+import { Login } from '../Login/Login'
+import { Register } from '../Login/Register'
+import DashBoard from '../Dashboard/index'
+import ListFriend from '../listFriend/index'
+import {
+  BrowserRouter as Router,
+  Route,
+  Switch,
+  Routes
+} from 'react-router-dom'
+import Cloud from '../Cloud/index'
+import FriendRequest from '../FriendRequest/index'
+import TeamList from '../TeamList/index'
 
 const Navigation = () => {
   return (
-    <nav>
-      <ul>
-        <li>
-          <Link to="/">
-            <PiChatCircleText />
-          </Link>
-        </li>
-        <li>
-          <Link to="/list">
-            <BsPersonLinesFill />
-          </Link>
-        </li>
-      </ul>
-    </nav>
+    <Router>
+      <Routes>
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/dashboard" element={<DashBoard />} />
+        <Route path="/listFriend" element={<ListFriend />} />
+        <Route path="/cloud" element={<Cloud />} />
+        <Route path="/requestlist" element={<FriendRequest />} />
+        <Route path="/teamlist" element={<TeamList />} />
+      </Routes>
+    </Router>
   )
 }
+
 export default Navigation

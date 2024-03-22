@@ -1,10 +1,8 @@
 import React, { useState } from 'react'
-
-import { SlArrowDown } from 'react-icons/sl'
-import { BsArrowDownUp } from 'react-icons/bs'
-import { CiFilter } from 'react-icons/ci'
+import SideBar from '../Dashboard/sideBar/index.jsx'
+import SideBarFriend from '../listFriend/sideBarFriend.jsx'
 import { CiMail } from 'react-icons/ci'
-const FriendRequest = () => {
+const FriendRQ = () => {
   const [names, setNames] = useState([])
   const sortNames = () => {
     const sortedNames = [...names].sort((a, b) => a.localeCompare(b))
@@ -90,4 +88,4 @@ const FriendRequest = () => {
     </div>
   )
 }
-export default FriendRequest
+export default FriendRQ

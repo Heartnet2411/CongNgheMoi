@@ -3,7 +3,7 @@ import { IoPeopleOutline } from 'react-icons/io5'
 import { SlArrowDown } from 'react-icons/sl'
 import { BsArrowDownUp } from 'react-icons/bs'
 import { CiFilter } from 'react-icons/ci'
-const TeamList = () => {
+const Team = () => {
   const [names, setNames] = useState([])
   const sortNames = () => {
     const sortedNames = [...names].sort((a, b) => a.localeCompare(b))
@@ -165,4 +165,4 @@ const TeamList = () => {
     </div>
   )
 }
-export default TeamList
+export default Team
