@@ -1,8 +1,7 @@
-import './App.css'
 import { Login } from './Layout/Login/Login'
 import { Register } from './Layout/Login/Register'
 import DashBoard from './Layout/Dashboard/index'
-import ListFriend from './Layout/listFriend'
+import ListFriend from './Layout/ListFriend/index'
 import {
   BrowserRouter as Router,
   Route,
@@ -13,7 +12,12 @@ import Cloud from './Layout/Cloud/index'
 import Navigation from './Layout/Navigation/navigation'
 
 function App() {
-  return <Navigation />
+  // return <Login />
+  return (
+    <div>
+      <Navigation />
+    </div>
+  )
 }
 
 export default App

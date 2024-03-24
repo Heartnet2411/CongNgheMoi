@@ -14,18 +14,25 @@ const ConversationCloud = () => {
   return (
     <div
       style={{
-        width: 280,
-        height: '94.5%',
-        backgroundColor: 'whitesmoke',
+        width: '33%',
+        height: '100%',
+        backgroundColor: 'white',
         display: 'flex',
         flexDirection: 'column',
-        justifyContent: '',
         alignItems: 'center',
-        gap: 10,
-        padding: 20
+        gap: 10
       }}
     >
-      Thông tin hội thoại
+      <label
+        style={{
+          fontSize: 18,
+          fontWeight: 'bold',
+          marginTop: 20
+        }}
+      >
+        Thông tin hội thoại
+      </label>
+
       <div>
         <img
           src={cloud}
@@ -34,7 +41,8 @@ const ConversationCloud = () => {
             width: 80,
             height: 80,
             borderRadius: 100,
-            backgroundColor: 'white'
+            backgroundColor: 'white',
+            marginTop: 15
           }}
         />
       </div>
@@ -78,20 +86,22 @@ const ConversationCloud = () => {
       </div>
       <div
         style={{
-          width: 320,
+          width: '100%',
           borderBottomWidth: 3,
           borderBottomStyle: 'solid',
-          borderBottomColor: 'lightgrey'
+          borderBottomColor: 'whitesmoke'
         }}
       ></div>
       <div
         style={{
-          width: 320,
+          flex: 'row',
+          width: '100%',
           borderBottomWidth: 3,
           borderBottomStyle: 'solid',
-          borderBottomColor: 'lightgrey',
+          borderBottomColor: 'whitesmoke',
           display: 'flex',
-          gap: 10
+          alignContent: 'center',
+          justifyContent: 'center'
         }}
       >
         <label>
@@ -101,17 +111,23 @@ const ConversationCloud = () => {
       </div>
       <div
         style={{
-          width: 320,
+          width: '100%',
           borderBottomWidth: 3,
           borderBottomStyle: 'solid',
-          borderBottomColor: 'lightgrey',
+          borderBottomColor: 'whitesmoke',
           display: 'flex',
           gap: 10,
           flexDirection: 'column'
         }}
       >
         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-          <label>Ảnh/Video</label>
+          <label
+            style={{
+              paddingLeft: 10
+            }}
+          >
+            Ảnh/Video
+          </label>
           {isPhotoVidOpen ? (
             <label
               onClick={() => {
@@ -130,21 +146,36 @@ const ConversationCloud = () => {
             </label>
           )}
         </div>
-        {isPhotoVidOpen && <div> Danh sách ảnh và video</div>}
+        {isPhotoVidOpen && (
+          <div
+            style={{
+              paddingLeft: 10
+            }}
+          >
+            {' '}
+            Danh sách ảnh và video
+          </div>
+        )}
       </div>
       <div
         style={{
-          width: 320,
+          width: '100%',
           borderBottomWidth: 3,
           borderBottomStyle: 'solid',
-          borderBottomColor: 'lightgrey',
+          borderBottomColor: 'whitesmoke',
           display: 'flex',
           gap: 10,
           flexDirection: 'column'
         }}
       >
         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-          <label>File</label>
+          <label
+            style={{
+              paddingLeft: 10
+            }}
+          >
+            File
+          </label>
           {isFileOpen ? (
             <label
               onClick={() => {
@@ -163,21 +194,36 @@ const ConversationCloud = () => {
             </label>
           )}
         </div>
-        {isFileOpen && <div>Danh sách file</div>}
+        {isFileOpen && (
+          <div
+            style={{
+              paddingLeft: 10
+            }}
+          >
+            {' '}
+            Danh sách file
+          </div>
+        )}
       </div>
       <div
         style={{
-          width: 320,
+          width: '100%',
           borderBottomWidth: 3,
           borderBottomStyle: 'solid',
-          borderBottomColor: 'lightgrey',
+          borderBottomColor: 'whitesmoke',
           display: 'flex',
           gap: 10,
           flexDirection: 'column'
         }}
       >
         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-          <label>Links</label>
+          <label
+            style={{
+              paddingLeft: 10
+            }}
+          >
+            Links
+          </label>
           {isLinkOpen ? (
             <label
               onClick={() => {
@@ -196,7 +242,16 @@ const ConversationCloud = () => {
             </label>
           )}
         </div>
-        {isLinkOpen && <div>Danh sách link</div>}
+        {isLinkOpen && (
+          <div
+            style={{
+              paddingLeft: 10
+            }}
+          >
+            {' '}
+            {''}Danh sách link
+          </div>
+        )}
       </div>
       <div></div>
     </div>

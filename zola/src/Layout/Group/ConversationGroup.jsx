@@ -6,7 +6,8 @@ import { BsPeople } from 'react-icons/bs'
 import { CiBellOn } from 'react-icons/ci'
 import { TfiPinAlt } from 'react-icons/tfi'
 import { AiOutlineEdit } from 'react-icons/ai'
-const ConversationDetail = () => {
+import { IoSettingsOutline } from 'react-icons/io5'
+const ConversationGroup = () => {
   const [isPhotoVidOpen, setPhotoVidOpen] = React.useState(true)
   const [isFileOpen, setFileOpen] = React.useState(true)
   const [isLinkOpen, setLinkOpen] = React.useState(true)
@@ -52,7 +53,7 @@ const ConversationDetail = () => {
             fontWeight: 'bold'
           }}
         >
-          Nguyen Thuy Tinh
+          Nhóm 8
         </label>
         <label
           style={{
@@ -184,9 +185,99 @@ const ConversationDetail = () => {
               alignContent: 'center'
             }}
           >
-            Tạo nhóm trò chuyện
+            Thêm thành viên
           </label>
         </div>
+        <div
+          style={{
+            display: 'flex',
+
+            flexDirection: 'column',
+            alignItems: 'center'
+          }}
+        >
+          <div
+            style={{
+              width: 33,
+              height: 33,
+              borderRadius: 100,
+              backgroundColor: 'whitesmoke',
+              alignItems: 'center',
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'center',
+              alignContent: 'center'
+            }}
+          >
+            <IoSettingsOutline size="1.2rem" />
+          </div>
+          <label
+            style={{
+              fontSize: 12,
+              color: 'grey',
+              justifyContent: 'center',
+              alignItems: 'center',
+              display: 'flex',
+              alignContent: 'center'
+            }}
+          >
+            Quản lý nhóm
+          </label>
+        </div>
+      </div>
+      <div
+        style={{
+          width: '100%',
+          borderBottomWidth: 5,
+          borderBottomStyle: 'solid',
+          borderBottomColor: 'whitesmoke'
+        }}
+      ></div>
+      <div
+        style={{
+          flex: 'row',
+          width: '100%'
+        }}
+      >
+        <label
+          style={{
+            paddingLeft: 10
+          }}
+        >
+          <BsPeople size="1.3rem" />
+        </label>
+        <label
+          style={{
+            paddingLeft: 10
+          }}
+        >
+          "M" thành viên
+        </label>
+      </div>
+      <div
+        style={{
+          flex: 'row',
+          width: '100%',
+          borderBottomWidth: 5,
+          borderBottomStyle: 'solid',
+          borderBottomColor: 'whitesmoke',
+          gap: 10
+        }}
+      >
+        <label
+          style={{
+            paddingLeft: 10
+          }}
+        >
+          <BsPeople size="1.3rem" />
+        </label>
+        <label
+          style={{
+            paddingLeft: 10
+          }}
+        >
+          Link tham gia nhóm
+        </label>
       </div>
       <div
         style={{
@@ -239,7 +330,7 @@ const ConversationDetail = () => {
             paddingLeft: 10
           }}
         >
-          'M' nhóm chung
+          Ghi chú, ghim, bình chọn
         </label>
       </div>
       <div
@@ -395,4 +486,4 @@ const ConversationDetail = () => {
   )
 }
 
-export default ConversationDetail
+export default ConversationGroup

@@ -1,4 +1,3 @@
-import Main from '../Dashboard/main/index.jsx'
 import SideBar from '../Dashboard/sideBar/index.jsx'
 import MainFriend from './mainFriend.jsx'
 import SideBarFriend from './sideBarFriend.jsx'
@@ -8,7 +7,7 @@ const ListFriend = () => {
     <div
       style={{
         width: '100vw',
-        height: '94vh',
+        height: '100vh',
         display: 'flex',
         flexDirection: 'row'
       }}

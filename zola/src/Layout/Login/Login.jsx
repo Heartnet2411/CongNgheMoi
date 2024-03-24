@@ -36,7 +36,7 @@ export const Login = () => {
         <div className="form-group user-register">
           <div className="col-xl-12 col-md-10 col-sm-12 col-12 ">
             <br />
-            Don't have an account? <a href="./"> Register</a>
+            Don't have an account? <a href="/Register"> Register</a>
           </div>
         </div>
       </div>
