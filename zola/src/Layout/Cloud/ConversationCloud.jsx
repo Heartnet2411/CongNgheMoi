@@ -6,7 +6,8 @@ import { BsPeople } from 'react-icons/bs'
 import { CiBellOn } from 'react-icons/ci'
 import { TfiPinAlt } from 'react-icons/tfi'
 import { AiOutlineEdit } from 'react-icons/ai'
-const ConversationDetail = () => {
+import cloud from '../../Assets/cloud.png'
+const ConversationCloud = () => {
   const [isPhotoVidOpen, setPhotoVidOpen] = React.useState(true)
   const [isFileOpen, setFileOpen] = React.useState(true)
   const [isLinkOpen, setLinkOpen] = React.useState(true)
@@ -15,7 +16,7 @@ const ConversationDetail = () => {
       style={{
         width: 280,
         height: '94.5%',
-        backgroundColor: 'white',
+        backgroundColor: 'whitesmoke',
         display: 'flex',
         flexDirection: 'column',
         justifyContent: '',
@@ -24,25 +25,16 @@ const ConversationDetail = () => {
         padding: 20
       }}
     >
-      <label
-        style={{
-          fontSize: 18,
-          fontWeight: 'bold'
-        }}
-      >
-        Thông tin hội thoại
-      </label>
-
+      Thông tin hội thoại
       <div>
         <img
-          src="https://www.w3schools.com/howto/img_avatar.png"
-          alt="demo"
+          src={cloud}
+          alt="cloud"
           style={{
             width: 80,
             height: 80,
             borderRadius: 100,
-            backgroundColor: 'grey',
-            marginTop: 15
+            backgroundColor: 'white'
           }}
         />
       </div>
@@ -53,20 +45,7 @@ const ConversationDetail = () => {
             fontWeight: 'bold'
           }}
         >
-          Nguyen Thuy Tinh
-        </label>
-        <label
-          style={{
-            width: 25,
-            height: 25,
-            borderRadius: 100,
-            backgroundColor: 'whitesmoke',
-            alignItems: 'center',
-            display: 'flex',
-            flexDirection: 'column'
-          }}
-        >
-          <AiOutlineEdit size="1.4rem" />
+          Cloud của tôi
         </label>
       </div>
       <div
@@ -74,7 +53,7 @@ const ConversationDetail = () => {
           display: 'flex',
           justifyContent: 'space-around',
           gap: 20,
-          padding: 15
+          padding: 5
         }}
       >
         <div
@@ -86,62 +65,15 @@ const ConversationDetail = () => {
         >
           <label
             style={{
-              width: 33,
-              height: 33,
-              borderRadius: 100,
-              backgroundColor: 'whitesmoke',
-              alignItems: 'center',
-              display: 'flex',
-              flexDirection: 'column'
+              fontSize: 14,
+              color: 'grey',
+              alignContent: 'center',
+              textAlign: 'center'
             }}
           >
-            <BsPeople size="1.7rem" />
+            Lưu trữ và truy cập nhanh những nội dung quan trọng cuả bạn ngay
+            trên Zola
           </label>
-          <label style={{ fontSize: 14 }}>Tạo nhóm</label>
-        </div>
-        <div
-          style={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center'
-          }}
-        >
-          <label
-            style={{
-              width: 33,
-              height: 33,
-              borderRadius: 100,
-              backgroundColor: 'whitesmoke',
-              alignItems: 'center',
-              display: 'flex',
-              flexDirection: 'column'
-            }}
-          >
-            <CiBellOn size="1.7rem" />
-          </label>
-          <label style={{ fontSize: 14 }}>Tắt thông báo</label>
-        </div>
-        <div
-          style={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center'
-          }}
-        >
-          <label
-            style={{
-              width: 33,
-              height: 33,
-              borderRadius: 100,
-              backgroundColor: 'whitesmoke',
-              alignItems: 'center',
-              display: 'flex',
-              flexDirection: 'column'
-            }}
-          >
-            <TfiPinAlt size="1.5rem" />
-          </label>
-          <label style={{ fontSize: 14 }}>Ghim</label>
         </div>
       </div>
       <div
@@ -149,7 +81,7 @@ const ConversationDetail = () => {
           width: 320,
           borderBottomWidth: 3,
           borderBottomStyle: 'solid',
-          borderBottomColor: 'whitesmoke'
+          borderBottomColor: 'lightgrey'
         }}
       ></div>
       <div
@@ -157,7 +89,7 @@ const ConversationDetail = () => {
           width: 320,
           borderBottomWidth: 3,
           borderBottomStyle: 'solid',
-          borderBottomColor: 'whitesmoke',
+          borderBottomColor: 'lightgrey',
           display: 'flex',
           gap: 10
         }}
@@ -172,7 +104,7 @@ const ConversationDetail = () => {
           width: 320,
           borderBottomWidth: 3,
           borderBottomStyle: 'solid',
-          borderBottomColor: 'whitesmoke',
+          borderBottomColor: 'lightgrey',
           display: 'flex',
           gap: 10,
           flexDirection: 'column'
@@ -205,7 +137,7 @@ const ConversationDetail = () => {
           width: 320,
           borderBottomWidth: 3,
           borderBottomStyle: 'solid',
-          borderBottomColor: 'whitesmoke',
+          borderBottomColor: 'lightgrey',
           display: 'flex',
           gap: 10,
           flexDirection: 'column'
@@ -238,7 +170,7 @@ const ConversationDetail = () => {
           width: 320,
           borderBottomWidth: 3,
           borderBottomStyle: 'solid',
-          borderBottomColor: 'whitesmoke',
+          borderBottomColor: 'lightgrey',
           display: 'flex',
           gap: 10,
           flexDirection: 'column'
@@ -271,4 +203,4 @@ const ConversationDetail = () => {
   )
 }
 
-export default ConversationDetail
+export default ConversationCloud

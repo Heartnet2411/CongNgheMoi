@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
-import { BsPersonLinesFill } from 'react-icons/bs'
+import { IoPeopleOutline } from 'react-icons/io5'
 import { SlArrowDown } from 'react-icons/sl'
 import { BsArrowDownUp } from 'react-icons/bs'
 import { CiFilter } from 'react-icons/ci'
-const MainFriend = () => {
+const Team = () => {
   const [names, setNames] = useState([])
   const sortNames = () => {
     const sortedNames = [...names].sort((a, b) => a.localeCompare(b))
@@ -15,7 +15,7 @@ const MainFriend = () => {
       style={{
         width: '100%',
         height: '106.3%',
-        backgroundColor: 'whitesmoke'
+        backgroundColor: 'lightgrey'
       }}
     >
       <div
@@ -38,14 +38,14 @@ const MainFriend = () => {
           }}
         >
           <label>
-            <BsPersonLinesFill size="1.5rem" />
+            <IoPeopleOutline size="1.5rem" />
           </label>
           <label
             style={{
               fontSize: 18
             }}
           >
-            Danh sách bạn bè
+            Danh sách nhóm
           </label>
         </div>
       </div>
@@ -54,13 +54,13 @@ const MainFriend = () => {
         style={{
           width: '100%',
           height: 60,
-          backgroundColor: 'whitesmoke',
+          backgroundColor: 'lightgrey',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between'
         }}
       >
-        <label style={{ fontSize: 15, marginLeft: 15 }}>Bạn bè ( )</label>
+        <label style={{ fontSize: 15, marginLeft: 15 }}>Nhóm ( )</label>
       </div>
       <div
         style={{
@@ -88,7 +88,7 @@ const MainFriend = () => {
               width: '27%',
               height: 20,
               alignItems: 'center',
-              backgroundColor: 'whitesmoke',
+              backgroundColor: 'white',
               borderRadius: 5,
               display: 'flex',
               flexDirection: 'column',
@@ -106,7 +106,7 @@ const MainFriend = () => {
               alignItems: 'center',
               display: 'flex',
               borderRadius: 5,
-              backgroundColor: 'whitesmoke'
+              backgroundColor: 'lightgrey'
             }}
           >
             <BsArrowDownUp size="1rem" />
@@ -116,7 +116,7 @@ const MainFriend = () => {
                 width: '80%',
                 height: 26,
                 borderRadius: 5,
-                backgroundColor: 'whitesmoke',
+                backgroundColor: 'lightgrey',
                 border: 'none'
               }}
             >
@@ -131,7 +131,7 @@ const MainFriend = () => {
               alignItems: 'center',
               display: 'flex',
               borderRadius: 5,
-              backgroundColor: 'whitesmoke'
+              backgroundColor: 'lightgrey'
             }}
           >
             <CiFilter size="1rem" />
@@ -141,7 +141,7 @@ const MainFriend = () => {
                 width: '80%',
                 height: 26,
                 borderRadius: 5,
-                backgroundColor: 'whitesmoke',
+                backgroundColor: 'lightgrey',
                 border: 'none'
               }}
             >
@@ -165,4 +165,4 @@ const MainFriend = () => {
     </div>
   )
 }
-export default MainFriend
+export default Team

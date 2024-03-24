@@ -1,9 +1,24 @@
 import { PiChatCircleText } from 'react-icons/pi'
 import { BsPersonLinesFill } from 'react-icons/bs'
 import { CiCloudOn } from 'react-icons/ci'
-
+import { Link, Route } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { IoSettingsOutline } from 'react-icons/io5'
 const SideBar = () => {
+  const navigate = useNavigate()
+  const handleCloud = () => {
+    // Thực hiện chuyển hướng khi người dùng nhấp vào biểu tượng
+    navigate('/cloud')
+  }
+  const handleDashboard = () => {
+    // Thực hiện chuyển hướng khi người dùng nhấp vào biểu tượng
+    navigate('/dashboard')
+  }
+  const handleListFriend = () => {
+    // Thực hiện chuyển hướng khi người dùng nhấp vào biểu tượng
+    navigate('/listFriend')
+  }
+
   return (
     <div
       style={{
@@ -36,14 +51,44 @@ const SideBar = () => {
             backgroundColor: 'grey'
           }}
         />
-        <div style={{}}>
-          <PiChatCircleText size="2rem" />
+        <div>
+          <button
+            style={{
+              backgroundColor: 'blue',
+              border: 'none',
+              color: 'white',
+              fontSize: 20
+            }}
+            onClick={handleDashboard}
+          >
+            <PiChatCircleText size="2rem" />
+          </button>
         </div>
         <div>
-          <BsPersonLinesFill size="2rem" />
+          <button
+            style={{
+              backgroundColor: 'blue',
+              border: 'none',
+              color: 'white',
+              fontSize: 20
+            }}
+            onClick={handleListFriend}
+          >
+            <BsPersonLinesFill size="2rem" />
+          </button>
         </div>
         <div>
-          <CiCloudOn size="2rem" />
+          <button
+            style={{
+              backgroundColor: 'blue',
+              border: 'none',
+              color: 'white',
+              fontSize: 20
+            }}
+            onClick={handleCloud}
+          >
+            <CiCloudOn size="2.2rem" />
+          </button>
         </div>
       </div>
       <div>
