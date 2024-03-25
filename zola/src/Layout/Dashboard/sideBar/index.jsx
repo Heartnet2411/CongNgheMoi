@@ -22,13 +22,13 @@ const SideBar = () => {
   return (
     <div
       style={{
-        width: 70,
+        width: 90,
         height: '106.3%',
         backgroundColor: 'blue',
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'space-between',
-        alignItems: 'center'
+        alignItems: 'center',
       }}
     >
       <div
@@ -38,7 +38,7 @@ const SideBar = () => {
           flexDirection: 'column',
           justifyContent: 'center',
           alignItems: 'center',
-          gap: 20
+          gap: 20,
         }}
       >
         <img
@@ -48,7 +48,7 @@ const SideBar = () => {
             width: 50,
             height: 50,
             borderRadius: 30,
-            backgroundColor: 'grey'
+            backgroundColor: 'grey',
           }}
         />
         <div>
@@ -57,7 +57,7 @@ const SideBar = () => {
               backgroundColor: 'blue',
               border: 'none',
               color: 'white',
-              fontSize: 20
+              fontSize: 20,
             }}
             onClick={handleDashboard}
           >
@@ -70,7 +70,7 @@ const SideBar = () => {
               backgroundColor: 'blue',
               border: 'none',
               color: 'white',
-              fontSize: 20
+              fontSize: 20,
             }}
             onClick={handleListFriend}
           >
@@ -83,7 +83,7 @@ const SideBar = () => {
               backgroundColor: 'blue',
               border: 'none',
               color: 'white',
-              fontSize: 20
+              fontSize: 20,
             }}
             onClick={handleCloud}
           >

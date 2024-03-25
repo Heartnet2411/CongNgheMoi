@@ -1,9 +1,10 @@
 import React from 'react'
 import './Login.css'
+import { Button } from '@mui/material'
 import axios from 'axios'
 import { toast, Toaster } from 'react-hot-toast'
 export const Login = () => {
-  const [action, setAction] = React.useState('Log In')
+  const [action, setAction] = React.useState('Đăng Nhập')
   const [phoneNumber, setPhoneNumber] = React.useState('')
   const [password, setPassword] = React.useState('')
 
@@ -39,24 +40,27 @@ export const Login = () => {
       <div className="header">
         <Toaster toastOptions={{ duration: 4000 }} />
         <div className="text">{action}</div>
-        <div className="subtext">Log in to continue to Zola.</div>
+        <div className="subtext">
+          {' '}
+          <b className="zola-style">Zola</b> giúp mọi người kết nối với nhau{' '}
+        </div>
       </div>
       <div className="form">
-        <div className="labelI">PhoneNumber</div>
+        <div className="labelI">Số di động</div>
         <div className="input1">
           <input
             type="phone"
-            placeholder="Enter PhoneNumber"
+            placeholder="Nhập số điện thoại"
             onChange={(e) => {
               setPhoneNumber(e.target.value)
             }}
           />
         </div>
-        <div className="label">Password</div>
+        <div className="label">Mật Khẩu</div>
         <div className="input1">
           <input
             type="password"
-            placeholder="Enter Password"
+            placeholder="Nhập mật khẩu"
             onChange={(e) => {
               setPassword(e.target.value)
             }}
@@ -64,25 +68,38 @@ export const Login = () => {
         </div>
         <div className="form-group forgot-password">
           <div className="col-xl-12 col-md-10 col-sm-12 col-12">
-            <a href="/forgot"> Forgot Password?</a>
+            <a href="/forgotpassword"> Quên Mật Khẩu?</a>
           </div>
         </div>
 
         <div className="summit">
-          <div
-            className={action === 'Log In' ? 'button blue' : 'button'}
+          {/* <div
+            className={action === 'Đăng Nhập' ? 'button blue' : 'button'}
             onClick={(e) => {
               login(e)
-              setAction('Log In')
             }}
           >
             Log In
-          </div>
+          </div> */}
+
+          <Button
+            onClick={(e) => {
+              login(e)
+            }}
+            sx={{ marginTop: '10px' }}
+            variant="contained"
+            color="success"
+          >
+            Đăng nhập
+          </Button>
         </div>
+        <br />
         <div className="form-group user-register">
           <div className="col-xl-12 col-md-10 col-sm-12 col-12 ">
-            <br />
-            Don't have an account? <a href="./"> Register</a>
+            Bạn chưa có tài khoản ?{' '}
+            <b className="login-style">
+              <a href="/register"> Đăng Ký Ngay</a>
+            </b>
           </div>
         </div>
       </div>

@@ -4,6 +4,7 @@ import morgan from 'morgan'
 import methodOverride from 'method-override'
 import cors from 'cors'
 import path from 'path'
+import { Server } from 'socket.io'
 
 const app = express()
 const port = 3001

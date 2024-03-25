@@ -1,11 +1,14 @@
 import React from 'react'
+import { useState } from 'react'
+import { FaEye, FaEyeSlash } from 'react-icons/fa'
 import './Register.css'
 import DatePicker from 'react-datepicker'
 import axios from 'axios'
+import { Button } from '@mui/material'
 import 'react-datepicker/dist/react-datepicker.css'
 import { toast, Toaster } from 'react-hot-toast'
 export const Register = () => {
-  const [action, setAction] = React.useState('Register')
+  const [action, setAction] = React.useState('Đăng Ký')
   // lấy thông tin từ form firstname, lastname, numberphone, date of birth , Gender, password, confirm password
   const [firstName, setFirstName] = React.useState('')
   const [lastName, setLastName] = React.useState('')
@@ -16,12 +19,21 @@ export const Register = () => {
   const [password, setPassword] = React.useState('')
   const [confirmPassword, setConfirmPassword] = React.useState('')
 
+  const [showPassword, setShowPassword] = useState(false)
+
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword)
+  }
   // viết 1 hàm để gửi thông tin đăng ký lên server
   const register = (e) => {
     // kiểm tra password và confirm password có giống nhau không
+    // // regex cho mật khẩu có ít nhất 8 ký tự, ít nhất 1 chữ hoa, 1 chữ thường, 1 số
+
     e.preventDefault()
     if (password !== confirmPassword) {
-      alert('Mật khẩu không trùng khớp!!! Vui lòng nhập lại mật khẩu!!!')
+      toast.error(
+        'Mật khẩu xác nhận không trùng khớp!!! Vui lòng nhập lại mật khẩu!!!'
+      )
       return
     }
     // kiểm tra thông tin nhập vào có đầy đủ không
@@ -31,11 +43,21 @@ export const Register = () => {
       phoneNumber === '' ||
       dateOfBirth === '' ||
       gender === ''
-    )
+    ) {
       toast.error('Vui lòng nhập đầy đủ thông tin!!!')
+      return
+    }
+    const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/
+    if (!password.match(passwordRegex)) {
+      toast.error(
+        'Mật khẩu phải chứa ít nhất 8 ký tự, ít nhất 1 chữ hoa, 1 chữ thường và 1 số!!!'
+      )
+      return
+    }
     // kiểm tra năm sinh có lớn hơn năm hiện tại không
     else if (dateOfBirth > new Date()) {
       toast.error('Năm sinh không hợp lệ!!!')
+      return
     } else {
       // format lại kiểu dữ liệu dateOfBirth , chỉ lấy ngày tháng năm sinh
       let date = dateOfBirth.getDate()
@@ -87,19 +109,19 @@ export const Register = () => {
         <Toaster toastOptions={{ duration: 4000 }} />
         <div className="header-re">
           <div className="text">{action}</div>
-          <div className="subtext">Get your Zola account now.</div>
+          <div className="subtext">Tạo tài khoản chóng và dễ dàng. </div>
         </div>
         <div className="form">
           <div className="labelA">
             <div className="inputA">
-              <div className="labelA">First Name</div>
-              <div className="labelAB">Last Name</div>
+              <div className="labelA">Nhập Họ</div>
+              <div className="labelAB">Nhập Tên</div>
             </div>
             <div className="inputA">
               <div className="inputIA">
                 <input
                   type="firstname"
-                  placeholder="Enter First Name"
+                  placeholder="Nhập họ của bạn"
                   onChange={(e) => {
                     setFirstName(e.target.value)
                   }}
@@ -108,7 +130,7 @@ export const Register = () => {
               <div className="inputIAB">
                 <input
                   type="lastname"
-                  placeholder="Enter Last Name"
+                  placeholder="Nhập tên của bạn"
                   onChange={(e) => {
                     setLastName(e.target.value)
                   }}
@@ -116,22 +138,22 @@ export const Register = () => {
               </div>
             </div>
           </div>
-          <div className="label">NumberPhone</div>
+          <div className="label">Nhập số di động </div>
           <div className="inputI">
             <input
               type="numberphone"
-              placeholder="Enter NumberPhone"
+              placeholder="Nhập số di động"
               onChange={(e) => {
                 setPhoneNumber(e.target.value)
               }}
             />
           </div>
-          <div className="label">Date of Birth</div>
+          <div className="label">Nhập ngày sinh </div>
           <div className="inputA">
             <div className="inputB">
               <DatePicker
                 //showIcon
-                placeholderText="Click to select a date"
+                placeholderText="Chọn ngày sinh "
                 selected={dateOfBirth}
                 onChange={(e) => setDateOfBirth(e)}
                 dateFormat="dd/MM/yyyy"
@@ -139,42 +161,58 @@ export const Register = () => {
               />
             </div>
             <div className="inputC">
-              <div>
-                <label for="select"> Gender </label>
+              <div className="div-gender">
+                <label for="select"> Giới tính </label>
                 <select
                   className="form-select"
                   id="select"
                   value={gender}
                   onChange={(e) => setGender(e.target.value)}
                 >
-                  <option value="male">Male</option>
-                  <option value="female">Female</option>
-                  <option value="other">Other</option>
+                  <option value="male">Nam</option>
+                  <option value="female">Nữ</option>
+                  <option value="other">Khác</option>
                 </select>
               </div>
             </div>
           </div>
 
-          <div className="label">Password</div>
+          <div className="label">Nhập mật khẩu</div>
           <div className="inputIB">
             <input
-              type="password"
-              placeholder="Enter Password"
+              // type="password"
+              type={showPassword ? 'text' : 'password'}
+              placeholder="Nhập mật khẩu"
               onChange={(e) => setPassword(e.target.value)}
             />
+            <span className="span-eye" onClick={togglePasswordVisibility}>
+              {showPassword ? <FaEyeSlash /> : <FaEye />}{' '}
+              {/* Sử dụng icon con mắt */}
+            </span>
           </div>
-          <div className="label">Confirm Password</div>
+          <div className="label">Nhập lại mật khẩu </div>
           <div className="inputIB">
             <input
-              type="password"
-              placeholder="Enter Confirm Password"
+              type={showPassword ? 'text' : 'password'}
+              placeholder="Nhập lại mật khẩu"
               // set lấy giá trị confirm password
               onChange={(e) => setConfirmPassword(e.target.value)}
             />
           </div>
           <div className="user-re">
-            <div className="col-xl-12 col-md-10 col-sm-12 col-12">
-              <div
+            <Button
+              onClick={(e) => {
+                register(e)
+              }}
+              sx={{ marginTop: '10px' }}
+              variant="contained"
+              color="success"
+            >
+              Đăng ký
+            </Button>
+            {/* <div className="col-xl-12 col-md-10 col-sm-12 col-12"> */}
+
+            {/* <div
                 className={action === 'Register' ? 'button blue' : 'button'}
                 onClick={(e) => {
                   register(e)
@@ -182,13 +220,16 @@ export const Register = () => {
                 }}
               >
                 Register
-              </div>
-            </div>
+              </div> */}
+            {/* </div> */}
           </div>
           <div className="form-group user-register">
             <div className="col-xl-12 col-md-10 col-sm-12 col-12 ">
               <br />
-              Do you have an account? <a href="/login"> Log In</a>
+              Bạn đã có tài khoản ?{' '}
+              <b className="login-style">
+                <a href="/login"> Đăng Nhập</a>
+              </b>
             </div>
           </div>
         </div>

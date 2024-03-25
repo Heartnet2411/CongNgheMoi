@@ -16,7 +16,7 @@ const MainCloud = () => {
         width: '100%',
         height: '106.3%',
         backgroundColor: 'lightgrey',
-        display: 'flex'
+        display: 'flex',
       }}
     >
       <div
@@ -25,7 +25,7 @@ const MainCloud = () => {
           height: '100%',
           display: 'flex',
           flexDirection: 'column',
-          justifyContent: 'space-between'
+          justifyContent: 'space-between',
         }}
       >
         <div
@@ -35,16 +35,15 @@ const MainCloud = () => {
             backgroundColor: 'white',
             display: 'flex',
             justifyContent: 'space-between',
-            alignItems: 'center'
+            alignItems: 'center',
           }}
         >
           <div
             style={{
               display: 'flex',
               gap: 15,
-              display: 'flex',
               justifyContent: 'space-between',
-              alignItems: 'center'
+              alignItems: 'center',
             }}
           >
             <img
@@ -55,13 +54,13 @@ const MainCloud = () => {
                 width: 60,
                 height: 60,
                 borderRadius: 30,
-                backgroundColor: 'grey'
+                backgroundColor: 'grey',
               }}
             />
             <label
               style={{
                 fontSize: 18,
-                fontWeight: 'bold'
+                fontWeight: 'bold',
               }}
             >
               Cloud của tôi
@@ -77,7 +76,7 @@ const MainCloud = () => {
                 setOpenDrawer(!openDrawer)
               }}
               style={{
-                backgroundColor: openDrawer === true ? 'white' : 'white'
+                backgroundColor: openDrawer === true ? 'white' : 'white',
               }}
             >
               <BsCodeSquare size="1.6rem" />
@@ -92,7 +91,7 @@ const MainCloud = () => {
             backgroundColor: 'white',
             display: 'flex',
             gap: 20,
-            alignItems: 'center'
+            alignItems: 'center',
           }}
         >
           <input
@@ -104,7 +103,7 @@ const MainCloud = () => {
               borderStyle: 'none',
               border: 'none',
               outline: 'none',
-              marginLeft: 10
+              marginLeft: 10,
             }}
             type="tin nhan"
             placeholder="Nhap tin nhan "

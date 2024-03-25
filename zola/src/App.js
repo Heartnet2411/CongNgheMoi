@@ -8,6 +8,10 @@ import Phone2 from './Layout/FireBase/phone2'
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import Receiveotp from './Layout/Login/Receiveotp'
 import Sendotp from './Layout/Login/Sendotp'
+import Cloud from './Layout/Cloud'
+import Forgot from './Layout/Login/Forgotpassword'
+import Forgotpassword from './Layout/Login/Forgotpassword'
+import Resetpassword from './Layout/Login/Resetpassword'
 
 function App() {
   return (
@@ -23,6 +27,9 @@ function App() {
           <Route path="/phonesignin" element={<PhoneSignin />} />
           <Route path="/phone" element={<Phone2 />} />
           <Route path="/sendotp" element={<Sendotp />} />
+          <Route path="/cloud" element={<Cloud />} />
+          <Route path="/forgotpassword" element={<Forgotpassword />} />
+          <Route path="/resetpassword" element={<Resetpassword />} />
         </Routes>
       </BrowserRouter>
     </div>

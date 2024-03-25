@@ -114,6 +114,10 @@ class AccountController {
             })
         }
     }
+    // viết 1 hàm post quên mật khẩu từ số điện thoại
+    async forgot(req, res) {
+        // gọi lại hàm loginphone
+    }
 }
 
 export default new AccountController()
