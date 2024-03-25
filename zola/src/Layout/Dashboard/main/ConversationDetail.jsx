@@ -202,7 +202,6 @@ const ConversationDetail = () => {
           width: '100%',
           flexDirection: 'column',
           display: 'flex',
-          backgroundColor: 'red',
         }}
       >
         {/* tesst123 */}
@@ -218,7 +217,7 @@ const ConversationDetail = () => {
 
           <label
             style={{
-              paddingLeft: 30,
+              paddingLeft: 10,
             }}
           >
             Danh sách nhắc hẹn
@@ -235,20 +234,30 @@ const ConversationDetail = () => {
           gap: 10,
         }}
       >
-        <label
+        {/* <label
           style={{
             paddingLeft: 10,
           }}
         >
           <BsPeople size="1.3rem" />
-        </label>
-        <label
+        </label> */}
+        <div
           style={{
             paddingLeft: 10,
+            flex: 'row',
+            width: '100%',
+            display: 'flex',
           }}
         >
-          'M' nhóm chung
-        </label>
+          <BsPeople size="1.3rem" />
+          <label
+            style={{
+              paddingLeft: 10,
+            }}
+          >
+            'M' nhóm chung
+          </label>
+        </div>
       </div>
       <div
         style={{
