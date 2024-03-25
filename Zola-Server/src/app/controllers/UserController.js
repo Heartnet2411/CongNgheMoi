@@ -106,6 +106,10 @@ class UserController {
             res.json('User doesn`t exits !!!')
         }
     }
+    async userInfo(req, res) {
+        console.log('hello111')
+        res.status(200).send('<h1>hello</h1>')
+    }
 }
 
 export default new UserController()

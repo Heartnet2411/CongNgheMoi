@@ -117,6 +117,35 @@ class AccountController {
     // viết 1 hàm post quên mật khẩu từ số điện thoại
     async forgot(req, res) {
         // gọi lại hàm loginphone
+        const { phoneNumber } = req.body
+        const passwordnew = req.body.passwordnew
+        // tìm từ số điện thoại ra account trong db có số điện thoại đó không
+        const account = await Account.findOne({ phoneNumber: phoneNumber })
+        // từ account đổi password thành passwordnew
+
+        // kiểm tra mật khẩu mới có giống mật khẩu cũ không , nếu giống thì báo lỗi
+        if (account.password === passwordnew) {
+            console.log('Mật khẩu mới không được trùng mật khẩu cũ')
+            res.status(400).json({
+                message: 'Mật khẩu mới không được trùng mật khẩu cũ',
+            })
+        } else {
+            // nếu giống thì thay đổi mật khẩu thành mật khẩu mới
+            account.password = passwordnew
+            await account.save()
+            console.log('Mật khẩu đã được thay đổi thành công')
+            res.status(200).json({
+                message: 'Mật khẩu đã được thay đổi thành công!!!',
+                account: account,
+            })
+        }
+
+        // // in ra account
+        // console.log(account)
+        // res.status(200).json({
+        //     message: 'Thành công',
+        //     account: account,
+        // })
     }
 }
 

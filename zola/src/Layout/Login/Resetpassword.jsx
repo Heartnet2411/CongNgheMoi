@@ -9,11 +9,14 @@ import { RecaptchaVerifier, signInWithPhoneNumber } from 'firebase/auth'
 import { auth } from './setup'
 import 'react-toastify/dist/ReactToastify.css'
 import { toast, Toaster } from 'react-hot-toast'
+import axios from 'axios'
 const Resetpassword = () => {
   const [otp, setOtp] = useState('')
-  // const [phone, setPhone] = useState('')
   const [user, setUser] = useState(null)
   const [loading, setLoading] = useState(false)
+
+  const [passwordnew, setPasswordnew] = useState('') // Khai báo state passwordnew để lưu giá trị mật khẩu mới
+
   const handleOtpChange = (e) => {
     let newValue = e.target.value.replace(/\D/g, '') // Lọc chỉ giữ lại số
     newValue = newValue.slice(0, 6) // Giới hạn chỉ cho phép nhập 6 số
@@ -23,7 +26,7 @@ const Resetpassword = () => {
   useEffect(() => {
     if (!phoneNumber) {
       alert('Không tìm thấy số điện thoại!!!')
-      window.location.href = 'http://localhost:3000/sendotp'
+      window.location.href = 'http://localhost:3000/forgotpassword'
       return
     }
     onSignUp()
@@ -66,23 +69,54 @@ const Resetpassword = () => {
     //     setLoading(false)
     //   })
   }
-  function onVerifyOTP() {
+  function OnSetupPassword() {
     setLoading(true)
-    window.confirmationResult
-      .confirm(otp)
-      .then(async (res) => {
-        console.log(res)
-        setUser(res.user)
-        setLoading(false)
+    // kiểm tra nếu mà passwordnew bé hơn 8 ký tự thì báo lỗi
+
+    const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/
+    if (!passwordRegex.test(passwordnew)) {
+      toast.error(
+        'Mật khẩu mới phải có ít nhất 8 ký tự có ít nhất 8 ký tự, ít nhất 1 chữ hoa, 1 chữ thường, 1 số'
+      )
+      return
+    }
+
+    // gọi hàm axios và post đến code http://localhost:3001/account/forgot-account
+    axios
+      .post('http://localhost:3001/account/forgot-account', {
+        phoneNumber: phoneNumber,
+        passwordnew: passwordnew,
       })
-      .catch((err) => {
-        console.log(err)
-        setLoading(false)
-        // Xử lý trường hợp OTP không đúng
-        toast.error('Mã OTP không đúng. Vui lòng nhập lại.')
-        // Đặt lại giá trị của OTP để người dùng nhập lại
-        setOtp('')
+      .then((response) => {
+        if (
+          response.data.message === 'Mật khẩu mới không được trùng mật khẩu cũ'
+        ) {
+          toast.success('Mật khẩu mới không được trùng mật khẩu cũ')
+        }
+
+        if (
+          response.data.message === 'Mật khẩu đã được thay đổi thành công!!!'
+        ) {
+          window.location.href = 'http://localhost:3000/dashboard'
+          toast.success('Mật khẩu đã được thay đổi thành công')
+        }
       })
+
+    // window.confirmationResult
+    //   .confirm(otp)
+    //   .then(async (res) => {
+    //     console.log(res)
+    //     setUser(res.user)
+    //     setLoading(false)
+    //   })
+    //   .catch((err) => {
+    //     console.log(err)
+    //     setLoading(false)
+    //     // Xử lý trường hợp OTP không đúng
+    //     toast.error('Mã OTP không đúng. Vui lòng nhập lại.')
+    //     // Đặt lại giá trị của OTP để người dùng nhập lại
+    //     setOtp('')
+    //   })
   }
 
   return (
@@ -131,17 +165,19 @@ const Resetpassword = () => {
         variant="outlined"
         size="small"
         inputProps={{
-          type: 'number',
-          maxLength: 6, // Giới hạn chiều dài tối đa là 6 ký tự
+          type: 'text',
+          // giới hạn ít nhất là 8 ký tự
+          minLength: 8,
         }}
         InputProps={{
           endAdornment: null,
         }}
-        onChange={handleOtpChange}
+        onChange={(e) => setPasswordnew(e.target.value)}
       ></TextField>{' '}
       <br />
       <Button
-        onClick={onVerifyOTP}
+        onClick={OnSetupPassword}
+        // Gán giá trị của ô input vào state passwordnew
         sx={{ marginTop: '10px' }}
         variant="contained"
         color="success"

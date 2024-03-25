@@ -11,4 +11,5 @@ router.get('/findUser', userController.findUserByAccountID)
 
 router.put('/addFriend', userController.addFriend)
 
+router.get('/userInfo', userController.userInfo)
 export default router

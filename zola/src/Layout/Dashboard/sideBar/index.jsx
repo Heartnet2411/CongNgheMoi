@@ -32,13 +32,13 @@ const SideBar = () => {
   return (
     <div
       style={{
-        width: '4%',
+        width: '6%',
         height: '100%',
         backgroundColor: 'blue',
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'space-between',
-        alignItems: 'center'
+        alignItems: 'center',
       }}
     >
       <div
@@ -48,7 +48,7 @@ const SideBar = () => {
           flexDirection: 'column',
           justifyContent: 'center',
           alignItems: 'center',
-          gap: 20
+          gap: 20,
         }}
       >
         <div
@@ -56,7 +56,7 @@ const SideBar = () => {
             backgroundColor: 'blue',
             border: 'none',
             color: 'white',
-            fontSize: 20
+            fontSize: 20,
           }}
           onClick={() => {
             setOpenInfo(!openInfo)
@@ -70,7 +70,7 @@ const SideBar = () => {
               width: 50,
               height: 50,
               borderRadius: 30,
-              backgroundColor: 'grey'
+              backgroundColor: 'grey',
             }}
           />
         </div>
@@ -82,7 +82,7 @@ const SideBar = () => {
               top: '2%',
               background: 'whitesmoke',
               height: '10rem',
-              width: '16rem'
+              width: '16rem',
             }}
           >
             <div>
@@ -94,7 +94,7 @@ const SideBar = () => {
                   gap: 10,
                   marginLeft: 10,
                   marginTop: 10,
-                  borderBottom: '1px solid lightgrey'
+                  borderBottom: '1px solid lightgrey',
                 }}
               >
                 <label
@@ -102,7 +102,7 @@ const SideBar = () => {
                     color: 'black',
                     fontSize: 18,
                     fontWeight: 'bold',
-                    marginLeft: 10
+                    marginLeft: 10,
                   }}
                 >
                   Nguyen Thuy Tinh
@@ -115,7 +115,7 @@ const SideBar = () => {
                   display: 'flex',
                   gap: 10,
                   marginLeft: 10,
-                  marginTop: 10
+                  marginTop: 10,
                 }}
               >
                 <label
@@ -123,7 +123,7 @@ const SideBar = () => {
                     color: 'black',
                     fontSize: 15,
 
-                    marginLeft: 10
+                    marginLeft: 10,
                   }}
                 >
                   Hồ sơ của bạn
@@ -137,7 +137,7 @@ const SideBar = () => {
                   gap: 10,
                   marginLeft: 10,
                   marginTop: 10,
-                  borderBottom: '1px solid lightgrey'
+                  borderBottom: '1px solid lightgrey',
                 }}
               >
                 <label
@@ -145,7 +145,7 @@ const SideBar = () => {
                     color: 'black',
                     fontSize: 15,
 
-                    marginLeft: 10
+                    marginLeft: 10,
                   }}
                 >
                   Cài đặt
@@ -158,7 +158,7 @@ const SideBar = () => {
                   display: 'flex',
                   gap: 10,
                   marginLeft: 10,
-                  marginTop: 10
+                  marginTop: 10,
                 }}
               >
                 <label
@@ -166,7 +166,7 @@ const SideBar = () => {
                     color: 'black',
                     fontSize: 15,
 
-                    marginLeft: 10
+                    marginLeft: 10,
                   }}
                 >
                   Đăng xuất
@@ -181,7 +181,7 @@ const SideBar = () => {
               backgroundColor: 'blue',
               border: 'none',
               color: 'white',
-              fontSize: 20
+              fontSize: 20,
             }}
             onClick={handleDashboard}
           >
@@ -194,7 +194,7 @@ const SideBar = () => {
               backgroundColor: 'blue',
               border: 'none',
               color: 'white',
-              fontSize: 20
+              fontSize: 20,
             }}
             onClick={handleListFriend}
           >
@@ -207,7 +207,7 @@ const SideBar = () => {
               backgroundColor: 'blue',
               border: 'none',
               color: 'white',
-              fontSize: 20
+              fontSize: 20,
             }}
             onClick={handleCloud}
           >
@@ -220,7 +220,7 @@ const SideBar = () => {
           backgroundColor: 'blue',
           border: 'none',
           color: 'white',
-          fontSize: 20
+          fontSize: 20,
         }}
         onClick={() => {
           setOpen(!open)
@@ -237,7 +237,7 @@ const SideBar = () => {
             left: '0%',
             background: 'whitesmoke',
             height: '17rem',
-            width: '13rem'
+            width: '13rem',
           }}
         >
           {/* code here */}
@@ -249,14 +249,14 @@ const SideBar = () => {
                 display: 'flex',
                 gap: 10,
                 marginLeft: 10,
-                marginTop: 10
+                marginTop: 10,
               }}
             >
               <IoPersonOutline size="1.5rem" />
               <label
                 style={{
                   color: 'black',
-                  fontSize: 15
+                  fontSize: 15,
                 }}
               >
                 Thông tin tài khoản
@@ -269,14 +269,14 @@ const SideBar = () => {
                 display: 'flex',
                 gap: 10,
                 marginLeft: 10,
-                borderBottom: '1px solid lightgrey'
+                borderBottom: '1px solid lightgrey',
               }}
             >
               <IoSettingsOutline size="1.5rem" />
               <label
                 style={{
                   color: 'black',
-                  fontSize: 15
+                  fontSize: 15,
                 }}
               >
                 Cài đặt
@@ -289,7 +289,7 @@ const SideBar = () => {
                 display: 'flex',
                 gap: 10,
                 marginTop: 10,
-                marginLeft: 10
+                marginLeft: 10,
               }}
             >
               <div
@@ -297,14 +297,14 @@ const SideBar = () => {
                   width: '80%',
                   height: 30,
                   display: 'flex',
-                  gap: 10
+                  gap: 10,
                 }}
               >
                 <FiDatabase size="1.5rem" />
                 <label
                   style={{
                     color: 'black',
-                    fontSize: 15
+                    fontSize: 15,
                   }}
                 >
                   Dữ liệu
@@ -318,7 +318,7 @@ const SideBar = () => {
                 height: 30,
                 display: 'flex',
                 gap: 10,
-                marginLeft: 10
+                marginLeft: 10,
               }}
             >
               <div
@@ -326,14 +326,14 @@ const SideBar = () => {
                   width: '80%',
                   height: 30,
                   display: 'flex',
-                  gap: 10
+                  gap: 10,
                 }}
               >
                 <FiTool size="1.5rem" />
                 <label
                   style={{
                     color: 'black',
-                    fontSize: 15
+                    fontSize: 15,
                   }}
                 >
                   Công cụ
@@ -347,7 +347,7 @@ const SideBar = () => {
                 height: 30,
                 display: 'flex',
                 gap: 10,
-                marginLeft: 10
+                marginLeft: 10,
               }}
             >
               <div
@@ -355,14 +355,14 @@ const SideBar = () => {
                   width: '80%',
                   height: 30,
                   display: 'flex',
-                  gap: 10
+                  gap: 10,
                 }}
               >
                 <MdOutlineLanguage size="1.4rem" />
                 <label
                   style={{
                     color: 'black',
-                    fontSize: 15
+                    fontSize: 15,
                   }}
                 >
                   Ngôn ngữ
@@ -377,7 +377,7 @@ const SideBar = () => {
                 display: 'flex',
                 gap: 10,
                 marginLeft: 10,
-                borderBottom: '1px solid lightgrey'
+                borderBottom: '1px solid lightgrey',
               }}
             >
               <div
@@ -385,14 +385,14 @@ const SideBar = () => {
                   width: '80%',
                   height: 30,
                   display: 'flex',
-                  gap: 10
+                  gap: 10,
                 }}
               >
                 <IoIosInformationCircleOutline size="1.5rem" />
                 <label
                   style={{
                     color: 'black',
-                    fontSize: 15
+                    fontSize: 15,
                   }}
                 >
                   Giới thiệu
@@ -408,7 +408,7 @@ const SideBar = () => {
                 display: 'flex',
                 gap: 10,
                 marginLeft: 40,
-                marginTop: 10
+                marginTop: 10,
                 // borderTop: '1px solid lightgrey'
               }}
             >
@@ -416,7 +416,7 @@ const SideBar = () => {
                 style={{
                   color: 'black',
                   fontSize: 15,
-                  color: 'red'
+                  color: 'red',
                 }}
               >
                 Đăng xuất
@@ -428,13 +428,13 @@ const SideBar = () => {
                 height: 30,
                 display: 'flex',
                 gap: 10,
-                marginLeft: 40
+                marginLeft: 40,
               }}
             >
               <label
                 style={{
                   color: 'black',
-                  fontSize: 15
+                  fontSize: 15,
                 }}
               >
                 Thoát

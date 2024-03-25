@@ -63,7 +63,8 @@ function Forgotpassword() {
         .then((response) => {
           //window.location.href = 'http://localhost:3000/receiveotp'
           if (response.data.message === 'Đăng nhập thành công!!!') {
-            window.location.href = 'http://localhost:3000/receiveotp'
+            // làm đở gửi tới luôn trang reset password
+            window.location.href = 'http://localhost:3000/resetpassword'
             // Hoặc lưu vào session storage
             sessionStorage.setItem('phoneNumber', response.data.phoneNumber)
           } else {
@@ -105,7 +106,7 @@ function Forgotpassword() {
           sx={{ marginTop: '10px' }}
           variant="contained"
         >
-          Gửi Mã OTP
+          Tiếp tục
         </Button>
       </div>
     </div>

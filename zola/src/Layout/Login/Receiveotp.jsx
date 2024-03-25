@@ -23,7 +23,7 @@ const Receiveotp = () => {
   useEffect(() => {
     if (!phoneNumber) {
       alert('Không tìm thấy số điện thoại!!!')
-      window.location.href = 'http://localhost:3000/sendotp'
+      window.location.href = 'http://localhost:3000/register'
       return
     }
     onSignUp()
