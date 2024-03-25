@@ -1,9 +1,16 @@
 import { PiChatCircleText } from 'react-icons/pi'
 import { BsPersonLinesFill } from 'react-icons/bs'
 import { CiCloudOn } from 'react-icons/ci'
-import { Link, Route } from 'react-router-dom'
+import { CiMail } from 'react-icons/ci'
 import { useNavigate } from 'react-router-dom'
 import { IoSettingsOutline } from 'react-icons/io5'
+import { useState } from 'react'
+import { IoPersonOutline } from 'react-icons/io5'
+import { FiDatabase } from 'react-icons/fi'
+import { FiTool } from 'react-icons/fi'
+import { MdOutlineLanguage } from 'react-icons/md'
+import { IoIosInformationCircleOutline } from 'react-icons/io'
+import { IoIosArrowForward } from 'react-icons/io'
 const SideBar = () => {
   const navigate = useNavigate()
   const handleCloud = () => {
@@ -19,16 +26,19 @@ const SideBar = () => {
     navigate('/listFriend')
   }
 
+  const [open, setOpen] = useState(false)
+  const [openInfo, setOpenInfo] = useState(false)
+
   return (
     <div
       style={{
-        width: 90,
-        height: '106.3%',
+        width: '4%',
+        height: '100%',
         backgroundColor: 'blue',
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'space-between',
-        alignItems: 'center',
+        alignItems: 'center'
       }}
     >
       <div
@@ -38,26 +48,140 @@ const SideBar = () => {
           flexDirection: 'column',
           justifyContent: 'center',
           alignItems: 'center',
-          gap: 20,
+          gap: 20
         }}
       >
-        <img
-          src="https://www.w3schools.com/howto/img_avatar.png"
-          alt="demo"
+        <div
           style={{
-            width: 50,
-            height: 50,
-            borderRadius: 30,
-            backgroundColor: 'grey',
+            backgroundColor: 'blue',
+            border: 'none',
+            color: 'white',
+            fontSize: 20
           }}
-        />
+          onClick={() => {
+            setOpenInfo(!openInfo)
+          }}
+        >
+          {' '}
+          <img
+            src="https://www.w3schools.com/howto/img_avatar.png"
+            alt="demo"
+            style={{
+              width: 50,
+              height: 50,
+              borderRadius: 30,
+              backgroundColor: 'grey'
+            }}
+          />
+        </div>
+        {openInfo && (
+          <div
+            style={{
+              position: 'absolute',
+              left: '4%',
+              top: '2%',
+              background: 'whitesmoke',
+              height: '10rem',
+              width: '16rem'
+            }}
+          >
+            <div>
+              <div
+                style={{
+                  width: '90%',
+                  height: 30,
+                  display: 'flex',
+                  gap: 10,
+                  marginLeft: 10,
+                  marginTop: 10,
+                  borderBottom: '1px solid lightgrey'
+                }}
+              >
+                <label
+                  style={{
+                    color: 'black',
+                    fontSize: 18,
+                    fontWeight: 'bold',
+                    marginLeft: 10
+                  }}
+                >
+                  Nguyen Thuy Tinh
+                </label>
+              </div>
+              <div
+                style={{
+                  width: '90%',
+                  height: 30,
+                  display: 'flex',
+                  gap: 10,
+                  marginLeft: 10,
+                  marginTop: 10
+                }}
+              >
+                <label
+                  style={{
+                    color: 'black',
+                    fontSize: 15,
+
+                    marginLeft: 10
+                  }}
+                >
+                  Hồ sơ của bạn
+                </label>
+              </div>
+              <div
+                style={{
+                  width: '90%',
+                  height: 30,
+                  display: 'flex',
+                  gap: 10,
+                  marginLeft: 10,
+                  marginTop: 10,
+                  borderBottom: '1px solid lightgrey'
+                }}
+              >
+                <label
+                  style={{
+                    color: 'black',
+                    fontSize: 15,
+
+                    marginLeft: 10
+                  }}
+                >
+                  Cài đặt
+                </label>
+              </div>
+              <div
+                style={{
+                  width: '90%',
+                  height: 30,
+                  display: 'flex',
+                  gap: 10,
+                  marginLeft: 10,
+                  marginTop: 10
+                }}
+              >
+                <label
+                  style={{
+                    color: 'black',
+                    fontSize: 15,
+
+                    marginLeft: 10
+                  }}
+                >
+                  Đăng xuất
+                </label>
+              </div>
+            </div>
+          </div>
+        )}
         <div>
           <button
             style={{
               backgroundColor: 'blue',
               border: 'none',
               color: 'white',
-              fontSize: 20,
+              fontSize: 20
             }}
             onClick={handleDashboard}
           >
@@ -70,7 +194,7 @@ const SideBar = () => {
               backgroundColor: 'blue',
               border: 'none',
               color: 'white',
-              fontSize: 20,
+              fontSize: 20
             }}
             onClick={handleListFriend}
           >
@@ -83,7 +207,7 @@ const SideBar = () => {
               backgroundColor: 'blue',
               border: 'none',
               color: 'white',
-              fontSize: 20,
+              fontSize: 20
             }}
             onClick={handleCloud}
           >
@@ -91,10 +215,234 @@ const SideBar = () => {
           </button>
         </div>
       </div>
-      <div>
+      <div
+        style={{
+          backgroundColor: 'blue',
+          border: 'none',
+          color: 'white',
+          fontSize: 20
+        }}
+        onClick={() => {
+          setOpen(!open)
+        }}
+      >
         {' '}
         <IoSettingsOutline size="2rem" />
       </div>
+      {open && (
+        <div
+          style={{
+            position: 'absolute',
+            bottom: '7%',
+            left: '0%',
+            background: 'whitesmoke',
+            height: '17rem',
+            width: '13rem'
+          }}
+        >
+          {/* code here */}
+          <div>
+            <div
+              style={{
+                width: '100%',
+                height: 30,
+                display: 'flex',
+                gap: 10,
+                marginLeft: 10,
+                marginTop: 10
+              }}
+            >
+              <IoPersonOutline size="1.5rem" />
+              <label
+                style={{
+                  color: 'black',
+                  fontSize: 15
+                }}
+              >
+                Thông tin tài khoản
+              </label>
+            </div>
+            <div
+              style={{
+                width: '100%',
+                height: 30,
+                display: 'flex',
+                gap: 10,
+                marginLeft: 10,
+                borderBottom: '1px solid lightgrey'
+              }}
+            >
+              <IoSettingsOutline size="1.5rem" />
+              <label
+                style={{
+                  color: 'black',
+                  fontSize: 15
+                }}
+              >
+                Cài đặt
+              </label>
+            </div>
+            <div
+              style={{
+                width: '100%',
+                height: 30,
+                display: 'flex',
+                gap: 10,
+                marginTop: 10,
+                marginLeft: 10
+              }}
+            >
+              <div
+                style={{
+                  width: '80%',
+                  height: 30,
+                  display: 'flex',
+                  gap: 10
+                }}
+              >
+                <FiDatabase size="1.5rem" />
+                <label
+                  style={{
+                    color: 'black',
+                    fontSize: 15
+                  }}
+                >
+                  Dữ liệu
+                </label>
+              </div>
+              <IoIosArrowForward size="1rem" />
+            </div>
+            <div
+              style={{
+                width: '100%',
+                height: 30,
+                display: 'flex',
+                gap: 10,
+                marginLeft: 10
+              }}
+            >
+              <div
+                style={{
+                  width: '80%',
+                  height: 30,
+                  display: 'flex',
+                  gap: 10
+                }}
+              >
+                <FiTool size="1.5rem" />
+                <label
+                  style={{
+                    color: 'black',
+                    fontSize: 15
+                  }}
+                >
+                  Công cụ
+                </label>
+              </div>
+              <IoIosArrowForward size="1rem" />
+            </div>
+            <div
+              style={{
+                width: '100%',
+                height: 30,
+                display: 'flex',
+                gap: 10,
+                marginLeft: 10
+              }}
+            >
+              <div
+                style={{
+                  width: '80%',
+                  height: 30,
+                  display: 'flex',
+                  gap: 10
+                }}
+              >
+                <MdOutlineLanguage size="1.4rem" />
+                <label
+                  style={{
+                    color: 'black',
+                    fontSize: 15
+                  }}
+                >
+                  Ngôn ngữ
+                </label>
+              </div>
+              <IoIosArrowForward size="1rem" />
+            </div>
+            <div
+              style={{
+                width: '100%',
+                height: 30,
+                display: 'flex',
+                gap: 10,
+                marginLeft: 10,
+                borderBottom: '1px solid lightgrey'
+              }}
+            >
+              <div
+                style={{
+                  width: '80%',
+                  height: 30,
+                  display: 'flex',
+                  gap: 10
+                }}
+              >
+                <IoIosInformationCircleOutline size="1.5rem" />
+                <label
+                  style={{
+                    color: 'black',
+                    fontSize: 15
+                  }}
+                >
+                  Giới thiệu
+                </label>
+              </div>
+              <IoIosArrowForward size="1rem" />
+            </div>
+
+            <div
+              style={{
+                width: '100%',
+                height: 30,
+                display: 'flex',
+                gap: 10,
+                marginLeft: 40,
+                marginTop: 10
+                // borderTop: '1px solid lightgrey'
+              }}
+            >
+              <label
+                style={{
+                  color: 'black',
+                  fontSize: 15,
+                  color: 'red'
+                }}
+              >
+                Đăng xuất
+              </label>
+            </div>
+            <div
+              style={{
+                width: '100%',
+                height: 30,
+                display: 'flex',
+                gap: 10,
+                marginLeft: 40
+              }}
+            >
+              <label
+                style={{
+                  color: 'black',
+                  fontSize: 15
+                }}
+              >
+                Thoát
+              </label>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

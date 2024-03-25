@@ -1,6 +1,4 @@
 import React, { useState } from 'react'
-import SideBar from '../Dashboard/sideBar/index.jsx'
-import SideBarFriend from '../ListFriend/sideBarFriend.jsx'
 import { CiMail } from 'react-icons/ci'
 const FriendRQ = () => {
   const [names, setNames] = useState([])
@@ -13,8 +11,8 @@ const FriendRQ = () => {
     <div
       style={{
         width: '100%',
-        height: '106.3%',
-        backgroundColor: 'lightgrey'
+        height: '100%',
+        backgroundColor: 'whitesmoke'
       }}
     >
       <div
@@ -53,7 +51,7 @@ const FriendRQ = () => {
         style={{
           width: '100%',
           height: 60,
-          backgroundColor: 'lightgrey',
+          backgroundColor: 'whitesmoke',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between'

@@ -5,8 +5,19 @@ import { CiVideoOn } from 'react-icons/ci'
 import { IoCallOutline } from 'react-icons/io5'
 import { IoMdSend } from 'react-icons/io'
 import { MdOutlineAddReaction } from 'react-icons/md'
+import { TbMessage2Bolt } from 'react-icons/tb'
 import { ImAttachment } from 'react-icons/im'
+import { FiAtSign } from 'react-icons/fi'
+import { CiImageOn } from 'react-icons/ci'
+import { LuSticker } from 'react-icons/lu'
+import { TbCapture } from 'react-icons/tb'
+import { TiBusinessCard } from 'react-icons/ti'
+import { LuAlarmClock } from 'react-icons/lu'
 import { SlLike } from 'react-icons/sl'
+import { SlPicture } from 'react-icons/sl'
+import { MdFormatColorText } from 'react-icons/md'
+import { MdOutlineAssignmentTurnedIn } from 'react-icons/md'
+import { MdOutlinePriorityHigh } from 'react-icons/md'
 const Main = () => {
   const [openDrawer, setOpenDrawer] = React.useState(true)
   const [isSend, setSend] = React.useState(true)
@@ -14,7 +25,7 @@ const Main = () => {
     <div
       style={{
         width: '100%',
-        height: '106.3%',
+        height: '100%',
         backgroundColor: 'lightgrey',
         display: 'flex'
       }}
@@ -91,55 +102,96 @@ const Main = () => {
         <div
           style={{
             width: '100%',
-            height: 70,
+            height: '13%',
             backgroundColor: 'white',
             display: 'flex',
-            gap: 20,
+            flexDirection: 'column',
+
             alignItems: 'center'
           }}
         >
-          <input
+          <div
             style={{
-              width: '80%',
-              height: 60,
-              alignItems: 'center',
-              backgroundColor: 'white',
-              borderStyle: 'none',
-              border: 'none',
-              outline: 'none',
-              marginLeft: 10
-            }}
-            type="tin nhan"
-            placeholder="Nhap tin nhan "
-          />
-          <ImAttachment size="1.4rem" />
-          <MdOutlineAddReaction size="1.5rem" />
+              display: 'flex',
 
-          {isSend ? (
-            <label
-              onClick={() => {
-                setSend(!isSend)
+              marginTop: 5,
+              alignContent: 'space-between',
+              width: '100%',
+              height: '40%',
+              borderBottom: '1px solid lightgrey'
+            }}
+          >
+            <div
+              style={{
+                marginLeft: 10,
+                gap: 20,
+                marginBottom: 5,
+                display: 'flex',
+                color: 'black'
               }}
             >
-              GỬI
-            </label>
-          ) : (
-            <label
-              onClick={() => {
-                setSend(!isSend)
+              <LuSticker size="1.4rem" />
+
+              <SlPicture size="1.4rem" />
+
+              <ImAttachment size="1.3rem" />
+              <TbCapture size="1.4rem" />
+              <TiBusinessCard size="1.4rem" />
+              <LuAlarmClock size="1.4rem" />
+              <MdOutlineAssignmentTurnedIn size="1.4rem" />
+              <MdFormatColorText size="1.4rem" />
+              <MdOutlinePriorityHigh size="1.4rem" />
+            </div>
+          </div>
+          <div
+            style={{
+              display: 'flex',
+              gap: 3,
+              width: '95%',
+              height: '95%',
+              alignItems: 'center',
+              justifyContent: 'space-between'
+            }}
+          >
+            <input
+              style={{
+                width: '85%',
+                height: '85%',
+                alignItems: 'center',
+                backgroundColor: 'white',
+                borderStyle: 'none',
+                border: 'none',
+                outline: 'none'
               }}
-            >
-              <SlLike size="1.5rem" />
-            </label>
-          )}
+              type="tin nhan"
+              placeholder="Nhập @, tin nhắn tới  "
+            />
+            <TbMessage2Bolt size="1.3rem" />
+            <MdOutlineAddReaction size="1.3rem" />
+            <FiAtSign size="1.3rem" />
+
+            {isSend ? (
+              <label
+                onClick={() => {
+                  setSend(!isSend)
+                }}
+              >
+                GỬI
+              </label>
+            ) : (
+              <label
+                onClick={() => {
+                  setSend(!isSend)
+                }}
+              >
+                <SlLike size="1.2rem" />
+              </label>
+            )}
+          </div>
         </div>
       </div>
 
-      {openDrawer === true && (
-        <div>
-          <ConversationDetail />
-        </div>
-      )}
+      {openDrawer === true && <ConversationDetail />}
     </div>
   )
 }

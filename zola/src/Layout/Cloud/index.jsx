@@ -8,7 +8,7 @@ const Cloud = () => {
     <div
       style={{
         width: '100vw',
-        height: '94vh',
+        height: '100vh',
         display: 'flex',
         flexDirection: 'row'
       }}

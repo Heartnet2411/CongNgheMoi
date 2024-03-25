@@ -2,7 +2,7 @@ import Main from './main'
 import SideBar from './sideBar'
 import SubSideBar from './subSideBar'
 
-const DashBoard = () => {
+const Group = () => {
   return (
     <div
       style={{
@@ -19,4 +19,4 @@ const DashBoard = () => {
   )
 }
 
-export default DashBoard
+export default Group

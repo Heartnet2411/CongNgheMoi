@@ -3,31 +3,49 @@ import { GrSearch } from 'react-icons/gr'
 import { AiOutlineUsergroupAdd } from 'react-icons/ai'
 const SubSideBar = () => {
   return (
-    <div style={{ width: 350, height: '106.3%', backgroundColor: 'white' }}>
-      <div style={{ display: 'flex', gap: 10, marginTop: 25 }}>
-        <input
+    <div style={{ width: '25%', height: '100%', backgroundColor: 'white' }}>
+      <div style={{ display: 'flex', gap: 10, marginTop: 25, height: '3%' }}>
+        <div
           style={{
-            width: '60%',
-            height: 20,
-            alignItems: 'center',
-            backgroundColor: 'white',
-            borderRadius: 10,
             display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'center',
+            height: '100%',
             backgroundColor: 'whitesmoke',
-            marginLeft: 10
+            width: '100%',
+            marginLeft: 20,
+            borderRadius: 10,
+            gap: 5,
+            border: '1px solid black'
           }}
-          type="text"
-          placeholder="Search "
-        />
+        >
+          <div style={{ marginLeft: 10, marginTop: 2 }}>
+            <GrSearch size="1rem" />
+          </div>
+
+          <input
+            style={{
+              width: '100%',
+              height: '90%',
+              alignItems: 'center',
+              backgroundColor: 'white',
+              borderRadius: 10,
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'center',
+              border: 'none',
+              backgroundColor: 'whitesmoke'
+            }}
+            type="text"
+            placeholder="Tìm kiếm "
+          />
+        </div>
+
         <AiOutlineUserAdd size="1.6rem" />
         <AiOutlineUsergroupAdd size="1.6rem" />
       </div>
       <div
         style={{
           width: '100%',
-          height: 55,
+          height: '100%',
           display: 'flex',
           gap: 10,
 
