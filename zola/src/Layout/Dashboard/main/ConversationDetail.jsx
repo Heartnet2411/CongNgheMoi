@@ -19,14 +19,14 @@ const ConversationDetail = () => {
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-        gap: 10
+        gap: 10,
       }}
     >
       <label
         style={{
           fontSize: 18,
           fontWeight: 'bold',
-          marginTop: 20
+          marginTop: 20,
         }}
       >
         Thông tin hội thoại
@@ -41,7 +41,7 @@ const ConversationDetail = () => {
             height: 80,
             borderRadius: 100,
             backgroundColor: 'grey',
-            marginTop: 15
+            marginTop: 15,
           }}
         />
       </div>
@@ -49,7 +49,7 @@ const ConversationDetail = () => {
         <label
           style={{
             fontSize: 18,
-            fontWeight: 'bold'
+            fontWeight: 'bold',
           }}
         >
           Nguyen Thuy Tinh
@@ -62,7 +62,7 @@ const ConversationDetail = () => {
             backgroundColor: 'whitesmoke',
             alignItems: 'center',
             display: 'flex',
-            flexDirection: 'column'
+            flexDirection: 'column',
           }}
         >
           <AiOutlineEdit size="1.3rem" />
@@ -74,14 +74,14 @@ const ConversationDetail = () => {
           justifyContent: 'space-around',
           gap: 20,
           padding: 15,
-          width: '80%'
+          width: '80%',
         }}
       >
         <div
           style={{
             display: 'flex',
             flexDirection: 'column',
-            alignItems: 'center'
+            alignItems: 'center',
           }}
         >
           <div
@@ -94,7 +94,7 @@ const ConversationDetail = () => {
               display: 'flex',
               flexDirection: 'column',
               justifyContent: 'center',
-              alignContent: 'center'
+              alignContent: 'center',
             }}
           >
             <CiBellOn size="1.3rem" />
@@ -107,7 +107,7 @@ const ConversationDetail = () => {
               display: 'flex',
               color: 'grey',
               flexDirection: 'column',
-              alignContent: 'center'
+              alignContent: 'center',
             }}
           >
             <label>Tắt thông báo</label>
@@ -120,7 +120,7 @@ const ConversationDetail = () => {
             alignItems: 'center',
             justifyContent: 'center',
 
-            alignContent: 'center'
+            alignContent: 'center',
           }}
         >
           <div
@@ -133,7 +133,7 @@ const ConversationDetail = () => {
               display: 'flex',
               flexDirection: 'column',
               justifyContent: 'center',
-              alignContent: 'center'
+              alignContent: 'center',
             }}
           >
             <TfiPinAlt size="1.2rem" />
@@ -145,7 +145,7 @@ const ConversationDetail = () => {
               justifyContent: 'center',
               alignItems: 'center',
               display: 'flex',
-              alignContent: 'center'
+              alignContent: 'center',
             }}
           >
             Ghim hội thoại
@@ -156,7 +156,7 @@ const ConversationDetail = () => {
             display: 'flex',
 
             flexDirection: 'column',
-            alignItems: 'center'
+            alignItems: 'center',
           }}
         >
           <div
@@ -169,7 +169,7 @@ const ConversationDetail = () => {
               display: 'flex',
               flexDirection: 'column',
               justifyContent: 'center',
-              alignContent: 'center'
+              alignContent: 'center',
             }}
           >
             <BsPeople size="1.2rem" />
@@ -181,7 +181,7 @@ const ConversationDetail = () => {
               justifyContent: 'center',
               alignItems: 'center',
               display: 'flex',
-              alignContent: 'center'
+              alignContent: 'center',
             }}
           >
             Tạo nhóm trò chuyện
@@ -193,29 +193,37 @@ const ConversationDetail = () => {
           width: '100%',
           borderBottomWidth: 5,
           borderBottomStyle: 'solid',
-          borderBottomColor: 'whitesmoke'
+          borderBottomColor: 'whitesmoke',
         }}
       ></div>
       <div
         style={{
           flex: 'row',
-          width: '100%'
+          width: '100%',
+          flexDirection: 'column',
+          display: 'flex',
+          backgroundColor: 'red',
         }}
       >
-        <label
+        {/* tesst123 */}
+        <div
           style={{
-            paddingLeft: 10
+            paddingLeft: 10,
+            flex: 'row',
+            width: '100%',
+            display: 'flex',
           }}
         >
           <BsStopwatch size="1.3rem" />
-        </label>
-        <label
-          style={{
-            paddingLeft: 10
-          }}
-        >
-          Danh sách nhắc hẹn
-        </label>
+
+          <label
+            style={{
+              paddingLeft: 30,
+            }}
+          >
+            Danh sách nhắc hẹn
+          </label>
+        </div>
       </div>
       <div
         style={{
@@ -224,19 +232,19 @@ const ConversationDetail = () => {
           borderBottomWidth: 5,
           borderBottomStyle: 'solid',
           borderBottomColor: 'whitesmoke',
-          gap: 10
+          gap: 10,
         }}
       >
         <label
           style={{
-            paddingLeft: 10
+            paddingLeft: 10,
           }}
         >
           <BsPeople size="1.3rem" />
         </label>
         <label
           style={{
-            paddingLeft: 10
+            paddingLeft: 10,
           }}
         >
           'M' nhóm chung
@@ -250,19 +258,19 @@ const ConversationDetail = () => {
           borderBottomColor: 'whitesmoke',
           display: 'flex',
           gap: 10,
-          flexDirection: 'column'
+          flexDirection: 'column',
         }}
       >
         <div
           style={{
             display: 'flex',
-            justifyContent: 'space-between'
+            justifyContent: 'space-between',
             // padding: 10,
           }}
         >
           <label
             style={{
-              paddingLeft: 10
+              paddingLeft: 10,
             }}
           >
             Ảnh/Video
@@ -288,7 +296,7 @@ const ConversationDetail = () => {
         {isPhotoVidOpen && (
           <div
             style={{
-              paddingLeft: 10
+              paddingLeft: 10,
             }}
           >
             {' '}
@@ -304,13 +312,13 @@ const ConversationDetail = () => {
           borderBottomColor: 'whitesmoke',
           display: 'flex',
           gap: 10,
-          flexDirection: 'column'
+          flexDirection: 'column',
         }}
       >
         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
           <label
             style={{
-              paddingLeft: 10
+              paddingLeft: 10,
             }}
           >
             File
@@ -336,7 +344,7 @@ const ConversationDetail = () => {
         {isFileOpen && (
           <div
             style={{
-              paddingLeft: 10
+              paddingLeft: 10,
             }}
           >
             Danh sách file
@@ -351,13 +359,13 @@ const ConversationDetail = () => {
           borderBottomColor: 'whitesmoke',
           display: 'flex',
           gap: 10,
-          flexDirection: 'column'
+          flexDirection: 'column',
         }}
       >
         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
           <label
             style={{
-              paddingLeft: 10
+              paddingLeft: 10,
             }}
           >
             Links
@@ -383,7 +391,7 @@ const ConversationDetail = () => {
         {isLinkOpen && (
           <div
             style={{
-              paddingLeft: 10
+              paddingLeft: 10,
             }}
           >
             Danh sách link
