@@ -1,5 +1,6 @@
 import Account from '../models/Account.js'
 import { HTTP_STATUS_BAD_REQUEST } from '../../util/erorCode.js'
+import { response } from 'express'
 
 class AccountController {
     async login(req, res) {
@@ -69,13 +70,23 @@ class AccountController {
             res.status(HTTP_STATUS_BAD_REQUEST).json('Account not found!!!')
         }
     }
+    // POST
     async loginphone(req, res) {
         const { phoneNumber } = req.body
-        // chuyển đổi lại số điện thoại từ +84367909181 -> 0367909181
+
+        let phoneNumberFormat // Khai báo biến ở mức độ phạm vi toàn cục
 
         if (phoneNumber.startsWith('+84')) {
-            // Chuyển đổi lại số điện thoại từ +84367909181 -> 0367909181
-            const phoneNumberFormat = phoneNumber.replace('+84', '0')
+            // kiểm tra xem phoNumber đang là dạng này dạng +84367909181 hay là +840367909181 chuyển cả 2 dạng về 0367909181
+
+            // Kiểm tra xem số điện thoại có đúng định dạng +84XXXXXXXXX không
+            const regex = /^\+84\d{9}$/ // Biểu thức chính quy để kiểm tra
+            if (regex.test(phoneNumber)) {
+                phoneNumberFormat = phoneNumber.replace('+84', '0') // Thay thế +84 bằng 0
+            } else {
+                phoneNumberFormat = phoneNumber.replace('+840', '0') // Thay thế +840 bằng 0
+            }
+
             const data = phoneNumberFormat
             console.log(data)
             // kiểm tra số điện thoại đã tồn tại trong db chưa , nếu rồi trả về số điện thoại lại trang đã nhận otp để load
@@ -139,13 +150,6 @@ class AccountController {
                 account: account,
             })
         }
-
-        // // in ra account
-        // console.log(account)
-        // res.status(200).json({
-        //     message: 'Thành công',
-        //     account: account,
-        // })
     }
 }
 

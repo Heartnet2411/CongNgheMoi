@@ -1,13 +1,8 @@
 import { Login } from '../Login/Login'
 import { Register } from '../Login/Register'
 import DashBoard from '../Dashboard/index'
-import ListFriend from '../ListFriend/index'
-import {
-  BrowserRouter as Router,
-  Route,
-  Switch,
-  Routes
-} from 'react-router-dom'
+import ListFriend from '../listFriend/index'
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
 import Cloud from '../Cloud/index'
 import FriendRequest from '../FriendRequest/index'
 import TeamList from '../TeamList/index'

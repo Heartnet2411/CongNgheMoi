@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import PhoneInput from 'react-phone-input-2'
 import 'react-phone-input-2/lib/style.css'
 import './Receiveotp.css'
@@ -13,14 +13,24 @@ function Forgotpassword() {
   const [phone, setPhone] = useState('')
   const [user, setUser] = useState(null)
   const [loading, setLoading] = useState(false)
-  const handleOtpChange = (e) => {
-    let newValue = e.target.value.replace(/\D/g, '') // Lọc chỉ giữ lại số
-    newValue = newValue.slice(0, 6) // Giới hạn chỉ cho phép nhập 6 số
-    setOtp(newValue)
-  }
-  if (user) {
-    window.location.href = 'http://localhost:3000/dashboard'
-  }
+
+  // useEffect(() => {
+  //   const handleKeyPress = (event) => {
+  //     if (event.key === 'Enter') {
+  //       event.preventDefault() // Ngăn chặn hành động mặc định của phím "Enter"
+  //       onSignUp() // Gọi hàm onSignUp khi nhấn phím "Enter"
+  //     }
+  //   }
+
+  //   // Gắn lắng nghe sự kiện keydown cho cả trang web khi component được load
+  //   document.addEventListener('keydown', handleKeyPress)
+
+  //   // Xóa lắng nghe sự kiện khi component unmount để tránh memory leak
+  //   return () => {
+  //     document.removeEventListener('keydown', handleKeyPress)
+  //   }
+  // }, []) // Chạy useEffect chỉ một lần sau khi component được mount
+
   function onCaptchVerify() {
     if (!window.recaptchaVerifier) {
       window.recaptchaVerifier = new RecaptchaVerifier(
@@ -63,9 +73,12 @@ function Forgotpassword() {
         .then((response) => {
           //window.location.href = 'http://localhost:3000/receiveotp'
           if (response.data.message === 'Đăng nhập thành công!!!') {
+            // Nếu thành công thì chuyển hướng đến trang nhận OTP
+            window.location.href =
+              'http://localhost:3000/receiveOtp?type=forgotpassword'
             // làm đở gửi tới luôn trang reset password
-            window.location.href = 'http://localhost:3000/resetpassword'
-            // Hoặc lưu vào session storage
+            // window.location.href = 'http://localhost:3000/resetpassword'
+            // // Hoặc lưu vào session storage
             sessionStorage.setItem('phoneNumber', response.data.phoneNumber)
           } else {
             // Nếu server trả về message khác 'Đăng nhập thành công!!!'
@@ -84,7 +97,7 @@ function Forgotpassword() {
     <div className="phone_body">
       <div className="phone-content">
         <div id="recaptcha-container"></div>
-        <Toaster toastOptions={{ duration: 4000 }} />
+        <Toaster toastOptions={{ duration: 2000 }} />
         <h1 className="h1-name">
           Quên Mật Khẩu
           <br />
@@ -100,6 +113,12 @@ function Forgotpassword() {
         <PhoneInput
           country={'vn'}
           onChange={(phone) => setPhone('+' + phone)}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') {
+              e.preventDefault() // Ngăn chặn hành động mặc định của phím "Enter"
+              onSignUp() // Gọi hàm onSignUp khi nhấn phím "Enter"
+            }
+          }}
         />
         <Button
           onClick={onSignUp}

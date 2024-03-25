@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react' // Import thư viện React
+import React, { useEffect, useRef } from 'react' // Import thư viện React
 import { useState } from 'react' // Import hook useState từ thư viện React
 import './Receiveotp.css'
 import { Button, TextField } from '@mui/material'
@@ -14,23 +14,66 @@ const Receiveotp = () => {
   // const [phone, setPhone] = useState('')
   const [user, setUser] = useState(null)
   const [loading, setLoading] = useState(false)
+
+  const didMountRef = useRef(false)
+  const type = new URLSearchParams(window.location.search).get('type')
   const handleOtpChange = (e) => {
     let newValue = e.target.value.replace(/\D/g, '') // Lọc chỉ giữ lại số
     newValue = newValue.slice(0, 6) // Giới hạn chỉ cho phép nhập 6 số
     setOtp(newValue)
   }
   const phoneNumber = sessionStorage.getItem('phoneNumber')
+  // hàm kiểm tra thời gian là buổi nào
+  function getGreeting() {
+    const currentTime = new Date()
+    const currentHour = currentTime.getHours()
+
+    if (currentHour >= 5 && currentHour < 12) {
+      return 'Chào buổi sáng'
+    } else if (currentHour >= 12 && currentHour < 18) {
+      return 'Chào buổi chiều'
+    } else {
+      return 'Chào buổi tối'
+    }
+  }
+
   useEffect(() => {
-    if (!phoneNumber) {
-      alert('Không tìm thấy số điện thoại!!!')
-      window.location.href = 'http://localhost:3000/register'
+    // hàm này để cho nó chạy 1 lần duy nhất khi component được render
+    if (!didMountRef.current) {
+      didMountRef.current = true
       return
+    }
+    //alert(phoneNumber)
+    if (!phoneNumber) {
+      toast.error('Không tìm thấy số điện thoại . Tự động trở về trang đăng ký')
+
+      // Đặt độ trễ trước khi chuyển hướng trang
+      const delay = 3000 // Độ trễ trong milliseconds (3 giây)
+
+      // Sử dụng setTimeout để chờ đợi trước khi chuyển hướng trang
+      const timer = setTimeout(() => {
+        window.location.href = 'http://localhost:3000/register'
+      }, delay)
+
+      // Xóa timer khi component unmount
+      return () => clearTimeout(timer)
     }
     onSignUp()
   }, [phoneNumber]) //
-  if (user) {
+  if (type === 'register' && user) {
+    toast.success('Đăng nhập thành công')
     window.location.href = 'http://localhost:3000/dashboard'
   }
+  // Kiểm tra nếu trang trước đó là quên mật khẩu, chuyển hướng đến trang quên mật khẩu
+  else if (type === 'forgotpassword' && user) {
+    window.location.href = `http://localhost:3000/resetpassword`
+  }
+  // if (type === 'register') {
+  //   alert('Trang được gọi từ register')
+  // }
+  // if (type === 'forgotpassword') {
+  //   alert('Trang được gọi từ forgotPassword')
+  // }
 
   function onCaptchVerify() {
     if (!window.recaptchaVerifier) {
@@ -49,11 +92,10 @@ const Receiveotp = () => {
   }
 
   function onSignUp() {
-    setLoading(true)
     onCaptchVerify()
     const phoneNumber2 = '+84' + phoneNumber.slice(1)
     const appVerifier = window.recaptchaVerifier
-
+    // toast.success('Thành công rồi nha')
     signInWithPhoneNumber(auth, phoneNumber2, appVerifier)
       .then((confirmationResult) => {
         window.confirmationResult = confirmationResult
@@ -90,14 +132,13 @@ const Receiveotp = () => {
       <div id="recaptcha-container"></div>
       <Toaster toastOptions={{ duration: 4000 }} />
       <h1 className="h1-name">
-        Welcomte to
-        <br />
+        <div>
+          <b>{getGreeting()}</b>
+        </div>
         Zola
-        <br />
-        {/* <SiZalo size={40} /> */}
       </h1>
       <label htmlFor="ph" className="custom-class">
-        Enter Your OTP
+        Nhập mã OTP
       </label>
       <br />
       <TextField
@@ -148,7 +189,7 @@ const Receiveotp = () => {
         // onClick={onVerifyOTP()}
       >
         {loading && <CgSpinner size={20} className="mt-1 animate-spin" />}
-        Xác Nhận OTP
+        Xác Nhận
       </Button>
     </div>
   )

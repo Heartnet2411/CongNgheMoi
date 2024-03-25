@@ -1,19 +1,51 @@
 import React from 'react'
+import { useState, useEffect, useRef } from 'react'
 import './Login.css'
 import { Button } from '@mui/material'
 import axios from 'axios'
 import { toast, Toaster } from 'react-hot-toast'
+import { FaEye, FaEyeSlash } from 'react-icons/fa'
 export const Login = () => {
   const [action, setAction] = React.useState('Đăng Nhập')
   const [phoneNumber, setPhoneNumber] = React.useState('')
   const [password, setPassword] = React.useState('')
+  const [showPassword, setShowPassword] = useState(false)
+
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword)
+  }
+
+  // const didMountRef1 = useRef(false)
+  // useEffect(() => {
+  //   // if (!didMountRef1.current) {
+  //   //   didMountRef1.current = true
+  //   //   return
+  //   // }
+  //   const handleKeyPress = (event) => {
+  //     if (event.key === 'Enter') {
+  //       event.preventDefault() // Ngăn chặn hành động mặc định của phím "Enter"
+  //       login(event) // Gọi hàm register khi nhấn phím "Enter"
+  //     }
+  //   }
+
+  //   // Gắn lắng nghe sự kiện keydown cho cả trang web khi component được load
+  //   document.addEventListener('keydown', handleKeyPress)
+
+  //   // Xóa lắng nghe sự kiện khi component unmount để tránh memory leak
+  //   return () => {
+  //     document.removeEventListener('keydown', handleKeyPress)
+  //   }
+  // }, [])
 
   // viết 1 hàm để gửi thông tin đăng nhập lên server
   const login = (e) => {
     e.preventDefault()
+
     // kiểm tra rỗng
     if (phoneNumber === '' || password === '') {
       toast.error('Vui lòng nhập đầy đủ thông tin!!!')
+      // Đặt biến errorShown thành true để chỉ hiển thị một lần
+
       return
     }
 
@@ -38,7 +70,7 @@ export const Login = () => {
   return (
     <div className="container1">
       <div className="header">
-        <Toaster toastOptions={{ duration: 4000 }} />
+        <Toaster toastOptions={{ duration: 2200 }} />
         <div className="text">{action}</div>
         <div className="subtext">
           {' '}
@@ -54,17 +86,33 @@ export const Login = () => {
             onChange={(e) => {
               setPhoneNumber(e.target.value)
             }}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                e.preventDefault() // Ngăn chặn hành động mặc định của phím "Enter"
+                login(e) // Gọi hàm onSignUp khi nhấn phím "Enter"
+              }
+            }}
           />
         </div>
         <div className="label">Mật Khẩu</div>
         <div className="input1">
           <input
-            type="password"
+            type={showPassword ? 'text' : 'password'}
             placeholder="Nhập mật khẩu"
             onChange={(e) => {
               setPassword(e.target.value)
             }}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                e.preventDefault() // Ngăn chặn hành động mặc định của phím "Enter"
+                login(e) // Gọi hàm onSignUp khi nhấn phím "Enter"
+              }
+            }}
           />
+          <span className="span-eye" onClick={togglePasswordVisibility}>
+            {showPassword ? <FaEyeSlash /> : <FaEye />}{' '}
+            {/* Sử dụng icon con mắt */}
+          </span>
         </div>
         <div className="form-group forgot-password">
           <div className="col-xl-12 col-md-10 col-sm-12 col-12">

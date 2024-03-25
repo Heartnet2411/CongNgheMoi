@@ -112,3 +112,7 @@
   /* Áp dụng hiệu ứng quay */
   animation: spin 1s linear infinite;
 }
+.h1-name div {
+  color: #f1eaab;
+  /* 6 in Tailwind CSS */
+}

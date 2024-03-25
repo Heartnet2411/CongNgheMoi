@@ -107,8 +107,8 @@ class UserController {
         }
     }
     async userInfo(req, res) {
-        console.log('hello111')
-        res.status(200).send('<h1>hello</h1>')
+        // const phoneNumber = 0367909181;
+        // // từ phonenumber tìm ra user
     }
 }
 

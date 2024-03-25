@@ -1,5 +1,5 @@
 import React from 'react'
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { FaEye, FaEyeSlash } from 'react-icons/fa'
 import './Register.css'
 import DatePicker from 'react-datepicker'
@@ -18,12 +18,33 @@ export const Register = () => {
   const [gender, setGender] = React.useState('male')
   const [password, setPassword] = React.useState('')
   const [confirmPassword, setConfirmPassword] = React.useState('')
-
+  const didMountRef1 = useRef(false)
   const [showPassword, setShowPassword] = useState(false)
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword)
   }
+
+  // useEffect(() => {
+  //   if (!didMountRef1.current) {
+  //     didMountRef1.current = true
+  //     return
+  //   }
+  //   const handleKeyPress = (event) => {
+  //     if (event.key === 'Enter') {
+  //       event.preventDefault() // Ngăn chặn hành động mặc định của phím "Enter"
+  //       register(event) // Gọi hàm register khi nhấn phím "Enter"
+  //     }
+  //   }
+
+  //   // Gắn lắng nghe sự kiện keydown cho cả trang web khi component được load
+  //   document.addEventListener('keydown', handleKeyPress)
+
+  //   // Xóa lắng nghe sự kiện khi component unmount để tránh memory leak
+  //   return () => {
+  //     document.removeEventListener('keydown', handleKeyPress)
+  //   }
+  // }, [])
   // viết 1 hàm để gửi thông tin đăng ký lên server
   const register = (e) => {
     // kiểm tra password và confirm password có giống nhau không
@@ -91,8 +112,9 @@ export const Register = () => {
               .then((response) => {
                 toast.success('Đăng ký tài khoản và user thành công!')
                 sessionStorage.setItem('phoneNumber', response.data.phoneNumber)
-                // window.location.href = 'http://localhost:3000/dashboard'
-                window.location.href = 'http://localhost:3000/receiveotp'
+                //window.location.href = 'http://localhost:3000/receiveotp'
+                window.location.href =
+                  'http://localhost:3000/receiveOtp?type=register'
               })
               .catch((err) => {
                 console.error('Error creating user:', err)
@@ -106,7 +128,7 @@ export const Register = () => {
   return (
     <div className="register-container">
       <div className="container">
-        <Toaster toastOptions={{ duration: 4000 }} />
+        <Toaster toastOptions={{ duration: 3500 }} />
         <div className="header-re">
           <div className="text">{action}</div>
           <div className="subtext">Tạo tài khoản chóng và dễ dàng. </div>
@@ -125,6 +147,12 @@ export const Register = () => {
                   onChange={(e) => {
                     setFirstName(e.target.value)
                   }}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') {
+                      e.preventDefault() // Ngăn chặn hành động mặc định của phím "Enter"
+                      register(e) // Gọi hàm register khi nhấn phím "Enter"
+                    }
+                  }}
                 />
               </div>
               <div className="inputIAB">
@@ -133,6 +161,12 @@ export const Register = () => {
                   placeholder="Nhập tên của bạn"
                   onChange={(e) => {
                     setLastName(e.target.value)
+                  }}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') {
+                      e.preventDefault() // Ngăn chặn hành động mặc định của phím "Enter"
+                      register(e) // Gọi hàm register khi nhấn phím "Enter"
+                    }
                   }}
                 />
               </div>
@@ -146,6 +180,12 @@ export const Register = () => {
               onChange={(e) => {
                 setPhoneNumber(e.target.value)
               }}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                  e.preventDefault() // Ngăn chặn hành động mặc định của phím "Enter"
+                  register(e) // Gọi hàm register khi nhấn phím "Enter"
+                }
+              }}
             />
           </div>
           <div className="label">Nhập ngày sinh </div>
@@ -158,6 +198,13 @@ export const Register = () => {
                 onChange={(e) => setDateOfBirth(e)}
                 dateFormat="dd/MM/yyyy"
                 showYearDropdown
+                // scrollYearDropdown
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') {
+                    e.preventDefault() // Ngăn chặn hành động mặc định của phím "Enter"
+                    register(e) // Gọi hàm register khi nhấn phím "Enter"
+                  }
+                }}
               />
             </div>
             <div className="inputC">
@@ -168,6 +215,12 @@ export const Register = () => {
                   id="select"
                   value={gender}
                   onChange={(e) => setGender(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') {
+                      e.preventDefault() // Ngăn chặn hành động mặc định của phím "Enter"
+                      register(e) // Gọi hàm register khi nhấn phím "Enter"
+                    }
+                  }}
                 >
                   <option value="male">Nam</option>
                   <option value="female">Nữ</option>
@@ -184,6 +237,12 @@ export const Register = () => {
               type={showPassword ? 'text' : 'password'}
               placeholder="Nhập mật khẩu"
               onChange={(e) => setPassword(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                  e.preventDefault() // Ngăn chặn hành động mặc định của phím "Enter"
+                  register(e) // Gọi hàm register khi nhấn phím "Enter"
+                }
+              }}
             />
             <span className="span-eye" onClick={togglePasswordVisibility}>
               {showPassword ? <FaEyeSlash /> : <FaEye />}{' '}
@@ -197,6 +256,12 @@ export const Register = () => {
               placeholder="Nhập lại mật khẩu"
               // set lấy giá trị confirm password
               onChange={(e) => setConfirmPassword(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                  e.preventDefault() // Ngăn chặn hành động mặc định của phím "Enter"
+                  register(e) // Gọi hàm register khi nhấn phím "Enter"
+                }
+              }}
             />
           </div>
           <div className="user-re">

@@ -12,10 +12,12 @@ import Cloud from './Layout/Cloud'
 import Forgot from './Layout/Login/Forgotpassword'
 import Forgotpassword from './Layout/Login/Forgotpassword'
 import Resetpassword from './Layout/Login/Resetpassword'
+import Navigation from './Layout/Navigation/navigation'
 
 function App() {
   return (
     <div>
+      <Navigation />
       <BrowserRouter>
         <Routes>
           <Route path="*" element={<Navigate to="/register" />} />
