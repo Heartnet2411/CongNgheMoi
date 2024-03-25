@@ -2,12 +2,12 @@ import {
     StyleSheet,
     Text,
     View,
-    SafeAreaView,
     TouchableOpacity,
     Image,
     Alert,
     Modal,
     Pressable,
+    Dimensions,
 } from 'react-native'
 import React from 'react'
 import { K2D_700Bold, useFonts } from '@expo-google-fonts/k2d'
@@ -16,6 +16,7 @@ import { primaryColor } from '../utils/constant'
 import { Entypo, FontAwesome5, FontAwesome } from '@expo/vector-icons'
 import { useState } from 'react'
 import Tab from '../components/Tab'
+import { SafeAreaView } from 'react-native-safe-area-context'
 const Login = ({ navigation, route }) => {
     useFonts({ K2D_700Bold })
     useFonts({ Inter_600SemiBold })
@@ -106,6 +107,9 @@ const Login = ({ navigation, route }) => {
 
 export default Login
 
+const windowHeight = Dimensions.get('window').height
+const windowWidth = Dimensions.get('window').width
+
 const styles = StyleSheet.create({
     container: {
         flex: 1,
@@ -114,14 +118,14 @@ const styles = StyleSheet.create({
 
     background: {
         width: '100%',
-        height: 300,
+        height: windowHeight * 0.3,
         backgroundColor: '#ccc',
         objectFit: 'cover',
     },
     avatar: {
-        width: 150,
-        height: 150,
-        borderRadius: 75,
+        width: windowHeight * 0.15,
+        height: windowHeight * 0.15,
+        borderRadius: windowHeight * 0.075,
         borderWidth: 2,
         borderColor: '#fff',
         position: 'absolute',
@@ -133,8 +137,8 @@ const styles = StyleSheet.create({
         fontFamily: 'K2D_700Bold',
         fontSize: 25,
         color: '#000',
-        left: 180,
-        width: 220,
+        left: windowWidth * 0.4,
+        width: windowWidth * 0.6,
     },
 
     button: {

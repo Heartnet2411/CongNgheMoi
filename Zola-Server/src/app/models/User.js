@@ -10,7 +10,7 @@ const Friend = new Schema({
 const User = new Schema(
     {
         account_id: { type: String, required: true, unique: true },
-        conversation_id: { type: String, required: true },
+        conversation_id: { type: Array },
         userName: { type: String, required: true },
         firstName: { type: String, required: true },
         lastName: { type: String, required: true },

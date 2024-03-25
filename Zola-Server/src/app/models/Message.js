@@ -2,7 +2,7 @@ import mongoose from 'mongoose'
 const Schema = mongoose.Schema
 
 const Message = new Schema({
-    conversation_id: { type: String, required: true, unique: true },
+    conversation_id: { type: String, required: true },
     sender_id: { type: String, required: true },
     content: { type: String, required: true },
     dateSend: { type: Date, required: true },

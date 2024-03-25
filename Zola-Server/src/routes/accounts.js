@@ -6,5 +6,6 @@ import accountController from '../app/controllers/AccountController.js'
 router.get('/login', accountController.login)
 router.post('/add-account', accountController.register)
 router.get('/find', accountController.findByID)
+router.post('/create-account', accountController.createAccount)
 
 export default router

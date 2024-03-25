@@ -39,6 +39,20 @@ class AccountController {
             res.status(HTTP_STATUS_BAD_REQUEST).json('Account not found!!!')
         }
     }
+
+    async createAccount(req, res) {
+        const { phoneNumber, password } = req.body
+
+        const account = new Account({ phoneNumber, password })
+        await account
+            .save()
+            .then(() => {
+                res.json('Create account successfully!!!')
+            })
+            .catch((err) => {
+                res.json('Create account failure!!!')
+            })
+    }
 }
 
 export default new AccountController()

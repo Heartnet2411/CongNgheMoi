@@ -1,5 +1,4 @@
 import {
-    SafeAreaView,
     StyleSheet,
     Text,
     View,
@@ -7,16 +6,19 @@ import {
     TouchableOpacity,
     FlatList,
     Dimensions,
+    ScrollView,
 } from 'react-native'
 import React from 'react'
 import { Inter_600SemiBold, useFonts } from '@expo-google-fonts/inter'
 import Tab from '../components/Tab'
+import { EvilIcons, MaterialCommunityIcons, Ionicons } from '@expo/vector-icons'
+import { SafeAreaView } from 'react-native-safe-area-context'
 
 const Message = ({ navigation, route }) => {
     const listMess = [
         {
             id: 1,
-            name: 'Nguyễn Văn Thuận',
+            name: 'Nguyễn Văn A',
             avatar: require('../image/avatar.png'),
             time: '10:00',
             content: 'Chào bạn',
@@ -112,58 +114,77 @@ const Message = ({ navigation, route }) => {
             <View>
                 <View style={styles.header}>
                     <TouchableOpacity style={styles.search}>
-                        <Image
-                            source={require('../image/search.png')}
+                        <EvilIcons
+                            name="search"
                             style={styles.iconSearch}
+                            size={30}
+                            color="white"
                         />
                         <Text style={styles.txtSearch}>Tìm kiếm</Text>
                     </TouchableOpacity>
                     <TouchableOpacity>
-                        <Image
-                            source={require('../image/qrcode-scan.png')}
+                        <MaterialCommunityIcons
                             style={styles.iconQR}
+                            name="qrcode-scan"
+                            size={25}
+                            color="white"
                         />
                     </TouchableOpacity>
                     <TouchableOpacity>
-                        <Image
-                            source={require('../image/add.png')}
+                        <Ionicons
+                            name="add"
                             style={styles.iconAdd}
+                            size={30}
+                            color="white"
                         />
                     </TouchableOpacity>
                 </View>
-                <View style={styles.list}>
-                    {listMess.map((item) => {
-                        return (
-                            <TouchableOpacity id={item.id}>
-                                <View
-                                    style={{
-                                        flexDirection: 'row',
-                                        alignItems: 'center',
-                                        margin: 10,
-                                    }}
-                                >
-                                    <Image
-                                        source={item.avatar}
-                                        style={{
-                                            width: 60,
-                                            height: 60,
-                                            borderRadius: 30,
-                                        }}
-                                    />
+                <ScrollView>
+                    <View style={styles.list}>
+                        {listMess.map((item) => {
+                            return (
+                                <TouchableOpacity id={item.id}>
                                     <View
                                         style={{
-                                            marginLeft: 10,
-                                            width: 250,
+                                            flexDirection: 'row',
+                                            alignItems: 'center',
+                                            margin: 10,
                                         }}
                                     >
-                                        <Text
+                                        <Image
+                                            source={item.avatar}
                                             style={{
-                                                fontFamily: 'Inter_600SemiBold',
-                                                fontSize: 18,
+                                                width: 60,
+                                                height: 60,
+                                                borderRadius: 30,
+                                            }}
+                                        />
+                                        <View
+                                            style={{
+                                                marginLeft: 10,
+                                                width: 250,
                                             }}
                                         >
-                                            {item.name}
-                                        </Text>
+                                            <Text
+                                                style={{
+                                                    fontFamily:
+                                                        'Inter_600SemiBold',
+                                                    fontSize: 18,
+                                                }}
+                                            >
+                                                {item.name}
+                                            </Text>
+                                            <Text
+                                                style={{
+                                                    fontFamily:
+                                                        'Inter_600SemiBold',
+                                                    fontSize: 14,
+                                                    color: '#8F9BB3',
+                                                }}
+                                            >
+                                                {item.content}
+                                            </Text>
+                                        </View>
                                         <Text
                                             style={{
                                                 fontFamily: 'Inter_600SemiBold',
@@ -171,23 +192,14 @@ const Message = ({ navigation, route }) => {
                                                 color: '#8F9BB3',
                                             }}
                                         >
-                                            {item.content}
+                                            {item.time}
                                         </Text>
                                     </View>
-                                    <Text
-                                        style={{
-                                            fontFamily: 'Inter_600SemiBold',
-                                            fontSize: 14,
-                                            color: '#8F9BB3',
-                                        }}
-                                    >
-                                        {item.time}
-                                    </Text>
-                                </View>
-                            </TouchableOpacity>
-                        )
-                    })}
-                </View>
+                                </TouchableOpacity>
+                            )
+                        })}
+                    </View>
+                </ScrollView>
                 <Tab />
             </View>
         </SafeAreaView>
@@ -217,8 +229,6 @@ const styles = StyleSheet.create({
         width: 280,
     },
     iconSearch: {
-        width: 35,
-        height: 35,
         marginLeft: 10,
     },
     txtSearch: {

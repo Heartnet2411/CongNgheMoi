@@ -4,6 +4,7 @@ import {
     View,
     SafeAreaView,
     TouchableOpacity,
+    Dimensions,
 } from 'react-native'
 import React from 'react'
 import { K2D_700Bold, useFonts } from '@expo-google-fonts/k2d'
@@ -19,7 +20,7 @@ const Login = ({ navigation, route }) => {
             <View style={styles.btn}>
                 <TouchableOpacity
                     style={styles.btnLogin}
-                    onPress={() => navigation.navigate('Message')}
+                    onPress={() => navigation.navigate('Login2')}
                 >
                     <Text style={styles.txtLogin}>Đăng nhập</Text>
                 </TouchableOpacity>
@@ -36,6 +37,8 @@ const Login = ({ navigation, route }) => {
 
 export default Login
 
+windowWidth = Dimensions.get('window').width
+
 const styles = StyleSheet.create({
     container: {
         flex: 1,
@@ -50,6 +53,9 @@ const styles = StyleSheet.create({
         color: '#1B96CB',
         fontFamily: 'K2D_700Bold',
         marginTop: 150,
+        width: windowWidth,
+        alignSelf: 'center',
+        textAlign: 'center',
     },
     btn: {
         alignItems: 'center',
@@ -67,7 +73,7 @@ const styles = StyleSheet.create({
     txtLogin: {
         color: '#fff',
         fontSize: 18,
-        fontFamily: 'Inter_600SemiBold',
+        fontWeight: 'bold',
     },
     btnRegis: {
         alignItems: 'center',
@@ -80,6 +86,6 @@ const styles = StyleSheet.create({
     },
     txtRegis: {
         fontSize: 18,
-        fontFamily: 'Inter_600SemiBold',
+        fontWeight: 'bold',
     },
 })

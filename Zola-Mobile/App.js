@@ -8,6 +8,10 @@ import EditPassword from './components/EditPassword'
 import Register from './screens/Register'
 import ConfirmCode from './components/ConfirmCode'
 import PhoneInput from './components/PhoneInput'
+import Cloud from './screens/Cloud'
+import Login2 from './screens/Login2'
+import Contact from './screens/Contact'
+import CreateUser from './components/CreateUser'
 import { NavigationContainer } from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 
@@ -60,6 +64,26 @@ export default function App() {
                 <Stack.Screen
                     name="PhoneInput"
                     component={PhoneInput}
+                    options={{ headerShown: false }}
+                />
+                <Stack.Screen
+                    name="Cloud"
+                    component={Cloud}
+                    options={{ headerShown: false }}
+                />
+                <Stack.Screen
+                    name="Login2"
+                    component={Login2}
+                    options={{ headerShown: false }}
+                />
+                <Stack.Screen
+                    name="Contact"
+                    component={Contact}
+                    options={{ headerShown: false }}
+                />
+                <Stack.Screen
+                    name="CreateUser"
+                    component={CreateUser}
                     options={{ headerShown: false }}
                 />
             </Stack.Navigator>
