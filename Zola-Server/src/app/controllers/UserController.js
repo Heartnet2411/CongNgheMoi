@@ -1,39 +1,39 @@
 import User from '../models/User.js'
 
-// hàm bỏ dấu
-function removeVietnameseTones(str) {
-    str = str.toLowerCase()
-    str = str.replace(/à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ/g, 'a')
-    str = str.replace(/è|é|ẹ|ẻ|ẽ|ê|ề|ế|ệ|ể|ễ/g, 'e')
-    str = str.replace(/ì|í|ị|ỉ|ĩ/g, 'i')
-    str = str.replace(/ò|ó|ọ|ỏ|õ|ô|ồ|ố|ộ|ổ|ỗ|ơ|ờ|ớ|ợ|ở|ỡ/g, 'o')
-    str = str.replace(/ù|ú|ụ|ủ|ũ|ư|ừ|ứ|ự|ử|ữ/g, 'u')
-    str = str.replace(/ỳ|ý|ỵ|ỷ|ỹ/g, 'y')
-    str = str.replace(/đ/g, 'd')
-    return str
-}
+// // hàm bỏ dấu
+// function removeVietnameseTones(str) {
+//     str = str.toLowerCase()
+//     str = str.replace(/à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ/g, 'a')
+//     str = str.replace(/è|é|ẹ|ẻ|ẽ|ê|ề|ế|ệ|ể|ễ/g, 'e')
+//     str = str.replace(/ì|í|ị|ỉ|ĩ/g, 'i')
+//     str = str.replace(/ò|ó|ọ|ỏ|õ|ô|ồ|ố|ộ|ổ|ỗ|ơ|ờ|ớ|ợ|ở|ỡ/g, 'o')
+//     str = str.replace(/ù|ú|ụ|ủ|ũ|ư|ừ|ứ|ự|ử|ữ/g, 'u')
+//     str = str.replace(/ỳ|ý|ỵ|ỷ|ỹ/g, 'y')
+//     str = str.replace(/đ/g, 'd')
+//     return str
+// }
 
 class UserController {
-    // post /register
+    // post /register http://localhost:3001/user/register
     async register(req, res) {
         const account_id = req.body.account_id
         const conversation_id = Math.floor(Math.random() * 1000000000)
         // const userName = req.body.userName
 
-        // Tạo ra biến username từ firstName và lastName người dùng ví dụ Nguyễn Đức Tài là taind
-        // Usage
-        const lastNameLower = removeVietnameseTones(
-            req.body.lastName.toLowerCase().replace(/\s/g, '')
-        )
-        // Usage
-        const firstNameInitials = req.body.firstName
-            .split(' ')
-            .map((word) => removeVietnameseTones(word.charAt(0).toLowerCase()))
-            .join('') // Lấy ký tự đầu tiên của mỗi từ trong firstName, loại bỏ dấu, và chuyển thành chữ thường
-        const userName = `${lastNameLower}${firstNameInitials}`
+        // // Tạo ra biến username từ firstName và lastName người dùng ví dụ Nguyễn Đức Tài là taind
+        // // Usage
+        // const lastNameLower = removeVietnameseTones(
+        //     req.body.lastName.toLowerCase().replace(/\s/g, '')
+        // )
+        // // Usage
+        // const firstNameInitials = req.body.firstName
+        //     .split(' ')
+        //     .map((word) => removeVietnameseTones(word.charAt(0).toLowerCase()))
+        //     .join('') // Lấy ký tự đầu tiên của mỗi từ trong firstName, loại bỏ dấu, và chuyển thành chữ thường
 
         const firstName = req.body.firstName
         const lastName = req.body.lastName
+        const userName = `${firstName} ${lastName}`
         const phoneNumber = req.body.phoneNumber
         const dateOfBirth = req.body.dateOfBirth
         const gender = req.body.gender
@@ -55,6 +55,11 @@ class UserController {
         })
 
         console.log(user)
+
+        // return res.status(200).json({
+        //     message: 'Đăng ký User thành công!!!',
+        //     user: user,
+        // })
 
         await user
             .save()
