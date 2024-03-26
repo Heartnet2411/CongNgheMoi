@@ -14,29 +14,6 @@ export const Login = () => {
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword)
   }
-
-  // const didMountRef1 = useRef(false)
-  // useEffect(() => {
-  //   // if (!didMountRef1.current) {
-  //   //   didMountRef1.current = true
-  //   //   return
-  //   // }
-  //   const handleKeyPress = (event) => {
-  //     if (event.key === 'Enter') {
-  //       event.preventDefault() // Ngăn chặn hành động mặc định của phím "Enter"
-  //       login(event) // Gọi hàm register khi nhấn phím "Enter"
-  //     }
-  //   }
-
-  //   // Gắn lắng nghe sự kiện keydown cho cả trang web khi component được load
-  //   document.addEventListener('keydown', handleKeyPress)
-
-  //   // Xóa lắng nghe sự kiện khi component unmount để tránh memory leak
-  //   return () => {
-  //     document.removeEventListener('keydown', handleKeyPress)
-  //   }
-  // }, [])
-
   // viết 1 hàm để gửi thông tin đăng nhập lên server
   const login = (e) => {
     e.preventDefault()
@@ -58,11 +35,39 @@ export const Login = () => {
         console.log(response)
         if (response.data.message === 'Account not found!!!') {
           toast.error('Tài khoản không tồn tại!!!')
-        } else if (response.data.message === 'Login successfully!!!') {
-          toast.success('Đăng nhập thành công!!!')
-          window.location.href = 'http://localhost:3000/dashboard'
         } else if (response.data.message === 'Password not match!!!') {
           toast.error('Mật khẩu không đúng!!!')
+        } else if (response.data.message === 'Login successfully!!!') {
+          toast.success('Đăng nhập thành công!!!')
+          localStorage.setItem('account_id', response.data.account_id)
+          window.location.href = 'http://localhost:3000/dashboard'
+          //   axios
+          //     .post('http://localhost:3001/user/findUser', {
+          //       account_id: response.data.account_id,
+          //     })
+          //     .then((response) => {
+          //       toast.success('Đăng nhập thành công!!!')
+          //       // localStorage.setItem('user', JSON.stringify(response.data.user))
+          //       // window.location.href = 'http://localhost:3000/dashboard'
+          //       axios
+          //         .post('http://localhost:3000/dashboard', {
+          //           account_id: response.data.account_id,
+          //           conversation_id: response.data.conversation_id,
+          //           userName: response.data.userName,
+          //           firstName: response.datafirstName,
+          //           lastName: response.datalastName,
+          //           phoneNumber: response.data.phoneNumber,
+          //           dateOfBirth: response.data.dateOfBirthFormatted,
+          //           gender: response.data.gender,
+          //           avatar: response.data.avatar,
+          //           friend: response.data.friend,
+          //         })
+          //         .then((response) => {
+          //           toast.success('Đăng nhập thành công!!!')
+          //           // localStorage.setItem('user', JSON.stringify(response.data.user))
+          //           // window.location.href = 'http://localhost:3000/dashboard'
+          //         })
+          //     })
         }
       })
   }

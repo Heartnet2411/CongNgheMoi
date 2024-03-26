@@ -81,15 +81,23 @@ class UserController {
         res.json(users)
     }
 
-    // get /findUser
+    // post /findUser http://localhost:3001/user/findUser
     async findUserByAccountID(req, res) {
-        const account_id = req.query.account_id
+        const account_id = req.body.account_id
 
+        // từ account đã đăng nhập thành công thì tìm ra user tương ứng với account đó
         const user = await User.findOne({ account_id: account_id })
+        console.log('user: ' + user)
+
         if (user) {
-            res.json(user)
+            console.log('Lấy user từ account thành công 123123')
+            res.status(200).json({
+                message: 'Login successfully!!!',
+                user: user,
+            })
         } else {
-            res.json('User not found!!!')
+            console.log('Không tìm thấy user từ account')
+            res.status(200).json({ message: 'User not found!!!' })
         }
     }
 

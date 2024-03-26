@@ -3,6 +3,7 @@ import { HTTP_STATUS_BAD_REQUEST } from '../../util/erorCode.js'
 import { response } from 'express'
 
 class AccountController {
+    // POST http://localhost:3001/account/login
     async login(req, res) {
         console.log('Đang đăng nhập')
 
@@ -12,7 +13,6 @@ class AccountController {
 
         const account = await Account.findOne({ phoneNumber: phoneNumber })
         if (!account) {
-            // dừng chuong trình và trả về thông báo số điện thoại đã được đăng ký
             return res.status(200).json({
                 message: 'Account not found!!!',
             })
@@ -20,12 +20,13 @@ class AccountController {
         if (account.password !== password) {
             return res.status(200).json({ message: 'Password not match!!!' })
         }
-
+        // lấy biến account_id từ account
+        const account_id = account._id
         if (account && account.password === password) {
             console.log('Đăng nhập thành công')
             res.status(200).json({
                 message: 'Login successfully!!!',
-                data: account,
+                account_id: account_id,
             })
         }
     }

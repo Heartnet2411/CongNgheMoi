@@ -116,3 +116,16 @@
   color: #f1eaab;
   /* 6 in Tailwind CSS */
 }
+.span-eyers {
+  margin-top: 10px;
+  padding-left: 5px;
+  cursor: pointer;
+}
+.div-texteye {
+  display: flex;
+  align-items: center;
+  border-radius: 10px;
+}
+.span-eyers svg {
+  fill: white;
+}

@@ -9,19 +9,19 @@ import { RecaptchaVerifier, signInWithPhoneNumber } from 'firebase/auth'
 import { auth } from './setup'
 import 'react-toastify/dist/ReactToastify.css'
 import { toast, Toaster } from 'react-hot-toast'
+import { FaEye, FaEyeSlash } from 'react-icons/fa'
 import axios from 'axios'
 const Resetpassword = () => {
-  const [otp, setOtp] = useState('')
   const [user, setUser] = useState(null)
   const [loading, setLoading] = useState(false)
 
   const [passwordnew, setPasswordnew] = useState('') // Khai báo state passwordnew để lưu giá trị mật khẩu mới
   const didMountRef = useRef(false)
 
-  const handleOtpChange = (e) => {
-    let newValue = e.target.value.replace(/\D/g, '') // Lọc chỉ giữ lại số
-    newValue = newValue.slice(0, 6) // Giới hạn chỉ cho phép nhập 6 số
-    setOtp(newValue)
+  const [showPassword, setShowPassword] = useState(false)
+
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword)
   }
   // Trong trang resetpassword
   const phoneNumber = localStorage.getItem('phoneNumber')
@@ -102,46 +102,53 @@ const Resetpassword = () => {
         Nhập mật khẩu mới
       </label>
       <br />
-      <TextField
-        sx={{
-          marginTop: '10px',
-          width: '300px',
-          '& .MuiOutlinedInput-root': {
-            '& fieldset': {
-              borderColor: 'white', // Thiết lập màu viền của TextField
+
+      <div className="div-texteye">
+        <TextField
+          sx={{
+            marginTop: '10px',
+            width: '300px',
+            '& .MuiOutlinedInput-root': {
+              '& fieldset': {
+                borderColor: 'white', // Thiết lập màu viền của TextField
+              },
+              '&:hover fieldset': {
+                borderColor: 'white', // Thiết lập màu viền khi di chuột qua TextField
+              },
+              '&.Mui-focused fieldset': {
+                borderColor: 'white', // Thiết lập màu viền khi TextField được focus
+              },
+              '& input': {
+                color: 'white', // Thiết lập màu chữ trong TextField
+              },
+              '& .MuiInputLabel-root': {
+                color: 'white', // Thiết lập màu chữ cho label
+              },
+              '& .MuiOutlinedInput-notchedOutline': {
+                borderColor: 'white', // Thiết lập màu viền cho input
+              },
+              '& .MuiInputBase-input': {
+                color: 'white', // Thiết lập màu chữ cho input
+              },
             },
-            '&:hover fieldset': {
-              borderColor: 'white', // Thiết lập màu viền khi di chuột qua TextField
-            },
-            '&.Mui-focused fieldset': {
-              borderColor: 'white', // Thiết lập màu viền khi TextField được focus
-            },
-            '& input': {
-              color: 'white', // Thiết lập màu chữ trong TextField
-            },
-            '& .MuiInputLabel-root': {
-              color: 'white', // Thiết lập màu chữ cho label
-            },
-            '& .MuiOutlinedInput-notchedOutline': {
-              borderColor: 'white', // Thiết lập màu viền cho input
-            },
-            '& .MuiInputBase-input': {
-              color: 'white', // Thiết lập màu chữ cho input
-            },
-          },
-        }}
-        variant="outlined"
-        size="small"
-        inputProps={{
-          type: 'text',
-          // giới hạn ít nhất là 8 ký tự
-          minLength: 8,
-        }}
-        InputProps={{
-          endAdornment: null,
-        }}
-        onChange={(e) => setPasswordnew(e.target.value)}
-      ></TextField>{' '}
+          }}
+          variant="outlined"
+          size="small"
+          inputProps={{
+            type: showPassword ? 'text' : 'password',
+            // giới hạn ít nhất là 8 ký tự
+            minLength: 8,
+          }}
+          InputProps={{
+            endAdornment: null,
+          }}
+          onChange={(e) => setPasswordnew(e.target.value)}
+        ></TextField>{' '}
+        <span className="span-eyers" onClick={togglePasswordVisibility}>
+          {showPassword ? <FaEyeSlash /> : <FaEye />}{' '}
+        </span>
+      </div>
+
       <br />
       <Button
         onClick={OnSetupPassword}

@@ -22,7 +22,8 @@ const Receiveotp = () => {
     newValue = newValue.slice(0, 6) // Giới hạn chỉ cho phép nhập 6 số
     setOtp(newValue)
   }
-  const phoneNumber = sessionStorage.getItem('phoneNumber')
+  const phoneNumber = localStorage.getItem('phoneNumber')
+  alert(phoneNumber)
   // hàm kiểm tra thời gian là buổi nào
   function getGreeting() {
     const currentTime = new Date()
@@ -44,7 +45,7 @@ const Receiveotp = () => {
       return
     }
     //alert(phoneNumber)
-    if (!phoneNumber) {
+    if (!phoneNumber && type === 'register') {
       toast.error('Không tìm thấy số điện thoại . Tự động trở về trang đăng ký')
 
       // Đặt độ trễ trước khi chuyển hướng trang
@@ -57,15 +58,34 @@ const Receiveotp = () => {
 
       // Xóa timer khi component unmount
       return () => clearTimeout(timer)
+    } else if (!phoneNumber && type === 'forgotpassword') {
+      toast.error(
+        'Không tìm thấy số điện thoại . Tự động trở về trang quên mật khẩu'
+      )
+
+      // Đặt độ trễ trước khi chuyển hướng trang
+      const delay = 3000 // Độ trễ trong milliseconds (3 giây)
+
+      // Sử dụng setTimeout để chờ đợi trước khi chuyển hướng trang
+      const timer = setTimeout(() => {
+        window.location.href = 'http://localhost:3000/forgotpassword'
+      }, delay)
+
+      // Xóa timer khi component unmount
+      return () => clearTimeout(timer)
     }
+
     onSignUp()
   }, [phoneNumber]) //
   if (type === 'register' && user) {
     toast.success('Đăng nhập thành công')
+    localStorage.removeItem('phoneNumber')
     window.location.href = 'http://localhost:3000/dashboard'
   }
   // Kiểm tra nếu trang trước đó là quên mật khẩu, chuyển hướng đến trang quên mật khẩu
   else if (type === 'forgotpassword' && user) {
+    toast.success('Thành công chuyển hướng đến trang đổi mật khẩu')
+    localStorage.removeItem('phoneNumber')
     window.location.href = `http://localhost:3000/resetpassword`
   }
   // if (type === 'register') {
@@ -95,18 +115,18 @@ const Receiveotp = () => {
     onCaptchVerify()
     const phoneNumber2 = '+84' + phoneNumber.slice(1)
     const appVerifier = window.recaptchaVerifier
-    // toast.success('Thành công rồi nha')
-    signInWithPhoneNumber(auth, phoneNumber2, appVerifier)
-      .then((confirmationResult) => {
-        window.confirmationResult = confirmationResult
-        console.log('OTP đã được gửi đến số điện thoại của bạn.')
-        setLoading(false)
-        toast.success('OTP đã được gửi đến số điện thoại của bạn.')
-      })
-      .catch((error) => {
-        console.log('Lỗi xảy ra khi gửi OTP: ', error)
-        setLoading(false)
-      })
+    toast.success('Thành công rồi nha')
+    // signInWithPhoneNumber(auth, phoneNumber2, appVerifier)
+    //   .then((confirmationResult) => {
+    //     window.confirmationResult = confirmationResult
+    //     console.log('OTP đã được gửi đến số điện thoại của bạn.')
+    //     setLoading(false)
+    //     toast.success('OTP đã được gửi đến số điện thoại của bạn.')
+    //   })
+    //   .catch((error) => {
+    //     console.log('Lỗi xảy ra khi gửi OTP: ', error)
+    //     setLoading(false)
+    //   })
   }
   function onVerifyOTP() {
     setLoading(true)

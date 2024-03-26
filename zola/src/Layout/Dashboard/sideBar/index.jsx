@@ -15,7 +15,7 @@ import { CiCamera } from 'react-icons/ci'
 import Popup from '../sideBar/popup'
 import demo from '../../../Assets/demo.jpg'
 import { IoIosArrowForward } from 'react-icons/io'
-const SideBar = () => {
+const SideBar = ({ user }) => {
   const navigate = useNavigate()
   const handleCloud = () => {
     // Thực hiện chuyển hướng khi người dùng nhấp vào biểu tượng
@@ -33,6 +33,19 @@ const SideBar = () => {
   const [open, setOpen] = useState(false)
   const [openInfo, setOpenInfo] = useState(false)
   const [openInfoMe, setOpenInfoMe] = useState(false)
+
+  // nếu mà có user thì mới thực hiện các cấu lệnh dưới
+
+  // format ngày tháng năm sinh từ chuỗi String sang dạng Date
+  const [day, month, year] = user.dateOfBirth.split('/')
+  const dateOfBirth = new Date(`${month}/${day}/${year}`)
+  const formattedDateOfBirth = `${dateOfBirth.getDate()} tháng ${
+    dateOfBirth.getMonth() + 1
+  }, ${dateOfBirth.getFullYear()}`
+  // const formattedPhoneNumber = user.phoneNumber.replace(/^0/, '+84 ')
+
+  // lấy đường dẫn ảnh đại diện của người dùng
+  const avatarURL = user.avatar
 
   return (
     <div
@@ -69,7 +82,7 @@ const SideBar = () => {
         >
           {' '}
           <img
-            src="https://www.w3schools.com/howto/img_avatar.png"
+            src={avatarURL}
             alt="demo"
             style={{
               width: 50,
@@ -110,7 +123,7 @@ const SideBar = () => {
                     marginLeft: 10,
                   }}
                 >
-                  Nguyen Thuy Tinh
+                  {user.userName}
                 </label>
               </div>
               <div
@@ -203,7 +216,7 @@ const SideBar = () => {
                             }}
                           >
                             <img
-                              src="https://www.w3schools.com/howto/img_avatar.png"
+                              src={avatarURL}
                               alt="demo"
                               style={{
                                 width: 70,
@@ -248,7 +261,7 @@ const SideBar = () => {
                                 fontWeight: 'bold',
                               }}
                             >
-                              Nguyễn Thúy Tình
+                              {user.userName}
                             </label>
                             <label
                               style={{
@@ -322,7 +335,7 @@ const SideBar = () => {
                               marginLeft: 35,
                             }}
                           >
-                            Nữ
+                            {user.gender}
                           </label>
                         </div>
                         <div
@@ -350,7 +363,7 @@ const SideBar = () => {
                               marginLeft: 25,
                             }}
                           >
-                            14 tháng 09, 2002
+                            {formattedDateOfBirth}
                           </label>
                         </div>
                         <div
@@ -378,7 +391,8 @@ const SideBar = () => {
                               marginLeft: 23,
                             }}
                           >
-                            +84 988580844
+                            {/* {formattedPhoneNumber} */}
+                            {user.phoneNumber.replace(/^0/, '+84 ')}
                           </label>
                         </div>
                         <div

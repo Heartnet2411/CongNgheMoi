@@ -79,7 +79,7 @@ function Forgotpassword() {
             // làm đở gửi tới luôn trang reset password
             // window.location.href = 'http://localhost:3000/resetpassword'
             // // Hoặc lưu vào session storage
-            sessionStorage.setItem('phoneNumber', response.data.phoneNumber)
+            localStorage.setItem('phoneNumber', response.data.phoneNumber)
           } else {
             // Nếu server trả về message khác 'Đăng nhập thành công!!!'
             alert('Đăng nhập không thành công! Vui lòng thử lại.')

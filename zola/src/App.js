@@ -23,6 +23,7 @@ function App() {
           <Route path="*" element={<Navigate to="/register" />} />
           <Route path="/register" element={<Register />} />
           <Route path="/receiveotp" element={<Receiveotp />} />
+
           <Route path="/login" element={<Login />} />
           <Route path="/dashboard" element={<DashBoard />} />
           <Route path="/listfriend" element={<ListFriend />} />
