@@ -492,7 +492,22 @@ const SideBar = ({ user }) => {
                   marginTop: 10,
                 }}
               >
-                <label
+                <a
+                  href="http://localhost:3000/login"
+                  style={{
+                    width: '90%',
+                    height: 30,
+                    display: 'flex',
+                    gap: 10,
+                    marginLeft: 10,
+                    color: 'black',
+                    fontSize: 15,
+                    textDecoration: 'none',
+                  }}
+                >
+                  Đăng xuất
+                </a>
+                {/* <label
                   style={{
                     color: 'black',
                     fontSize: 15,
@@ -501,7 +516,7 @@ const SideBar = ({ user }) => {
                   }}
                 >
                   Đăng xuất
-                </label>
+                </label> */}
               </div>
             </div>
           </div>
