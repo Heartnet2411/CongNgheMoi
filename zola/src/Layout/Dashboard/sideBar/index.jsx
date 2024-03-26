@@ -9,7 +9,11 @@ import { IoPersonOutline } from 'react-icons/io5'
 import { FiDatabase } from 'react-icons/fi'
 import { FiTool } from 'react-icons/fi'
 import { MdOutlineLanguage } from 'react-icons/md'
+import { AiOutlineEdit } from 'react-icons/ai'
 import { IoIosInformationCircleOutline } from 'react-icons/io'
+import { CiCamera } from 'react-icons/ci'
+import Popup from '../sideBar/popup'
+import demo from '../../../Assets/demo.jpg'
 import { IoIosArrowForward } from 'react-icons/io'
 const SideBar = () => {
   const navigate = useNavigate()
@@ -28,6 +32,7 @@ const SideBar = () => {
 
   const [open, setOpen] = useState(false)
   const [openInfo, setOpenInfo] = useState(false)
+  const [openInfoMe, setOpenInfoMe] = useState(false)
 
   return (
     <div
@@ -78,7 +83,7 @@ const SideBar = () => {
           <div
             style={{
               position: 'absolute',
-              left: '4%',
+              left: '4.6%',
               top: '2%',
               background: 'whitesmoke',
               height: '10rem',
@@ -117,18 +122,330 @@ const SideBar = () => {
                   marginLeft: 10,
                   marginTop: 10,
                 }}
+                onClick={() => {
+                  setOpenInfoMe(!openInfoMe)
+                }}
               >
                 <label
                   style={{
                     color: 'black',
                     fontSize: 15,
-
                     marginLeft: 10,
                   }}
                 >
                   Hồ sơ của bạn
                 </label>
               </div>
+              {openInfoMe && (
+                <Popup
+                  content={
+                    <div
+                      style={{
+                        width: '100%',
+                        height: '100%',
+                        display: 'flex',
+                        flexDirection: 'column',
+                      }}
+                    >
+                      <div
+                        style={{
+                          width: '100%',
+                          height: 30,
+                          display: 'flex',
+                          gap: 10,
+                          marginLeft: 15,
+                          marginTop: 10,
+                        }}
+                      >
+                        <label
+                          style={{
+                            color: 'black',
+                            fontSize: 16,
+                            fontWeight: 'bold',
+                          }}
+                        >
+                          Thông tin tài khoản
+                        </label>
+                      </div>
+                      <div
+                        style={{
+                          width: '100%',
+                          height: '30%',
+                          display: 'flex',
+                          flexDirection: 'column',
+                        }}
+                      >
+                        <img
+                          src={demo}
+                          alt="demo"
+                          style={{
+                            width: '100%',
+                            height: '100%',
+                            backgroundColor: 'grey',
+                            position: 'relative',
+                          }}
+                        />
+                        <div
+                          style={{
+                            width: '100%',
+                            height: 30,
+                            display: 'flex',
+                            gap: 10,
+                            marginLeft: 10,
+                          }}
+                        >
+                          <div
+                            style={{
+                              width: '5%',
+                              height: '20%',
+                              display: 'flex',
+                              flexDirection: 'column',
+                            }}
+                          >
+                            <img
+                              src="https://www.w3schools.com/howto/img_avatar.png"
+                              alt="demo"
+                              style={{
+                                width: 70,
+                                height: 70,
+                                backgroundColor: 'grey',
+                                borderRadius: '50%',
+                                position: 'absolute',
+                                top: '33%',
+                                left: '5%',
+                              }}
+                            />
+                            <label
+                              style={{
+                                width: 25,
+                                height: 25,
+                                borderRadius: 100,
+                                backgroundColor: 'whitesmoke',
+                                top: '43%',
+                                left: '18%',
+                                position: 'absolute',
+                              }}
+                            >
+                              <CiCamera size="1.3rem" />
+                            </label>
+                          </div>
+
+                          <div
+                            style={{
+                              display: 'flex',
+                              width: '100%',
+                              height: 30,
+                              gap: 10,
+
+                              marginTop: 10,
+                            }}
+                          >
+                            <label
+                              style={{
+                                color: 'black',
+                                fontSize: 17,
+                                marginLeft: '20%',
+                                fontWeight: 'bold',
+                              }}
+                            >
+                              Nguyễn Thúy Tình
+                            </label>
+                            <label
+                              style={{
+                                width: 25,
+                                height: 25,
+                                borderRadius: 100,
+
+                                alignItems: 'center',
+                                display: 'flex',
+                                flexDirection: 'column',
+                              }}
+                            >
+                              <AiOutlineEdit size="1.3rem" />
+                            </label>
+                          </div>
+                        </div>
+                      </div>
+                      <div
+                        style={{
+                          width: '100%',
+                          height: '30%',
+                          display: 'flex',
+                          flexDirection: 'column',
+                          marginTop: '15%',
+                        }}
+                      >
+                        <div
+                          style={{
+                            flex: 'row',
+                            width: '100%',
+                            borderTopWidth: 5,
+                            borderTopStyle: 'solid',
+                            borderTopColor: 'whitesmoke',
+                            gap: 10,
+                          }}
+                        >
+                          <div
+                            style={{
+                              paddingLeft: 10,
+                              fontSize: 15,
+                              color: 'black',
+                              fontWeight: 'bold',
+                              marginTop: 8,
+                            }}
+                          >
+                            Thông tin cá nhân
+                          </div>
+                        </div>
+                        <div
+                          style={{
+                            display: 'flex',
+                            flexDirection: 'row',
+                          }}
+                        >
+                          <label
+                            style={{
+                              paddingLeft: 10,
+                              fontSize: 13,
+                              color: 'grey',
+                              marginTop: 10,
+                            }}
+                          >
+                            Giới tính
+                          </label>
+                          <label
+                            style={{
+                              paddingLeft: 10,
+                              fontSize: 14,
+                              color: 'black',
+                              marginTop: 10,
+                              marginLeft: 35,
+                            }}
+                          >
+                            Nữ
+                          </label>
+                        </div>
+                        <div
+                          style={{
+                            display: 'flex',
+                            flexDirection: 'row',
+                          }}
+                        >
+                          <label
+                            style={{
+                              paddingLeft: 10,
+                              fontSize: 13,
+                              color: 'grey',
+                              marginTop: 10,
+                            }}
+                          >
+                            Ngày sinh
+                          </label>
+                          <label
+                            style={{
+                              paddingLeft: 10,
+                              fontSize: 14,
+                              color: 'black',
+                              marginTop: 10,
+                              marginLeft: 25,
+                            }}
+                          >
+                            14 tháng 09, 2002
+                          </label>
+                        </div>
+                        <div
+                          style={{
+                            display: 'flex',
+                            flexDirection: 'row',
+                          }}
+                        >
+                          <label
+                            style={{
+                              paddingLeft: 10,
+                              fontSize: 13,
+                              color: 'grey',
+                              marginTop: 10,
+                            }}
+                          >
+                            Điện thoại
+                          </label>
+                          <label
+                            style={{
+                              paddingLeft: 10,
+                              fontSize: 14,
+                              color: 'black',
+                              marginTop: 10,
+                              marginLeft: 23,
+                            }}
+                          >
+                            +84 988580844
+                          </label>
+                        </div>
+                        <div
+                          style={{
+                            display: 'flex',
+                            flexDirection: 'row',
+                          }}
+                        >
+                          <label
+                            style={{
+                              paddingLeft: 10,
+                              fontSize: 13,
+                              color: 'grey',
+                              marginTop: 10,
+                            }}
+                          >
+                            Chỉ bạn bè có lưu số của bạn trong danh bạ máy xem
+                            được số này
+                          </label>
+                        </div>
+                        <div
+                          style={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                            justifyContent: 'center',
+                            alignContent: 'center',
+                            alignItems: 'center',
+                          }}
+                        >
+                          <button
+                            style={{
+                              backgroundColor: 'white',
+                              color: 'black',
+                              border: '1px solid lightgrey',
+                              borderRadius: 5,
+                              width: '100%',
+                              height: 43,
+                              marginTop: 10,
+                              marginBottom: 10,
+                              display: 'flex',
+                              justifyContent: 'center',
+                              alignContent: 'center',
+                              alignItems: 'center',
+                              fontWeight: 'bold',
+                              fontSize: 14,
+                            }}
+                          >
+                            <label
+                              style={{
+                                width: 25,
+                                height: 25,
+                                borderRadius: 100,
+                              }}
+                            >
+                              <AiOutlineEdit size="1.3rem" />
+                            </label>
+                            Cập nhật
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  }
+                  handleClose={() => {
+                    setOpenInfoMe(!openInfoMe)
+                  }}
+                />
+              )}
               <div
                 style={{
                   width: '90%',

@@ -6,10 +6,15 @@ import { BsPeople } from 'react-icons/bs'
 import { CiBellOn } from 'react-icons/ci'
 import { TfiPinAlt } from 'react-icons/tfi'
 import { AiOutlineEdit } from 'react-icons/ai'
+import { useState } from 'react'
+import demo from '../../../Assets/demo.jpg'
+import PopupYou from './popupYou'
+import AddPupopYou from './addPupopYou'
 const ConversationDetail = () => {
   const [isPhotoVidOpen, setPhotoVidOpen] = React.useState(true)
   const [isFileOpen, setFileOpen] = React.useState(true)
   const [isLinkOpen, setLinkOpen] = React.useState(true)
+  const [openInfoYou, setOpenInfoYou] = useState(false)
   return (
     <div
       style={{
@@ -43,8 +48,13 @@ const ConversationDetail = () => {
             backgroundColor: 'grey',
             marginTop: 15,
           }}
+          onClick={() => {
+            setOpenInfoYou(!openInfoYou)
+          }}
         />
       </div>
+      {openInfoYou && <AddPupopYou />}
+
       <div style={{ display: 'flex', gap: 10 }}>
         <label
           style={{

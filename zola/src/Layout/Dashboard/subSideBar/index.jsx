@@ -26,12 +26,12 @@ const SubSideBar = () => {
               width: '100%',
               height: '90%',
               alignItems: 'center',
-              backgroundColor: 'white',
               borderRadius: 10,
               display: 'flex',
               flexDirection: 'column',
               justifyContent: 'center',
               border: 'none',
+
               backgroundColor: 'whitesmoke'
             }}
             type="text"
