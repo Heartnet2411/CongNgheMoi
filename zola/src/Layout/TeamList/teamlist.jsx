@@ -15,7 +15,7 @@ const Team = () => {
       style={{
         width: '100%',
         height: '100%',
-        backgroundColor: 'whitesmoke'
+        backgroundColor: 'whitesmoke',
       }}
     >
       <div
@@ -25,7 +25,7 @@ const Team = () => {
           backgroundColor: 'white',
           display: 'flex',
           justifyContent: 'space-between',
-          alignItems: 'center'
+          alignItems: 'center',
         }}
       >
         <div
@@ -34,7 +34,7 @@ const Team = () => {
             gap: 15,
             justifyContent: 'space-between',
             alignItems: 'center',
-            marginLeft: 20
+            marginLeft: 20,
           }}
         >
           <label>
@@ -42,7 +42,7 @@ const Team = () => {
           </label>
           <label
             style={{
-              fontSize: 18
+              fontSize: 18,
             }}
           >
             Danh sách nhóm
@@ -57,7 +57,7 @@ const Team = () => {
           backgroundColor: 'whitesmoke',
           display: 'flex',
           alignItems: 'center',
-          justifyContent: 'space-between'
+          justifyContent: 'space-between',
         }}
       >
         <label style={{ fontSize: 15, marginLeft: 15 }}>Nhóm ( )</label>
@@ -69,7 +69,7 @@ const Team = () => {
           backgroundColor: 'white',
           display: 'flex',
           margin: 'auto',
-          justifyContent: 'space-between'
+          justifyContent: 'space-between',
         }}
       >
         <div
@@ -80,7 +80,7 @@ const Team = () => {
             gap: 10,
             marginLeft: 10,
             alignItems: 'center',
-            justifyContent: 'space-between'
+            justifyContent: 'space-between',
           }}
         >
           <input
@@ -93,7 +93,7 @@ const Team = () => {
               display: 'flex',
               flexDirection: 'column',
               justifyContent: 'center',
-              marginLeft: 10
+              marginLeft: 10,
             }}
             type="text"
             placeholder="Search "
@@ -106,7 +106,7 @@ const Team = () => {
               alignItems: 'center',
               display: 'flex',
               borderRadius: 5,
-              backgroundColor: 'whitesmoke'
+              backgroundColor: 'whitesmoke',
             }}
           >
             <BsArrowDownUp size="1rem" />
@@ -117,7 +117,7 @@ const Team = () => {
                 height: 26,
                 borderRadius: 5,
                 backgroundColor: 'whitesmoke',
-                border: 'none'
+                border: 'none',
               }}
             >
               Tên (A-Z)
@@ -131,7 +131,7 @@ const Team = () => {
               alignItems: 'center',
               display: 'flex',
               borderRadius: 5,
-              backgroundColor: 'whitesmoke'
+              backgroundColor: 'whitesmoke',
             }}
           >
             <CiFilter size="1rem" />
@@ -142,7 +142,7 @@ const Team = () => {
                 height: 26,
                 borderRadius: 5,
                 backgroundColor: 'whitesmoke',
-                border: 'none'
+                border: 'none',
               }}
             >
               Tất cả
@@ -157,7 +157,7 @@ const Team = () => {
               alignItems: 'center',
               display: 'flex',
               flexDirection: 'column',
-              justifyContent: 'center'
+              justifyContent: 'center',
             }}
           ></div>
         </div>

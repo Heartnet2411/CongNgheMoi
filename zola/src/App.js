@@ -20,7 +20,7 @@ function App() {
       <Navigation />
       <BrowserRouter>
         <Routes>
-          <Route path="*" element={<Navigate to="/register" />} />
+          {/* <Route path="*" element={<Navigate to="/register" />} /> */}
           <Route path="/register" element={<Register />} />
           <Route path="/receiveotp" element={<Receiveotp />} />
 
