@@ -1,75 +1,115 @@
 import {
+    Alert,
+    KeyboardAvoidingView,
     StyleSheet,
     Text,
     TextInput,
     TouchableOpacity,
     View,
 } from 'react-native'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { AntDesign } from '@expo/vector-icons'
+import axios from 'axios'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
+const Login2 = ({ navigation }) => {
+    const [phoneNumber, setPhoneNumber] = useState()
+    const [password, setPassword] = useState()
+    useEffect(() => {
+        const checkLoginStatus= async()=>{
+        try {
+            
+                const token=await AsyncStorage.getItem('AuthToken')
+                if(token){
+                    navigation.navigate('Message')
+                }
+        } catch (error) {
+            console.log(error)
+        }
+    }
+    checkLoginStatus()
+    }, [])
 
-
-
-const Login2 = ({navigation}) => {
-    const [phoneNumber,setPhoneNumber]= useState();
-    const [password,setPassword]= useState();
-    const handleLogin = ()=>{
+    const handleLogin = () => {
         //kiểm tra hợp lệ
-        if(phoneNumber==null||password==null){
-            alert("Vui lòng nhập đầy đủ thông tin");
-            return;
+        /*if (phoneNumber == null || password == null) {
+            alert('Vui lòng nhập đầy đủ thông tin')
+            return
         }
         //gửi request lên server
         fetch(`http://localhost:3000/account/login?phoneNumber=${phoneNumber}`)
-        .then(res=>res.json())
-        .then(data=>{
-            if(data=="Account not found"){
-                alert("Tài khoản không tồn tại");
-            }else{
-                if(data.password==password){
-                    alert("Đăng nhập thành công");
-                    navigation.navigate('Message');
-
-                }else{
-                    alert("Mật khẩu không đúng");
+            .then((res) => res.json())
+            .then((data) => {
+                if (data == 'Account not found') {
+                    alert('Tài khoản không tồn tại')
+                } else {
+                    if (data.password == password) {
+                        alert('Đăng nhập thành công')
+                        navigation.navigate('Message')
+                    } else {
+                        alert('Mật khẩu không đúng')
+                    }
                 }
+            })
+            .catch((err) => {
+                console.log(err)
+            })*/
+            const account={
+                phoneNumber:phoneNumber,
+                password:password
             }
-        })
-        .catch(err=>{
-            console.log(err);
-        })
-     }
+            axios.post('http://localhost:3000/account/login',account).then
+            ((res)=>{
+                console.log(res)
+                const token=res.data.token
+                AsyncStorage.setItem('AuthToken',token)
+                navigation.navigate('Message')
+            }).catch((err)=>{
+                Alert.alert('Login failure!!!','Please check your username or password again!')
+                console.log('Error at login',err)
+            })
+            }
     return (
         <SafeAreaView style={styles.container}>
-            <View style={styles.header}>
-                <AntDesign
-                    style={styles.back}
-                    name="left"
-                    size={24}
-                    color="white"
-                />
-                <Text style={styles.login}>Đăng nhập</Text>
-            </View>
-            <View style={styles.info}>
-                <Text style={styles.direction}>
-                    Vui lòng nhập số điện thoại và mật khẩu để đăng nhập
-                </Text>
-                <TextInput style={styles.input} placeholder="Số điện thoại" onChangeText={setPhoneNumber} />
-                <TextInput onChangeText={setPassword}
-                    style={styles.input}
-                    placeholder="Mật khẩu"
-                    secureTextEntry
-                />
-                <TouchableOpacity style={styles.getPwd}>
-                    <Text style={styles.txtGetPwd
-                    }>Lấy lại mật khẩu</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.btnLogin} onPress={handleLogin}>
-                    <Text style={styles.txtLogin}>Đăng nhập</Text>
-                </TouchableOpacity>
-            </View>
+            <KeyboardAvoidingView>
+                <View style={styles.header}>
+                    <TouchableOpacity onPress={() => navigation.goBack()}>
+                    <AntDesign
+                        style={styles.back}
+                        name="left"
+                        size={24}
+                        color="white"
+                    />
+                    </TouchableOpacity>
+                    <Text style={styles.login}>Đăng nhập</Text>
+                </View>
+                <View style={styles.info}>
+                    <Text style={styles.direction}>
+                        Vui lòng nhập số điện thoại và mật khẩu để đăng nhập
+                    </Text>
+                    <TextInput
+                        style={styles.input}
+                        placeholder="Số điện thoại"
+                        onChangeText={setPhoneNumber}
+                    />
+                    <TextInput
+                        onChangeText={setPassword}
+                        style={styles.input}
+                        placeholder="Mật khẩu"
+                        secureTextEntry
+                    />
+                    <TouchableOpacity style={styles.getPwd}>
+                        <Text style={styles.txtGetPwd}>Lấy lại mật khẩu</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                        style={styles.btnLogin}
+                        onPress={handleLogin}
+                    >
+                        <Text style={styles.txtLogin}>Đăng nhập</Text>
+                    </TouchableOpacity>
+                </View>
+            </KeyboardAvoidingView>
         </SafeAreaView>
     )
 }
@@ -113,22 +153,22 @@ const styles = StyleSheet.create({
     },
 
     getPwd: {
-        marginLeft:15,
+        marginLeft: 15,
     },
     txtGetPwd: {
         color: '#1B96CB',
-        fontWeight:600,
-        fontSize:18,
+        fontWeight: 600,
+        fontSize: 18,
     },
     btnLogin: {
         alignItems: 'center',
-        marginTop:20,
+        marginTop: 20,
         justifyContent: 'center',
         width: 200,
         height: 40,
         backgroundColor: '#1B96CB',
         borderRadius: 20,
-        alignSelf:'center'
+        alignSelf: 'center',
     },
     txtLogin: {
         color: '#fff',

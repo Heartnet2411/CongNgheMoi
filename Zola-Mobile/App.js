@@ -11,14 +11,20 @@ import Login2 from './screens/Login2'
 import Contact from './screens/Contact'
 import ChatMessage from './screens/Cloud'
 import Cloud from './screens/Cloud'
+import Chat from './screens/Chat'
+import { UserContext } from './UserContext'
+import AddFriend from './components/AddFriend'
 
 export default function App() {
     const Stack = createNativeStackNavigator()
     //const LoginStack = createNativeStackNavigator();
 
     return (
+        <UserContext>
         <NavigationContainer>
             <Stack.Navigator initialRouteName="Login">
+                <Stack.Screen name="Chat" component={Chat} 
+                options={{headerShown:false}}/>
                 <Stack.Screen
                     name="Login"
                     component={Login}
@@ -39,6 +45,8 @@ export default function App() {
                     component={Contact}
                     options={{ headerShown: false }}
                 />
+                <Stack.Screen name='AddFriend' component={AddFriend}
+                options={{headerTitle:'Thêm Bạn'}}/>
                 <Stack.Screen
                     name="Cloud"
                     component={Cloud}
@@ -66,6 +74,7 @@ export default function App() {
                 />
             </Stack.Navigator>
         </NavigationContainer>
+        </UserContext>
     )
 }
 

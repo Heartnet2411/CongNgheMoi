@@ -8,11 +8,15 @@ import {
     Image,
     ScrollView,
 } from 'react-native'
-import React from 'react'
-import { MaterialIcons, EvilIcons, AntDesign } from '@expo/vector-icons'
+import React, { useEffect,useContext,useState } from 'react'
+import { MaterialIcons, EvilIcons, AntDesign ,FontAwesome5} from '@expo/vector-icons'
 import Tab from '../components/Tab'
+import { UserType } from '../UserContext'
+import AsyncStorage from '@react-native-async-storage/async-storage'
+import axios from 'axios'
+import {jwtDecode} from "jwt-decode";
 
-const Contact = () => {
+const Contact = ({navigation}) => {
     const listContact = [
         {
             id: 1,
@@ -45,6 +49,25 @@ const Contact = () => {
             avatar: require('../image/avatar.png'),
         },
     ]
+    const {accountId,setAccountId} = useContext(UserType)
+    const [users,setUsers]=useState([])
+    useEffect(() => {
+        const fetchUser= async()=>{
+            const token=await AsyncStorage.getItem('AuthToken')
+            const decodedToken=jwtDecode(token);
+            const accountId=decodedToken.accountId;
+            setAccountId(accountId)
+
+            axios.get(`http://localhost:3000/user/findAllExceptCurrentUser?account_id=${accountId}`).then((res)=>{
+                setUsers(res.data)
+                }).catch((err)=>{
+                    console.log(err)
+                });
+        };
+        fetchUser();
+    }
+    , [])
+    console.log('users',users,'accountid',accountId)
     return (
         <SafeAreaView style={styles.container}>
                 <View style={styles.header}>
@@ -57,7 +80,7 @@ const Contact = () => {
                         />
                         <Text style={styles.txtSearch}>Tìm kiếm</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.add}>
+                    <TouchableOpacity style={styles.add} onPress={()=>{navigation.navigate('AddFriend')}}>
                         <MaterialIcons
                             name="person-add-alt-1"
                             size={30}
@@ -74,9 +97,15 @@ const Contact = () => {
                         <Text style={styles.txtOption}>Nhóm</Text>
                     </TouchableOpacity>
                 </View>
+                <View style={styles.FriendRequests}>
+                    <TouchableOpacity style={styles.btnRequest}>
+                    <FontAwesome5 name="user-friends" size={24} color="#1B96CB"/>
+                        <Text style={styles.txtRequest}>Lời mời kết bạn</Text>
+                    </TouchableOpacity>
+                </View>
                 <ScrollView>
                     <View style={styles.list}>
-                        {listContact.map((item) => {
+                        {users.map((item) => {
                             return (
                                 <View key={item.id}>
                                     <TouchableOpacity style={styles.contact}>
@@ -86,7 +115,7 @@ const Contact = () => {
                                         />
 
                                         <Text style={styles.name}>
-                                            {item.name}
+                                            {item.firstName}
                                         </Text>
                                         <TouchableOpacity
                                             style={styles.message}
@@ -152,6 +181,22 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         height: 30,
         backgroundColor: '#ECEBEB',
+    },
+    FriendRequests:{
+        backgroundColor:'#ECEBEB',
+        height:50,
+        flexDirection:'row',
+    },
+    btnRequest:{
+        flexDirection:'row',
+        alignItems:'center',
+        marginLeft:20,
+    },
+    txtRequest:{
+        marginLeft:20,
+        fontFamily: 'Inter_600SemiBold',
+        fontSize: 18,
+        color: 'black',
     },
     txtOption: {
         fontFamily: 'Inter_600SemiBold',

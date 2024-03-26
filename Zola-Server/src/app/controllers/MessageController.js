@@ -1,6 +1,6 @@
-import Message from '../models/Message.js'
+//import Message from '../models/Message.js'
 
-class MessageController {
+/*class MessageController {
     // post /create
     async create(req, res) {
         const conversation_id = req.body.conversation_id
@@ -39,4 +39,4 @@ class MessageController {
     }
 }
 
-export default new MessageController()
+export default new MessageController()*/
