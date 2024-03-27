@@ -11,6 +11,8 @@ import {
 import Cloud from '../Cloud/index'
 import FriendRequest from '../FriendRequest/index'
 import TeamList from '../TeamList/index'
+import Main from '../Dashboard/main'
+import DashBoardWait from '../Dashboard/indexwait'
 
 const Navigation = () => {
   return (
@@ -23,6 +25,7 @@ const Navigation = () => {
         <Route path="/cloud" element={<Cloud />} />
         <Route path="/requestlist" element={<FriendRequest />} />
         <Route path="/teamlist" element={<TeamList />} />
+        <Route path="/dashboardwait" element={<DashBoardWait />} />
       </Routes>
     </Router>
   )

@@ -3,7 +3,7 @@ import SideBar from './sideBar'
 import SubSideBar from './subSideBar'
 import Wait from '../Dashboard/main/wait'
 
-const DashBoard = () => {
+const DashBoardWait = () => {
   return (
     <div
       style={{
@@ -15,10 +15,10 @@ const DashBoard = () => {
     >
       <SideBar />
       <SubSideBar />
-      {/* <Wait /> */}
-      <Main />
+      <Wait />
+      {/* <Main /> */}
     </div>
   )
 }
 
-export default DashBoard
+export default DashBoardWait

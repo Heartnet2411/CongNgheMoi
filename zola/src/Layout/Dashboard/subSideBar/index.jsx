@@ -1,7 +1,13 @@
 import { AiOutlineUserAdd } from 'react-icons/ai'
 import { GrSearch } from 'react-icons/gr'
 import { AiOutlineUsergroupAdd } from 'react-icons/ai'
+import { useNavigate } from 'react-router-dom'
 const SubSideBar = () => {
+  const navigate = useNavigate()
+  const handleDashboard = () => {
+    // Thực hiện chuyển hướng khi người dùng nhấp vào biểu tượng
+    navigate('/dashboard')
+  }
   return (
     <div style={{ width: '25%', height: '100%', backgroundColor: 'white' }}>
       <div style={{ display: 'flex', gap: 10, marginTop: 25, height: '3%' }}>
@@ -48,7 +54,6 @@ const SubSideBar = () => {
           height: '100%',
           display: 'flex',
           gap: 10,
-
           marginTop: 20
         }}
       >
@@ -62,6 +67,7 @@ const SubSideBar = () => {
             height: 55,
             alignItems: 'center'
           }}
+          onClick={handleDashboard}
         >
           <img
             src="https://www.w3schools.com/howto/img_avatar.png"
