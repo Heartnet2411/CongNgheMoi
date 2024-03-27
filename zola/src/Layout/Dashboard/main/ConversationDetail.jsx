@@ -8,13 +8,16 @@ import { TfiPinAlt } from 'react-icons/tfi'
 import { AiOutlineEdit } from 'react-icons/ai'
 import { useState } from 'react'
 import demo from '../../../Assets/demo.jpg'
-import PopupYou from './popupYou'
+import PopupYou from './pupopYou'
 import AddPupopYou from './addPupopYou'
+import PopupStranger from './pupopStranger'
+import AddPupopStranger from './addPupopStranger'
 const ConversationDetail = () => {
   const [isPhotoVidOpen, setPhotoVidOpen] = React.useState(true)
   const [isFileOpen, setFileOpen] = React.useState(true)
   const [isLinkOpen, setLinkOpen] = React.useState(true)
   const [openInfoYou, setOpenInfoYou] = useState(false)
+  const [openInfoStranger, setOpenInfoStranger] = useState(false)
   return (
     <div
       style={{
@@ -49,11 +52,32 @@ const ConversationDetail = () => {
             marginTop: 15,
           }}
           onClick={() => {
+            // này cho bạn bè
             setOpenInfoYou(!openInfoYou)
+            //  này cho người lạ
+            // setOpenInfoStranger(!openInfoStranger)
           }}
         />
       </div>
-      {openInfoYou && <AddPupopYou />}
+      {/* này cho bạn bè  */}
+      {openInfoYou && (
+        <PopupYou
+          content={<AddPupopYou />}
+          handleClose={() => {
+            setOpenInfoYou(!openInfoYou)
+          }}
+        />
+      )}
+
+      {/* này cho người lạ */}
+      {/* {openInfoStranger && (
+        <PopupStranger
+          content={<AddPupopStranger />}
+          handleClose={() => {
+            setOpenInfoStranger(!openInfoStranger)
+          }}
+        />
+      )} */}
 
       <div style={{ display: 'flex', gap: 10 }}>
         <label

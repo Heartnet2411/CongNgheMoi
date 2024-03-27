@@ -8,10 +8,10 @@ import { LuAlertTriangle } from 'react-icons/lu'
 import { FaRegTrashAlt } from 'react-icons/fa'
 import PopupYou from './pupopYou'
 import PopupStranger from './pupopStranger'
-const AddPupopYou = () => {
-  const [openInfoYou, setOpenInfoYou] = useState(false)
+const AddPupopStranger = () => {
+  const [openInfoStranger, setOpenInfoStranger] = useState(false)
   return (
-    // <PopupYou
+    // <PopupStranger
     //   content={
     <div
       style={{
@@ -160,7 +160,7 @@ const AddPupopYou = () => {
               fontSize: 14
             }}
           >
-            Gọi điện
+            Kết bạn
           </button>
           <button
             style={{
@@ -187,7 +187,7 @@ const AddPupopYou = () => {
       <div
         style={{
           width: '100%',
-          height: '20%',
+          height: '17%',
           display: 'flex',
           flexDirection: 'column',
           marginTop: '10%'
@@ -271,66 +271,6 @@ const AddPupopYou = () => {
             14 tháng 09, 2002
           </label>
         </div>
-        <div
-          style={{
-            display: 'flex',
-            flexDirection: 'row'
-          }}
-        >
-          <label
-            style={{
-              paddingLeft: 10,
-              fontSize: 13,
-              color: 'grey',
-              marginTop: 10
-            }}
-          >
-            Điện thoại
-          </label>
-          <label
-            style={{
-              paddingLeft: 10,
-              fontSize: 14,
-              color: 'black',
-              marginTop: 10,
-              marginLeft: 23
-            }}
-          >
-            +84 988 580 844
-          </label>
-        </div>
-      </div>
-      <div
-        style={{
-          width: '100%',
-          height: '15%',
-          display: 'flex',
-          flexDirection: 'column',
-          marginTop: '0%'
-        }}
-      >
-        <div
-          style={{
-            flex: 'row',
-            width: '100%',
-            borderTopWidth: 5,
-            borderTopStyle: 'solid',
-            borderTopColor: 'whitesmoke',
-            gap: 10
-          }}
-        >
-          <div
-            style={{
-              paddingLeft: 10,
-              fontSize: 15,
-              color: 'black',
-              fontWeight: 'bold',
-              marginTop: 8
-            }}
-          >
-            Hình ảnh
-          </div>
-        </div>
       </div>
       <div
         style={{
@@ -338,8 +278,7 @@ const AddPupopYou = () => {
           width: '100%',
           borderTopWidth: 5,
           borderTopStyle: 'solid',
-          borderTopColor: 'whitesmoke',
-          gap: 10
+          borderTopColor: 'whitesmoke'
         }}
       >
         <div
@@ -348,7 +287,7 @@ const AddPupopYou = () => {
             fontSize: 15,
             color: 'black',
             display: 'flex',
-            marginTop: 12
+            marginTop: 17
           }}
         >
           <BsPeople size="1.3rem" />
@@ -356,7 +295,7 @@ const AddPupopYou = () => {
             style={{
               paddingLeft: 10,
               fontSize: 15,
-              color: 'black'
+              color: 'grey'
             }}
           >
             Nhóm chung ()
@@ -368,7 +307,7 @@ const AddPupopYou = () => {
             fontSize: 15,
             color: 'black',
             display: 'flex',
-            marginTop: 12
+            marginTop: 17
           }}
         >
           <TiBusinessCard size="1.3rem" />
@@ -376,7 +315,7 @@ const AddPupopYou = () => {
             style={{
               paddingLeft: 10,
               fontSize: 15,
-              color: 'black'
+              color: 'grey'
             }}
           >
             Chia sẻ danh thiếp
@@ -388,7 +327,7 @@ const AddPupopYou = () => {
             fontSize: 15,
             color: 'black',
             display: 'flex',
-            marginTop: 12
+            marginTop: 17
           }}
         >
           <MdBlock size="1.3rem" />
@@ -408,7 +347,7 @@ const AddPupopYou = () => {
             fontSize: 15,
             color: 'black',
             display: 'flex',
-            marginTop: 12
+            marginTop: 17
           }}
         >
           <LuAlertTriangle size="1.3rem" />
@@ -422,33 +361,13 @@ const AddPupopYou = () => {
             Báo xấu
           </div>
         </div>
-        <div
-          style={{
-            paddingLeft: 10,
-            fontSize: 15,
-            color: 'black',
-            display: 'flex',
-            marginTop: 12
-          }}
-        >
-          <FaRegTrashAlt size="1.3rem" />
-          <div
-            style={{
-              paddingLeft: 10,
-              fontSize: 15,
-              color: 'black'
-            }}
-          >
-            Xóa khỏi danh sách bạn bè
-          </div>
-        </div>
       </div>
     </div>
-    //   }
-    //   handleClose={() => {
-    //     setOpenInfoYou(!openInfoYou)
-    //   }}
+    // }
+    // handleClose={() => {
+    //   setOpenInfoStranger(!openInfoStranger)
+    // }}
     // />
   )
 }
-export default AddPupopYou
+export default AddPupopStranger

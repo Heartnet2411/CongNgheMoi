@@ -7,6 +7,7 @@ import React, { useState } from 'react'
 import { toast, Toaster } from 'react-hot-toast'
 import { BeatLoader } from 'react-spinners'
 import Skeleton from 'react-loading-skeleton' // Import component Skeleton
+import Wait from '../Dashboard/main/wait'
 
 import { Suspense, lazy } from 'react'
 const DashBoard = () => {
@@ -40,6 +41,7 @@ const DashBoard = () => {
       {/* {user ? <SideBar user={user} /> : <Skeleton count={5} />} */}
       <SideBar user={user} />
       <SubSideBar />
+      {/* <Wait /> */}
       <Main />
     </div>
   )
