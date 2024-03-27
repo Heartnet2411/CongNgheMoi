@@ -11,5 +11,9 @@ router.post('/findUser', userController.findUserByAccountID)
 
 router.put('/addFriend', userController.addFriend)
 
-router.get('/userInfo', userController.userInfo)
+// website findallW
+router.post('/findAllUsersWeb', userController.findAllUsersWeb)
+// web findUser by số điện thoại
+router.post('/findUserByPhoneWeb', userController.findUserByPhoneWeb)
+
 export default router

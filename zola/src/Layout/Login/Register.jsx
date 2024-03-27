@@ -24,28 +24,6 @@ export const Register = () => {
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword)
   }
-
-  // useEffect(() => {
-  //   if (!didMountRef1.current) {
-  //     didMountRef1.current = true
-  //     return
-  //   }
-  //   const handleKeyPress = (event) => {
-  //     if (event.key === 'Enter') {
-  //       event.preventDefault() // Ngăn chặn hành động mặc định của phím "Enter"
-  //       register(event) // Gọi hàm register khi nhấn phím "Enter"
-  //     }
-  //   }
-
-  //   // Gắn lắng nghe sự kiện keydown cho cả trang web khi component được load
-  //   document.addEventListener('keydown', handleKeyPress)
-
-  //   // Xóa lắng nghe sự kiện khi component unmount để tránh memory leak
-  //   return () => {
-  //     document.removeEventListener('keydown', handleKeyPress)
-  //   }
-  // }, [])
-  // viết 1 hàm để gửi thông tin đăng ký lên server
   const register = (e) => {
     // kiểm tra password và confirm password có giống nhau không
     // // regex cho mật khẩu có ít nhất 8 ký tự, ít nhất 1 chữ hoa, 1 chữ thường, 1 số

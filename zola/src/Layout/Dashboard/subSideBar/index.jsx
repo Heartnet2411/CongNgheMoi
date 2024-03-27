@@ -1,11 +1,42 @@
 import { AiOutlineUserAdd } from 'react-icons/ai'
 import { GrSearch } from 'react-icons/gr'
 import { AiOutlineUsergroupAdd } from 'react-icons/ai'
-
+import React, { useState } from 'react'
+import axios from 'axios'
+import { toast, Toaster } from 'react-hot-toast'
 const SubSideBar = () => {
+  const handleInputChange = (event) => {
+    const searchValue = event.target.value
+
+    if (searchValue.length >= 10) {
+      console.log('searchValue: ', searchValue)
+      axios
+        .post('http://localhost:3001/user/findUserByPhoneWeb', {
+          phoneNumber: searchValue,
+        })
+        .then((res) => {
+          if (res.data.message === 'Không tìm thấy user!!!') {
+            toast.error('Số điện thoại chưa được đăng ký!!!')
+            return
+          }
+          if (res.data.message === 'Tìm user thành công!!!') {
+            toast.success('Tìm user thành công!!!')
+            // lưu thông tin user vào localStorage
+            localStorage.setItem(
+              'userFindBySearch',
+              JSON.stringify(res.data.user)
+            )
+          }
+        })
+        .catch((err) => {
+          console.log('err: ', err)
+        })
+    }
+  }
   return (
     <div style={{ width: '25%', height: '100%', backgroundColor: 'white' }}>
       <div style={{ display: 'flex', gap: 10, marginTop: 25, height: '3%' }}>
+        <Toaster toastOptions={{ duration: 3500 }} />
         <div
           style={{
             display: 'flex',
@@ -37,6 +68,8 @@ const SubSideBar = () => {
             }}
             type="text"
             placeholder="Tìm kiếm "
+            // value={searchValue}
+            onChange={handleInputChange}
           />
         </div>
 

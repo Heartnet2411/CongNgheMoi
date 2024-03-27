@@ -119,9 +119,34 @@ class UserController {
             res.json('User doesn`t exits !!!')
         }
     }
-    async userInfo(req, res) {
-        // const phoneNumber = 0367909181;
-        // // từ phonenumber tìm ra user
+
+    // website
+    // findalluser web
+    async findAllUsersWeb(req, res) {
+        const allUsers = await User.find()
+        console.log('allUsers: ', allUsers)
+        return res
+            .status(200)
+            .json({ message: 'Tìm tất cả user thành công!!!', users: allUsers })
+        // return res
+        //     .status(200)
+        //     .json({ message: 'Tìm tất cả user thành công!!!' })
+    }
+    //findUserByPhone
+    async findUserByPhoneWeb(req, res) {
+        const phoneNumber = req.body.phoneNumber
+        const user = await User.findOne({ phoneNumber: phoneNumber })
+        console.log('user: ', user)
+        if (user) {
+            return res.status(200).json({
+                message: 'Tìm user thành công!!!',
+                user: user,
+            })
+        } else {
+            return res.status(200).json({
+                message: 'Không tìm thấy user!!!',
+            })
+        }
     }
 }
 
