@@ -3,7 +3,7 @@ import { HTTP_STATUS_BAD_REQUEST } from '../../util/erorCode.js'
 import { response } from 'express'
 
 class AccountController {
-    // POST http://localhost:3001/account/login
+    // POST http://localhost:3001/account/login WEb
     async login(req, res) {
         console.log('Đang đăng nhập')
 
@@ -31,7 +31,7 @@ class AccountController {
         }
     }
 
-    // post /register
+    // post /register WEb
     async register(req, res) {
         const { phoneNumber, password } = req.body
 
@@ -60,6 +60,7 @@ class AccountController {
                 res.status(500).json({ message: 'Register failure!!!' })
             })
     }
+    // WEb
 
     async findByID(req, res) {
         const id = req.query.account_id
@@ -71,7 +72,7 @@ class AccountController {
             res.status(HTTP_STATUS_BAD_REQUEST).json('Account not found!!!')
         }
     }
-    // POST
+    // POST WEb
     async loginphone(req, res) {
         const { phoneNumber } = req.body
 
@@ -126,7 +127,7 @@ class AccountController {
             })
         }
     }
-    // viết 1 hàm post quên mật khẩu từ số điện thoại
+    // viết 1 hàm post quên mật khẩu từ số điện thoại WEb
     async forgot(req, res) {
         // gọi lại hàm loginphone
         const { phoneNumber } = req.body

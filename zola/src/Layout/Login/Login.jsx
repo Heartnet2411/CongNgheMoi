@@ -39,35 +39,35 @@ export const Login = () => {
           toast.error('Mật khẩu không đúng!!!')
         } else if (response.data.message === 'Login successfully!!!') {
           toast.success('Đăng nhập thành công!!!')
-          localStorage.setItem('account_id', response.data.account_id)
-          window.location.href = 'http://localhost:3000/dashboard'
-          //   axios
-          //     .post('http://localhost:3001/user/findUser', {
-          //       account_id: response.data.account_id,
-          //     })
-          //     .then((response) => {
-          //       toast.success('Đăng nhập thành công!!!')
-          //       // localStorage.setItem('user', JSON.stringify(response.data.user))
-          //       // window.location.href = 'http://localhost:3000/dashboard'
-          //       axios
-          //         .post('http://localhost:3000/dashboard', {
-          //           account_id: response.data.account_id,
-          //           conversation_id: response.data.conversation_id,
-          //           userName: response.data.userName,
-          //           firstName: response.datafirstName,
-          //           lastName: response.datalastName,
-          //           phoneNumber: response.data.phoneNumber,
-          //           dateOfBirth: response.data.dateOfBirthFormatted,
-          //           gender: response.data.gender,
-          //           avatar: response.data.avatar,
-          //           friend: response.data.friend,
-          //         })
-          //         .then((response) => {
-          //           toast.success('Đăng nhập thành công!!!')
-          //           // localStorage.setItem('user', JSON.stringify(response.data.user))
-          //           // window.location.href = 'http://localhost:3000/dashboard'
-          //         })
-          //     })
+          // localStorage.setItem('account_id', response.data.account_id)
+          // window.location.href = 'http://localhost:3000/dashboard'
+          axios
+            .post('http://localhost:3001/user/findUser', {
+              account_id: response.data.account_id,
+            })
+            .then((response) => {
+              toast.success('Đăng nhập thành công!!!')
+              localStorage.setItem('user', JSON.stringify(response.data.user))
+              window.location.href = 'http://localhost:3000/dashboard'
+              // axios
+              //   .post('http://localhost:3000/dashboard', {
+              //     account_id: response.data.account_id,
+              //     conversation_id: response.data.conversation_id,
+              //     userName: response.data.userName,
+              //     firstName: response.datafirstName,
+              //     lastName: response.datalastName,
+              //     phoneNumber: response.data.phoneNumber,
+              //     dateOfBirth: response.data.dateOfBirthFormatted,
+              //     gender: response.data.gender,
+              //     avatar: response.data.avatar,
+              //     friend: response.data.friend,
+              //   })
+              //   .then((response) => {
+              //     toast.success('Đăng nhập thành công!!!')
+              //     // localStorage.setItem('user', JSON.stringify(response.data.user))
+              //     // window.location.href = 'http://localhost:3000/dashboard'
+              //   })
+            })
         }
       })
   }
