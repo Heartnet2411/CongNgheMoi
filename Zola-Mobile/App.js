@@ -14,21 +14,49 @@ import Contact from './screens/Contact'
 import CreateUser from './components/CreateUser'
 import { NavigationContainer } from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
+import Login2 from './screens/Login2'
+import Contact from './screens/Contact'
+import ChatMessage from './screens/Cloud'
+import Cloud from './screens/Cloud'
+import Chat from './screens/Chat'
+import { UserContext } from './UserContext'
+import AddFriend from './components/AddFriend'
 
 export default function App() {
     const Stack = createNativeStackNavigator()
+    //const LoginStack = createNativeStackNavigator();
 
     return (
+        <UserContext>
         <NavigationContainer>
             <Stack.Navigator initialRouteName="Login">
+                <Stack.Screen name="Chat" component={Chat} 
+                options={{headerShown:false}}/>
                 <Stack.Screen
                     name="Login"
                     component={Login}
                     options={{ headerShown: false }}
                 />
                 <Stack.Screen
+                    name="Login2"
+                    component={Login2}
+                    options={{ headerShown: false }}
+                />
+                <Stack.Screen
                     name="Message"
                     component={Message}
+                    options={{ headerShown: false }}
+                />
+                <Stack.Screen
+                    name="Contact"
+                    component={Contact}
+                    options={{ headerShown: false }}
+                />
+                <Stack.Screen name='AddFriend' component={AddFriend}
+                options={{headerTitle:'Thêm Bạn'}}/>
+                <Stack.Screen
+                    name="Cloud"
+                    component={Cloud}
                     options={{ headerShown: false }}
                 />
                 <Stack.Screen
@@ -88,6 +116,7 @@ export default function App() {
                 />
             </Stack.Navigator>
         </NavigationContainer>
+        </UserContext>
     )
 }
 
