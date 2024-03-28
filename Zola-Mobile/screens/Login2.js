@@ -20,7 +20,7 @@ const Login2 = ({ navigation }) => {
         }
         //gửi request lên server
         fetch(
-            `http://192.168.1.11:3000/account/login?phoneNumber=${phoneNumber}`,
+            `http://192.168.1.13:3000/account/login?phoneNumber=${phoneNumber}`,
         )
             .then((res) => res.json())
             .then((data) => {

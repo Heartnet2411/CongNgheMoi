@@ -1,4 +1,10 @@
-import { StyleSheet, Text, View, TouchableOpacity } from 'react-native'
+import {
+    StyleSheet,
+    Text,
+    View,
+    TouchableOpacity,
+    Dimensions,
+} from 'react-native'
 import { AntDesign } from '@expo/vector-icons'
 import { useNavigation } from '@react-navigation/native'
 
@@ -34,18 +40,19 @@ export default function Tab({}) {
     )
 }
 
+const windowHeight = Dimensions.get('window').height
+const windowWidth = Dimensions.get('window').width
+
 const styles = StyleSheet.create({
     tab: {
-        height: 50,
-        width: '100%',
+        height: windowHeight * 0.08,
+        width: windowWidth,
         backgroundColor: '#fff',
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-around',
         borderTopWidth: 1,
         borderTopColor: '#ccc',
-        position: 'absolute',
-        bottom: 0,
         marginHorizontal: 0,
     },
     btn: {

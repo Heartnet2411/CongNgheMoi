@@ -27,6 +27,7 @@ const Cloud = () => {
             <View style={styles.body}>
                 <Text>xhat</Text>
             </View>
+            <Tab />
             <View style={styles.chat}>
                 <TouchableOpacity>
                     <Entypo
@@ -49,18 +50,20 @@ const Cloud = () => {
                     <MaterialIcons name="send" size={30} color="black" />
                 </TouchableOpacity>
             </View>
-            <Tab />
         </SafeAreaView>
     )
 }
 
 export default Cloud
+
 const windowWidth = Dimensions.get('window').width
 const windowHeight = Dimensions.get('window').height
+
 const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: 'white',
+        height: windowHeight,
     },
     header: {
         height: 60,
@@ -68,6 +71,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#1B96CB',
         flexDirection: 'row',
         alignItems: 'center',
+        height: windowHeight * 0.08,
     },
     txtHeader: {
         color: '#fff',
@@ -81,14 +85,18 @@ const styles = StyleSheet.create({
     },
     body: {
         width: windowWidth,
-        height: 500,
+        height: windowHeight * 0.8,
+        flex: 1,
         backgroundColor: '#fff',
+        position: 'relative',
     },
     chat: {
         flexDirection: 'row',
         alignItems: 'center',
         backgroundColor: '#fff',
         height: 60,
+        position: 'absolute',
+        bottom: windowHeight * 0.08,
     },
     iconemj: {
         marginLeft: 10,

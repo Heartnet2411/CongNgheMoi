@@ -17,7 +17,8 @@ const User = new Schema(
         phoneNumber: { type: String, required: true, unique: true },
         dateOfBirth: { type: String, required: true },
         gender: { type: String, required: true },
-        avatar: { type: String, required: true },
+        avatar: { type: String },
+        coverImage: { type: String },
         friend: [Friend],
     },
     { timestamps: true }

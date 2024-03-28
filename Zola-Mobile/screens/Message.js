@@ -111,97 +111,99 @@ const Message = ({ navigation, route }) => {
     useFonts({ Inter_600SemiBold })
     return (
         <SafeAreaView>
-            <View>
-                <View style={styles.header}>
-                    <TouchableOpacity style={styles.search}>
-                        <EvilIcons
-                            name="search"
-                            style={styles.iconSearch}
-                            size={30}
-                            color="white"
-                        />
-                        <Text style={styles.txtSearch}>Tìm kiếm</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity>
-                        <MaterialCommunityIcons
-                            style={styles.iconQR}
-                            name="qrcode-scan"
-                            size={25}
-                            color="white"
-                        />
-                    </TouchableOpacity>
-                    <TouchableOpacity>
-                        <Ionicons
-                            name="add"
-                            style={styles.iconAdd}
-                            size={30}
-                            color="white"
-                        />
-                    </TouchableOpacity>
-                </View>
-                <ScrollView>
-                    <View style={styles.list}>
-                        {listMess.map((item) => {
-                            return (
-                                <TouchableOpacity id={item.id}>
-                                    <View
+            <View style={styles.header}>
+                <TouchableOpacity style={styles.search}>
+                    <EvilIcons
+                        name="search"
+                        style={styles.iconSearch}
+                        size={30}
+                        color="white"
+                    />
+                    <Text style={styles.txtSearch}>Tìm kiếm</Text>
+                </TouchableOpacity>
+                <TouchableOpacity>
+                    <MaterialCommunityIcons
+                        style={styles.iconQR}
+                        name="qrcode-scan"
+                        size={25}
+                        color="white"
+                    />
+                </TouchableOpacity>
+                <TouchableOpacity>
+                    <Ionicons
+                        name="add"
+                        style={styles.iconAdd}
+                        size={35}
+                        color="white"
+                    />
+                </TouchableOpacity>
+            </View>
+            {/* List message */}
+            <ScrollView style={styles.list}>
+                {listMess.map((item) => {
+                    return (
+                        <TouchableOpacity id={item.id}>
+                            <View
+                                style={{
+                                    flexDirection: 'row',
+                                    alignItems: 'center',
+                                    justifyContent: 'space-around',
+                                    borderBottomColor: '#ccc',
+                                    borderBottomWidth: 1,
+                                    backgroundColor: '#fff',
+                                    paddingHorizontal: 15,
+                                    paddingVertical: 5,
+                                }}
+                            >
+                                <Image
+                                    source={item.avatar}
+                                    style={{
+                                        width: 60,
+                                        height: 60,
+                                        borderRadius: 30,
+                                    }}
+                                />
+                                <View
+                                    style={{
+                                        marginLeft: 10,
+                                        width: 250,
+                                    }}
+                                >
+                                    <Text
                                         style={{
-                                            flexDirection: 'row',
-                                            alignItems: 'center',
-                                            margin: 10,
+                                            fontFamily: 'Inter_600SemiBold',
+                                            fontSize: 18,
+                                            marginLeft: 10,
                                         }}
                                     >
-                                        <Image
-                                            source={item.avatar}
-                                            style={{
-                                                width: 60,
-                                                height: 60,
-                                                borderRadius: 30,
-                                            }}
-                                        />
-                                        <View
-                                            style={{
-                                                marginLeft: 10,
-                                                width: 250,
-                                            }}
-                                        >
-                                            <Text
-                                                style={{
-                                                    fontFamily:
-                                                        'Inter_600SemiBold',
-                                                    fontSize: 18,
-                                                }}
-                                            >
-                                                {item.name}
-                                            </Text>
-                                            <Text
-                                                style={{
-                                                    fontFamily:
-                                                        'Inter_600SemiBold',
-                                                    fontSize: 14,
-                                                    color: '#8F9BB3',
-                                                }}
-                                            >
-                                                {item.content}
-                                            </Text>
-                                        </View>
-                                        <Text
-                                            style={{
-                                                fontFamily: 'Inter_600SemiBold',
-                                                fontSize: 14,
-                                                color: '#8F9BB3',
-                                            }}
-                                        >
-                                            {item.time}
-                                        </Text>
-                                    </View>
-                                </TouchableOpacity>
-                            )
-                        })}
-                    </View>
-                </ScrollView>
-                <Tab />
-            </View>
+                                        {item.name}
+                                    </Text>
+                                    <Text
+                                        style={{
+                                            fontFamily: 'Inter_600SemiBold',
+                                            fontSize: 14,
+                                            color: '#8F9BB3',
+                                            marginLeft: 10,
+                                        }}
+                                    >
+                                        {item.content}
+                                    </Text>
+                                </View>
+                                <Text
+                                    style={{
+                                        fontFamily: 'Inter_600SemiBold',
+                                        fontSize: 14,
+                                        color: '#8F9BB3',
+                                    }}
+                                >
+                                    {item.time}
+                                </Text>
+                            </View>
+                        </TouchableOpacity>
+                    )
+                })}
+            </ScrollView>
+            <Tab />
         </SafeAreaView>
     )
 }
@@ -215,18 +217,20 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#fff',
-        position: 'relative',
+        height: windowHeight * 0.8,
+        width: windowWidth,
     },
     header: {
         height: 60,
         backgroundColor: '#1B96CB',
         flexDirection: 'row',
         alignItems: 'center',
+        justifyContent: 'space-between',
     },
     search: {
         flexDirection: 'row',
         alignItems: 'center',
-        width: 280,
+        width: windowWidth * 0.75,
     },
     iconSearch: {
         marginLeft: 10,
@@ -240,14 +244,15 @@ const styles = StyleSheet.create({
     iconQR: {
         width: 28,
         height: 28,
-        marginLeft: 10,
+        marginLeft: windowWidth * 0.01,
     },
     iconAdd: {
-        width: 35,
-        height: 35,
-        marginLeft: 15,
+        width: 40,
+        height: 40,
+        marginLeft: windowWidth * 0.03,
     },
     list: {
-        height: Math.round(windowHeight) - 60,
+        height: Math.round(windowHeight) - windowHeight * 0.16,
+        width: windowWidth,
     },
 })
