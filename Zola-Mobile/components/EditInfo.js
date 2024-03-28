@@ -92,6 +92,7 @@ export default function Tab({ route, navigation }) {
                             labelStyle={{ fontSize: 18 }}
                         />
                     </View>
+                    
                 </View>
             </View>
             <TouchableOpacity style={styles.btn}>

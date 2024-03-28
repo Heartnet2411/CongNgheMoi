@@ -11,6 +11,9 @@ import {
 import React from 'react'
 import { Inter_600SemiBold, useFonts } from '@expo-google-fonts/inter'
 import Tab from '../components/Tab'
+import { SafeAreaView } from 'react-native-safe-area-context'
+import { Feather, Ionicons, MaterialCommunityIcons } from '@expo/vector-icons'
+import { startColor, endColor } from '../utils/constant'
 
 const Message = ({ navigation, route }) => {
     const listMess = [
@@ -108,88 +111,100 @@ const Message = ({ navigation, route }) => {
     ]
     useFonts({ Inter_600SemiBold })
     return (
-        <SafeAreaView>
-            <View>
-                <View style={styles.header}>
-                    <TouchableOpacity style={styles.search}>
-                        <Image
-                            source={require('../image/search.png')}
-                            style={styles.iconSearch}
-                        />
-                        <Text style={styles.txtSearch}>Tìm kiếm</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity>
-                        <Image
-                            source={require('../image/qrcode-scan.png')}
-                            style={styles.iconQR}
-                        />
-                    </TouchableOpacity>
-                    <TouchableOpacity>
-                        <Image
-                            source={require('../image/add.png')}
-                            style={styles.iconAdd}
-                        />
-                    </TouchableOpacity>
-                </View>
-                <View style={styles.list}>
-                    {listMess.map((item) => {
-                        return (
-                            <TouchableOpacity id={item.id}>
+        <SafeAreaView style={styles.container}>
+            <View style={styles.header}>
+                <TouchableOpacity style={styles.search}>
+                    <Feather
+                        name="search"
+                        style={styles.iconSearch}
+                        size={26}
+                        color="white"
+                    />
+                    <Text style={styles.txtSearch}>Tìm kiếm</Text>
+                </TouchableOpacity>
+                <TouchableOpacity>
+                    <MaterialCommunityIcons
+                        style={styles.iconQR}
+                        name="qrcode-scan"
+                        size={25}
+                        color="white"
+                    />
+                </TouchableOpacity>
+                <TouchableOpacity>
+                    <Ionicons
+                        name="add"
+                        style={styles.iconAdd}
+                        size={35}
+                        color="white"
+                    />
+                </TouchableOpacity>
+            </View>
+            {/* List message */}
+            <ScrollView style={styles.list}>
+                {listMess.map((item) => {
+                    return (
+                        <TouchableOpacity id={item.id}>
+                            <View
+                                style={{
+                                    flexDirection: 'row',
+                                    alignItems: 'center',
+                                    justifyContent: 'space-around',
+                                    borderBottomColor: '#ccc',
+                                    borderBottomWidth: 1,
+                                    backgroundColor: '#fff',
+                                    paddingHorizontal: 15,
+                                    paddingVertical: 7,
+                                }}
+                            >
+                                <Image
+                                    source={item.avatar}
+                                    style={{
+                                        width: 60,
+                                        height: 60,
+                                        borderRadius: 30,
+                                    }}
+                                />
                                 <View
                                     style={{
-                                        flexDirection: 'row',
-                                        alignItems: 'center',
-                                        margin: 10,
+                                        marginLeft: 10,
+                                        width: 250,
                                     }}
                                 >
-                                    <Image
-                                        source={item.avatar}
+                                    <Text
                                         style={{
-                                            width: 60,
-                                            height: 60,
-                                            borderRadius: 30,
-                                        }}
-                                    />
-                                    <View
-                                        style={{
+                                            fontFamily: 'Inter_600SemiBold',
+                                            fontSize: 18,
                                             marginLeft: 10,
-                                            width: 250,
                                         }}
                                     >
-                                        <Text
-                                            style={{
-                                                fontFamily: 'Inter_600SemiBold',
-                                                fontSize: 18,
-                                            }}
-                                        >
-                                            {item.name}
-                                        </Text>
-                                        <Text
-                                            style={{
-                                                fontFamily: 'Inter_600SemiBold',
-                                                fontSize: 14,
-                                                color: '#8F9BB3',
-                                            }}
-                                        >
-                                            {item.content}
-                                        </Text>
-                                    </View>
+                                        {item.name}
+                                    </Text>
                                     <Text
                                         style={{
                                             fontFamily: 'Inter_600SemiBold',
                                             fontSize: 14,
                                             color: '#8F9BB3',
+                                            marginLeft: 10,
                                         }}
                                     >
-                                        {item.time}
+                                        {item.content}
                                     </Text>
                                 </View>
-                            </TouchableOpacity>
-                        )
-                    })}
-                </View>
-                <Tab />
-            </View>
+                                <Text
+                                    style={{
+                                        fontFamily: 'Inter_600SemiBold',
+                                        fontSize: 14,
+                                        color: '#8F9BB3',
+                                    }}
+                                >
+                                    {item.time}
+                                </Text>
+                            </View>
+                        </TouchableOpacity>
+                    )
+                })}
+            </ScrollView>
+            <Tab />
         </SafeAreaView>
     )
 }
@@ -208,10 +223,10 @@ const styles = StyleSheet.create({
     },
     header: {
         height: 60,
-        backgroundColor: '#1B96CB',
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
+        backgroundColor: '#086dff',
     },
     search: {
         flexDirection: 'row',
