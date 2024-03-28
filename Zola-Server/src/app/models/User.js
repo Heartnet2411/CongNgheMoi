@@ -10,17 +10,17 @@ const Friend = new Schema({
 const User = new Schema(
     {
         account_id: { type: String, required: true, unique: true },
-        conversation_id: { type: Array },
+        conversation_id: { type: String, required: true },
         userName: { type: String, required: true },
         firstName: { type: String, required: true },
         lastName: { type: String, required: true },
         phoneNumber: { type: String, required: true, unique: true },
         dateOfBirth: { type: String, required: true },
         gender: { type: String, required: true },
-        avatar: { type: String },
-        coverImage: { type: String },
+        avatar: { type: String, required: true },
         friend: [Friend],
     },
+
     { timestamps: true }
 )
 

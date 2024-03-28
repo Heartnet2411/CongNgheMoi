@@ -11,8 +11,6 @@ import {
 import React from 'react'
 import { Inter_600SemiBold, useFonts } from '@expo-google-fonts/inter'
 import Tab from '../components/Tab'
-import { EvilIcons, MaterialCommunityIcons, Ionicons } from '@expo/vector-icons'
-import { SafeAreaView } from 'react-native-safe-area-context'
 
 const Message = ({ navigation, route }) => {
     const listMess = [
@@ -111,99 +109,87 @@ const Message = ({ navigation, route }) => {
     useFonts({ Inter_600SemiBold })
     return (
         <SafeAreaView>
-            <View style={styles.header}>
-                <TouchableOpacity style={styles.search}>
-                    <EvilIcons
-                        name="search"
-                        style={styles.iconSearch}
-                        size={30}
-                        color="white"
-                    />
-                    <Text style={styles.txtSearch}>Tìm kiếm</Text>
-                </TouchableOpacity>
-                <TouchableOpacity>
-                    <MaterialCommunityIcons
-                        style={styles.iconQR}
-                        name="qrcode-scan"
-                        size={25}
-                        color="white"
-                    />
-                </TouchableOpacity>
-                <TouchableOpacity>
-                    <Ionicons
-                        name="add"
-                        style={styles.iconAdd}
-                        size={35}
-                        color="white"
-                    />
-                </TouchableOpacity>
-            </View>
-            {/* List message */}
-            <ScrollView style={styles.list}>
-                {listMess.map((item) => {
-                    return (
-                        <TouchableOpacity id={item.id}>
-                            <View
-                                style={{
-                                    flexDirection: 'row',
-                                    alignItems: 'center',
-                                    justifyContent: 'space-around',
-                                    borderBottomColor: '#ccc',
-                                    borderBottomWidth: 1,
-                                    backgroundColor: '#fff',
-                                    paddingHorizontal: 15,
-                                    paddingVertical: 5,
-                                }}
-                            >
-                                <Image
-                                    source={item.avatar}
-                                    style={{
-                                        width: 60,
-                                        height: 60,
-                                        borderRadius: 30,
-                                    }}
-                                />
+            <View>
+                <View style={styles.header}>
+                    <TouchableOpacity style={styles.search}>
+                        <Image
+                            source={require('../image/search.png')}
+                            style={styles.iconSearch}
+                        />
+                        <Text style={styles.txtSearch}>Tìm kiếm</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity>
+                        <Image
+                            source={require('../image/qrcode-scan.png')}
+                            style={styles.iconQR}
+                        />
+                    </TouchableOpacity>
+                    <TouchableOpacity>
+                        <Image
+                            source={require('../image/add.png')}
+                            style={styles.iconAdd}
+                        />
+                    </TouchableOpacity>
+                </View>
+                <View style={styles.list}>
+                    {listMess.map((item) => {
+                        return (
+                            <TouchableOpacity id={item.id}>
                                 <View
                                     style={{
-                                        marginLeft: 10,
-                                        width: 250,
+                                        flexDirection: 'row',
+                                        alignItems: 'center',
+                                        margin: 10,
                                     }}
                                 >
-                                    <Text
+                                    <Image
+                                        source={item.avatar}
                                         style={{
-                                            fontFamily: 'Inter_600SemiBold',
-                                            fontSize: 18,
+                                            width: 60,
+                                            height: 60,
+                                            borderRadius: 30,
+                                        }}
+                                    />
+                                    <View
+                                        style={{
                                             marginLeft: 10,
+                                            width: 250,
                                         }}
                                     >
-                                        {item.name}
-                                    </Text>
+                                        <Text
+                                            style={{
+                                                fontFamily: 'Inter_600SemiBold',
+                                                fontSize: 18,
+                                            }}
+                                        >
+                                            {item.name}
+                                        </Text>
+                                        <Text
+                                            style={{
+                                                fontFamily: 'Inter_600SemiBold',
+                                                fontSize: 14,
+                                                color: '#8F9BB3',
+                                            }}
+                                        >
+                                            {item.content}
+                                        </Text>
+                                    </View>
                                     <Text
                                         style={{
                                             fontFamily: 'Inter_600SemiBold',
                                             fontSize: 14,
                                             color: '#8F9BB3',
-                                            marginLeft: 10,
                                         }}
                                     >
-                                        {item.content}
+                                        {item.time}
                                     </Text>
                                 </View>
-                                <Text
-                                    style={{
-                                        fontFamily: 'Inter_600SemiBold',
-                                        fontSize: 14,
-                                        color: '#8F9BB3',
-                                    }}
-                                >
-                                    {item.time}
-                                </Text>
-                            </View>
-                        </TouchableOpacity>
-                    )
-                })}
-            </ScrollView>
-            <Tab />
+                            </TouchableOpacity>
+                        )
+                    })}
+                </View>
+                <Tab />
+            </View>
         </SafeAreaView>
     )
 }

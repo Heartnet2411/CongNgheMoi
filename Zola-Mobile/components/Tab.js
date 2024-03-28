@@ -18,16 +18,10 @@ export default function Tab({}) {
             >
                 <AntDesign name="message1" size={30} color="black" />
             </TouchableOpacity>
-            <TouchableOpacity
-                style={styles.btn}
-                onPress={() => navigation.navigate('Contact')}
-            >
+            <TouchableOpacity style={styles.btn}>
                 <AntDesign name="contacts" size={30} color="black" />
             </TouchableOpacity>
-            <TouchableOpacity
-                style={styles.btn}
-                onPress={() => navigation.navigate('Cloud')}
-            >
+            <TouchableOpacity style={styles.btn}>
                 <AntDesign name="cloudo" size={30} color="black" />
             </TouchableOpacity>
             <TouchableOpacity

@@ -116,10 +116,14 @@ const Login = ({ navigation, route }) => {
                     }}
                 >
                     <TouchableOpacity
-                        style={styles.buttonMain}
-                        onPress={() => handleLogout()}
+                        style={styles.button}
+                        onPress={() => navigation.navigate('EditPassword')}
                     >
-                        <Entypo name="log-out" size={20} color="black" />
+                        <Entypo name="lock" size={24} color="blue" />
+                        <Text style={styles.buttonText}>Đổi mật khẩu</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.button}>
+                        <Entypo name="log-out" size={24} color="blue" />
                         <Text style={styles.buttonText}>Đăng xuất</Text>
                     </TouchableOpacity>
                 </View>

@@ -74,6 +74,16 @@ class UserController {
             res.json('User doesn`t exits !!!')
         }
     }
+    async GetAllUsers(req, res) {
+        const loggedInAccountId= req.query.account_id;
+        User.find({account_id:{$ne:loggedInAccountId}}).then((users)=>{
+            res.status(200).json(users);
+        })
+        .catch((err)=>{
+            console.log("error in getting users",err);
+            res.status(500).json('  Error retrieving users');
+        })
+    }
 }
 
 export default new UserController()
