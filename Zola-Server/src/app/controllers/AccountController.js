@@ -32,14 +32,6 @@ class AccountController {
                 console.log('Error at login', err)
                 res.status(500).json('Internal server error!!!')
             })
-        /*const phoneNumber = req.query.phoneNumber
-
-        const account = await Account.findOne({ phoneNumber: phoneNumber })
-        if (account) {
-            res.json(account)
-        } else {
-            res.status(HTTP_STATUS_BAD_REQUEST).json('Account not found!!!')
-        }*/
     }
     // post /register
     async register(req, res) {
@@ -79,6 +71,17 @@ class AccountController {
             .catch((err) => {
                 res.json('Create account failure!!!')
             })
+    }
+
+    async findByPhoneNumber(req, res) {
+        const phoneNumber = req.query.phoneNumber
+
+        const account = await Account.findOne({ phoneNumber: phoneNumber })
+        if (account) {
+            res.json(account)
+        } else {
+            res.status(HTTP_STATUS_BAD_REQUEST).json('Account not found!!!')
+        }
     }
 }
 

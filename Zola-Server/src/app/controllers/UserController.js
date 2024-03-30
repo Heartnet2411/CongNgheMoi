@@ -12,6 +12,7 @@ class UserController {
         const dateOfBirth = req.body.dateOfBirth
         const gender = req.body.gender
         const avatar = req.body.avatar
+        const coverImage = req.body.coverImage
 
         const user = new User({
             account_id,
@@ -23,6 +24,7 @@ class UserController {
             dateOfBirth,
             gender,
             avatar,
+            coverImage,
         })
 
         console.log(user)
@@ -75,14 +77,15 @@ class UserController {
         }
     }
     async GetAllUsers(req, res) {
-        const loggedInAccountId= req.query.account_id;
-        User.find({account_id:{$ne:loggedInAccountId}}).then((users)=>{
-            res.status(200).json(users);
-        })
-        .catch((err)=>{
-            console.log("error in getting users",err);
-            res.status(500).json('  Error retrieving users');
-        })
+        const loggedInAccountId = req.query.account_id
+        User.find({ account_id: { $ne: loggedInAccountId } })
+            .then((users) => {
+                res.status(200).json(users)
+            })
+            .catch((err) => {
+                console.log('error in getting users', err)
+                res.status(500).json('  Error retrieving users')
+            })
     }
 }
 

@@ -59,7 +59,7 @@ const Login2 = ({ navigation }) => {
             password: password,
         }
         axios
-            .post('http://192.168.1.93:3000/account/login', account)
+            .post('http://192.168.1.11:3000/account/login', account)
             .then((res) => {
                 console.log(res)
                 const token = res.data.token

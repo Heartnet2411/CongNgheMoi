@@ -13,6 +13,7 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import RadioGroup from 'react-native-radio-buttons-group'
 import DateTimePicker from 'react-native-ui-datepicker'
 import dayjs from 'dayjs'
+import uploadDefaultAvatar from '../utils/uploadDefaultAvatar'
 
 const Register = ({ navigation, route }) => {
     const phoneNumber = route.params.phoneNumber
@@ -20,7 +21,6 @@ const Register = ({ navigation, route }) => {
     const [lastName, setLastName] = React.useState('')
     const [gender, setGender] = React.useState('')
     const [dateOfBirth, setDateOfBirth] = React.useState('')
-    const avatar = 'https://img.youtube.com/vi/LErNBXUNmak/sddefault.jpg'
     const [dateChoose, setDateChoose] = useState(dayjs())
     const [modalVisible, setModalVisible] = useState(false)
     const [id, setId] = useState()
@@ -45,11 +45,12 @@ const Register = ({ navigation, route }) => {
 
     React.useEffect(() => {
         fetch(
-            `http://192.168.1.13:3000/account/login?phoneNumber=${phoneNumber}`,
+            `http://192.168.1.14:3000/account/find-account-by-phone-number?phoneNumber=${phoneNumber}`,
         )
             .then((res) => res.json())
             .then((data) => {
                 setId(data._id)
+                console.log(data)
             })
             .catch((err) => {
                 console.log(err)
@@ -62,7 +63,6 @@ const Register = ({ navigation, route }) => {
         gender,
         dateOfBirth,
         phoneNumber,
-        avatar,
         id,
     ) => {
         const radioButton = radioButtons.find(
@@ -82,17 +82,13 @@ const Register = ({ navigation, route }) => {
             return
         } else {
             try {
-                console.log('firstName', firstName)
-                console.log('lastName', lastName)
-                console.log('phoneNumber', phoneNumber)
-                console.log('dateOfBirth', dateOfBirth)
-                console.log('gender', gender)
+                const avatar = uploadDefaultAvatar(lastName)
+                const coverImage =
+                    'https://myzolaappbucket.s3.ap-southeast-1.amazonaws.com/d449d8469620397e6031.jpg'
                 console.log('avatar', avatar)
                 const userName = lastName + ' ' + firstName
-                console.log('userName', userName)
-                console.log('id', id)
                 console.log('------------------------------')
-                fetch('http://192.168.1.13:3000/user/register', {
+                fetch('http://192.168.1.14:3000/user/register', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -106,6 +102,7 @@ const Register = ({ navigation, route }) => {
                         dateOfBirth: dateOfBirth,
                         gender: gender,
                         avatar: avatar,
+                        coverImage: coverImage,
                     }),
                 })
                     .then((res) => {
@@ -251,7 +248,6 @@ const Register = ({ navigation, route }) => {
                                 gender,
                                 dateOfBirth,
                                 phoneNumber,
-                                avatar,
                                 id,
                             )
                         }}

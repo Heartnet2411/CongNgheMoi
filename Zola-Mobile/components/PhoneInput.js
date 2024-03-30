@@ -10,6 +10,7 @@ import {
 import React from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import auth from '@react-native-firebase/auth'
+import { findAccountByPhone } from '../utils/fetchData'
 
 const PhoneInput = ({ navigation, route }) => {
     const [phoneNumber, setPhoneNumber] = React.useState('')
@@ -24,7 +25,7 @@ const PhoneInput = ({ navigation, route }) => {
     const signUpPhoneNumber = async (phoneNumber) => {
         try {
             fetch(
-                `http://192.168.1.13:3000/account/login?phoneNumber=${phoneNumber}`,
+                `http://192.168.1.11:3000/account/find-account-by-phone-number?phoneNumber=${phoneNumber}`,
             )
                 .then((res) => res.json())
                 .then((data) => {

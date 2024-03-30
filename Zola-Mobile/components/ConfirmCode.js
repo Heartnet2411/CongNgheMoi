@@ -49,6 +49,7 @@ const ConfirmCode = ({ navigation, route }) => {
 
     const onAuthStateChanged = (user) => {
         if (user) {
+            auth().currentUser.delete()
             navigation.navigate('Register', { phoneNumber: phoneNumber })
         }
     }

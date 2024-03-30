@@ -9,7 +9,7 @@ import {
     Pressable,
     Dimensions,
 } from 'react-native'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { K2D_700Bold, useFonts } from '@expo-google-fonts/k2d'
 import { Inter_600SemiBold } from '@expo-google-fonts/inter'
 import { primaryColor } from '../utils/constant'
@@ -22,14 +22,46 @@ import {
 import { useState } from 'react'
 import Tab from '../components/Tab'
 import { SafeAreaView } from 'react-native-safe-area-context'
+import AsyncStorage from '@react-native-async-storage/async-storage'
+import { jwtDecode } from 'jwt-decode'
+import { decode } from 'base-64'
+
+global.atob = decode
+
 const Login = ({ navigation, route }) => {
     useFonts({ K2D_700Bold })
     useFonts({ Inter_600SemiBold })
     const [modalVisible, setModalVisible] = useState(false)
 
-    const handleLogout = () => {
-        console.log('logoudfd')
+    const [user, setUser] = useState([])
 
+    React.useEffect(() => {
+        const fetchUser = async () => {
+            const token = await AsyncStorage.getItem('AuthToken')
+            const decodedToken = jwtDecode(token)
+            const account_id = decodedToken.accountId
+
+            fetch(
+                `http://192.168.1.11:3000/user/findUser?account_id=${account_id}`,
+                {
+                    method: 'GET',
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                },
+            )
+                .then((res) => res.json())
+                .then((data) => {
+                    setUser(data)
+                })
+                .catch((error) => {
+                    console.error('Error:', error)
+                })
+        }
+        fetchUser()
+    }, [])
+
+    const handleLogout = () => {
         Alert.alert(
             'Bạn có chắc chắn muốn đăng xuất?',
             'Nhập "ok" để xác nhận đăng xuất khỏi ứng dụng.',
@@ -42,6 +74,7 @@ const Login = ({ navigation, route }) => {
                 {
                     text: 'OK',
                     onPress: () => {
+                        AsyncStorage.removeItem('AuthToken')
                         navigation.navigate('Login')
                     },
                 },
@@ -59,28 +92,30 @@ const Login = ({ navigation, route }) => {
                 <View>
                     <Image
                         source={{
-                            uri: 'https://www.pcgamesn.com/wp-content/sites/pcgamesn/2023/11/league-of-legends-season-14-release-date.jpg',
+                            uri: user.coverImage,
                         }}
                         style={styles.background}
                     />
                     <Image
                         source={{
-                            uri: 'https://myzolaappbucket.s3.ap-southeast-1.amazonaws.com/Brown+Modern+Dream+Hotel+Resort+Design+Logo+(2).png',
+                            uri: user.avatar,
                         }}
                         style={styles.avatar}
                     />
                 </View>
-                <Text style={styles.userName}>Nguyễn Văn Thuận</Text>
+                <Text style={styles.userName}>{user.userName}</Text>
 
                 <View style={styles.infor}>
                     <Text style={styles.inforHeader}>Thông tin cá nhân</Text>
                     <View style={styles.inforWrap}>
                         <Text style={styles.inforKey}>Giới tính</Text>
-                        <Text style={styles.inforValue}>Nam</Text>
+                        <Text style={styles.inforValue}>{user.gender}</Text>
                     </View>
                     <View style={styles.inforWrap}>
                         <Text style={styles.inforKey}>Ngày sinh</Text>
-                        <Text style={styles.inforValue}>20/10/2000</Text>
+                        <Text style={styles.inforValue}>
+                            {user.dateOfBirth}
+                        </Text>
                     </View>
                     <View>
                         <View
@@ -93,7 +128,9 @@ const Login = ({ navigation, route }) => {
                             }}
                         >
                             <Text style={styles.inforKey}>Điện thoại</Text>
-                            <Text style={styles.inforValue}>0123456789</Text>
+                            <Text style={styles.inforValue}>
+                                {user.phoneNumber}
+                            </Text>
                         </View>
 
                         <TouchableOpacity

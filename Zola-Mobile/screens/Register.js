@@ -64,7 +64,7 @@ const Register = ({ navigation, route }) => {
         } else {
             try {
                 //gửi request lên server
-                fetch(`http://192.168.1.13:3000/account/create-account`, {
+                fetch(`http://192.168.1.14:3000/account/create-account`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -199,6 +199,7 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         marginTop: 10,
         paddingLeft: 10,
+        fontSize: 16,
     },
     hidePasswordButton: {
         position: 'absolute',
