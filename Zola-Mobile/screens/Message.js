@@ -14,6 +14,7 @@ import Tab from '../components/Tab'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { Feather, Ionicons, MaterialCommunityIcons } from '@expo/vector-icons'
 import { startColor, endColor } from '../utils/constant'
+import LinearGradient from 'react-native-linear-gradient'
 
 const Message = ({ navigation, route }) => {
     const listMess = [
@@ -112,7 +113,12 @@ const Message = ({ navigation, route }) => {
     useFonts({ Inter_600SemiBold })
     return (
         <SafeAreaView style={styles.container}>
-            <View style={styles.header}>
+            <LinearGradient
+                colors={['#474bff', '#478eff']}
+                useAngle={true}
+                angle={90}
+                style={styles.header}
+            >
                 <TouchableOpacity style={styles.search}>
                     <Feather
                         name="search"
@@ -138,12 +144,12 @@ const Message = ({ navigation, route }) => {
                         color="white"
                     />
                 </TouchableOpacity>
-            </View>
+            </LinearGradient>
             {/* List message */}
             <ScrollView style={styles.list}>
                 {listMess.map((item) => {
                     return (
-                        <TouchableOpacity id={item.id}>
+                        <TouchableOpacity id={item.id} key={item.id}>
                             <View
                                 style={{
                                     flexDirection: 'row',

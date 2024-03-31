@@ -83,6 +83,26 @@ class AccountController {
             res.status(HTTP_STATUS_BAD_REQUEST).json('Account not found!!!')
         }
     }
+
+    // put /updatePassword
+    async updatePassword(req, res) {
+        const { phoneNumber, password } = req.body
+
+        const account = await Account.findOne({ phoneNumber: phoneNumber })
+        if (account) {
+            account.password = password
+            await account
+                .save()
+                .then(() => {
+                    res.json('Update password successfully!!!')
+                })
+                .catch((err) => {
+                    res.json('Update password failure!!!')
+                })
+        } else {
+            res.status(HTTP_STATUS_BAD_REQUEST).json('Account not found!!!')
+        }
+    }
 }
 
 export default new AccountController()

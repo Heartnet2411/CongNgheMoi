@@ -11,11 +11,17 @@ import React, { useState, useEffect } from 'react'
 import { AntDesign, Entypo, MaterialIcons } from '@expo/vector-icons'
 import Tab from '../components/Tab'
 import { SafeAreaView } from 'react-native-safe-area-context'
+import LinearGradient from 'react-native-linear-gradient'
 
 const Cloud = () => {
     return (
         <SafeAreaView style={styles.container}>
-            <View style={styles.header}>
+            <LinearGradient
+                colors={['#474bff', '#478eff']}
+                useAngle={true}
+                angle={90}
+                style={styles.header}
+            >
                 <AntDesign
                     style={styles.iconCloud}
                     name="cloudo"
@@ -23,7 +29,7 @@ const Cloud = () => {
                     color="white"
                 />
                 <Text style={styles.txtHeader}>Cloud của tôi</Text>
-            </View>
+            </LinearGradient>
             <View style={styles.body}>
                 <Text>xhat</Text>
             </View>

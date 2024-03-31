@@ -11,7 +11,7 @@ import cors from 'cors'
 import passportLocal from 'passport-local'
 const app = express()
 const port = 3000
-const LocalStrategy= passportLocal.Strategy;
+const LocalStrategy = passportLocal.Strategy
 
 //connect to db
 db.connect()
@@ -22,14 +22,13 @@ app.use(bodyParser.json())
 app.use(passport.initialize())
 //unlock cors
 app.use((req, res, next) => {
-  const origin = req.headers['origin'] || '*'
-  res.setHeader('Access-Control-Allow-Origin', origin)
-  res.setHeader('Access-Control-Allow-Credentials', true)
-  res.setHeader('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE')
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type')
-  next()
-}
-)
+    const origin = req.headers['origin'] || '*'
+    res.setHeader('Access-Control-Allow-Origin', origin)
+    res.setHeader('Access-Control-Allow-Credentials', true)
+    res.setHeader('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE')
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type')
+    next()
+})
 app.use(methodOverride('_method'))
 
 // HTTP logger

@@ -20,6 +20,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 import axios from 'axios'
 import { jwtDecode } from 'jwt-decode'
 import { SafeAreaView } from 'react-native-safe-area-context'
+import LinearGradient from 'react-native-linear-gradient'
 
 const Contact = ({ navigation }) => {
     const listContact = [
@@ -79,7 +80,12 @@ const Contact = ({ navigation }) => {
     console.log('users', users, 'accountid', accountId)
     return (
         <SafeAreaView style={styles.container}>
-            <View style={styles.header}>
+            <LinearGradient
+                colors={['#474bff', '#478eff']}
+                useAngle={true}
+                angle={90}
+                style={styles.header}
+            >
                 <TouchableOpacity style={styles.search}>
                     <View style={styles.iconSearch}>
                         <Feather name="search" size={26} color="white" />
@@ -99,7 +105,7 @@ const Contact = ({ navigation }) => {
                         style={styles.iconAdd}
                     />
                 </TouchableOpacity>
-            </View>
+            </LinearGradient>
             <View style={styles.option}>
                 <TouchableOpacity
                     style={{

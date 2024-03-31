@@ -8,6 +8,7 @@ import {
     Modal,
     Pressable,
     Dimensions,
+    LogBox,
 } from 'react-native'
 import React, { useEffect } from 'react'
 import { K2D_700Bold, useFonts } from '@expo-google-fonts/k2d'
@@ -25,8 +26,14 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { jwtDecode } from 'jwt-decode'
 import { decode } from 'base-64'
+import * as ImagePicker from 'expo-image-picker'
+import buffer from 'buffer'
+import { url } from '../utils/constant'
 
 global.atob = decode
+global.Buffer = global.Buffer || buffer.Buffer
+
+LogBox.ignoreLogs([`ReactImageView: Image source "null" doesn't exist`])
 
 const Login = ({ navigation, route }) => {
     useFonts({ K2D_700Bold })
@@ -35,29 +42,171 @@ const Login = ({ navigation, route }) => {
 
     const [user, setUser] = useState([])
 
-    React.useEffect(() => {
-        const fetchUser = async () => {
-            const token = await AsyncStorage.getItem('AuthToken')
-            const decodedToken = jwtDecode(token)
-            const account_id = decodedToken.accountId
+    const pickImageAvatar = async () => {
+        // No permissions request is necessary for launching the image library
+        let result = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: ImagePicker.MediaTypeOptions.Images,
+            allowsEditing: true,
+            aspect: [4, 3],
+            quality: 1,
+        })
 
-            fetch(
-                `http://192.168.1.11:3000/user/findUser?account_id=${account_id}`,
-                {
-                    method: 'GET',
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    },
-                },
-            )
-                .then((res) => res.json())
-                .then((data) => {
-                    setUser(data)
-                })
-                .catch((error) => {
-                    console.error('Error:', error)
-                })
-        }
+        const data = new FormData()
+        data.append('file', {
+            uri: result.assets[0].uri,
+            type: 'image/jpeg' || 'image/png' || 'image/jpg',
+            name: 'image.jpg',
+        })
+        data.append('upload_preset', 'myzolaapp')
+        data.append('cloud_name', 'dpj4kdkxj')
+
+        fetch('https://api.cloudinary.com/v1_1/dpj4kdkxj/image/upload', {
+            method: 'POST',
+            body: data,
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
+        })
+            .then((response) => {
+                return response.json()
+            })
+            .then((data) => {
+                console.log('Success:', data.url)
+                handleChangeAvatar(data.url)
+            })
+            .catch((error) => {
+                console.error('Error:', error)
+            })
+            .finally(() => {
+                setModalVisible(!modalVisible)
+            })
+    }
+
+    const handleChangeAvatar = async (image) => {
+        const token = await AsyncStorage.getItem('AuthToken')
+        const decodedToken = jwtDecode(token)
+        const account_id = decodedToken.accountId
+        console.log(account_id)
+        console.log(image)
+        fetch(url + `/user/updateAvatar?account_id=${account_id}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                avatar: image,
+            }),
+        })
+            .then((res) => {
+                return res.json()
+            })
+            .then((data) => {
+                console.log(data)
+            })
+            .catch((error) => {
+                Alert.alert(
+                    'Lỗi',
+                    'Có lỗi xảy ra trong quá trình cập nhật ảnh đại diện, vui lòng thử lại sau',
+                )
+            })
+            .finally(() => {
+                fetchUser()
+            })
+    }
+
+    const pickImageCoverImage = async () => {
+        // No permissions request is necessary for launching the image library
+        let result = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: ImagePicker.MediaTypeOptions.Images,
+            allowsEditing: true,
+            aspect: [4, 3],
+            quality: 1,
+        })
+
+        const data = new FormData()
+        data.append('file', {
+            uri: result.assets[0].uri,
+            type: 'image/jpeg' || 'image/png' || 'image/jpg',
+            name: 'image.jpg',
+        })
+        data.append('upload_preset', 'myzolaapp')
+        data.append('cloud_name', 'dpj4kdkxj')
+
+        fetch('https://api.cloudinary.com/v1_1/dpj4kdkxj/image/upload', {
+            method: 'POST',
+            body: data,
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
+        })
+            .then((response) => {
+                return response.json()
+            })
+            .then((data) => {
+                console.log('Success:', data.url)
+                handleChangeCoverImage(data.url)
+            })
+            .catch((error) => {
+                console.error('Error:', error)
+            })
+            .finally(() => {
+                setModalVisible(!modalVisible)
+            })
+    }
+
+    const handleChangeCoverImage = async (image) => {
+        const token = await AsyncStorage.getItem('AuthToken')
+        const decodedToken = jwtDecode(token)
+        const account_id = decodedToken.accountId
+        console.log(account_id)
+        console.log(image)
+        fetch(url + `/user/updateCoverImage?account_id=${account_id}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                coverImage: image,
+            }),
+        })
+            .then((res) => {
+                return res.json()
+            })
+            .then((data) => {
+                console.log(data)
+            })
+            .catch((error) => {
+                Alert.alert(
+                    'Lỗi',
+                    'Có lỗi xảy ra trong quá trình cập nhật ảnh bìa, vui lòng thử lại sau',
+                )
+            })
+            .finally(() => {
+                fetchUser()
+            })
+    }
+
+    const fetchUser = async () => {
+        const token = await AsyncStorage.getItem('AuthToken')
+        const decodedToken = jwtDecode(token)
+        const account_id = decodedToken.accountId
+
+        fetch(url + `/user/findUser?account_id=${account_id}`, {
+            method: 'GET',
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        })
+            .then((res) => res.json())
+            .then((data) => {
+                setUser(data)
+            })
+            .catch((error) => {
+                console.error('Error:', error)
+            })
+    }
+
+    React.useEffect(() => {
         fetchUser()
     }, [])
 
@@ -173,11 +322,17 @@ const Login = ({ navigation, route }) => {
             >
                 <View style={styles.centeredView}>
                     <View style={styles.modalView}>
-                        <TouchableOpacity style={styles.button}>
+                        <TouchableOpacity
+                            style={styles.button}
+                            onPress={() => pickImageCoverImage()}
+                        >
                             <Entypo name="images" size={20} color="black" />
                             <Text style={styles.buttonText}>Đổi ảnh bìa</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity style={styles.button}>
+                        <TouchableOpacity
+                            style={styles.button}
+                            onPress={() => pickImageAvatar()}
+                        >
                             <Entypo name="images" size={20} color="black" />
                             <Text style={styles.buttonText}>
                                 Đổi ảnh đại diện

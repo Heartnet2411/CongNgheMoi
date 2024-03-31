@@ -76,6 +76,7 @@ class UserController {
             res.json('User doesn`t exits !!!')
         }
     }
+
     async GetAllUsers(req, res) {
         const loggedInAccountId = req.query.account_id
         User.find({ account_id: { $ne: loggedInAccountId } })
@@ -86,6 +87,60 @@ class UserController {
                 console.log('error in getting users', err)
                 res.status(500).json('  Error retrieving users')
             })
+    }
+
+    // put /updateInfo
+    async updateInfo(req, res) {
+        const account_id = req.query.account_id
+
+        const userName = req.body.userName
+        const firstName = req.body.firstName
+        const lastName = req.body.lastName
+        const dateOfBirth = req.body.dateOfBirth
+
+        const user = await User.findOne({ account_id: account_id })
+        if (user) {
+            user.userName = userName
+            user.firstName = firstName
+            user.lastName = lastName
+            user.dateOfBirth = dateOfBirth
+            await user.save()
+            res.json('Update info successfully!!!')
+        } else {
+            res.json('User doesn`t exits !!!')
+        }
+    }
+
+    // put /updateAvatar
+    async updateAvatar(req, res) {
+        const account_id = req.query.account_id
+
+        const avatar = req.body.avatar
+
+        const user = await User.findOne({ account_id: account_id })
+        if (user) {
+            user.avatar = avatar
+            await user.save()
+            res.json('Update avatar successfully!!!')
+        } else {
+            res.json('User doesn`t exits !!!')
+        }
+    }
+
+    // put /updateCoverImage
+    async updateCoverImage(req, res) {
+        const account_id = req.query.account_id
+
+        const coverImage = req.body.coverImage
+
+        const user = await User.findOne({ account_id: account_id })
+        if (user) {
+            user.coverImage = coverImage
+            await user.save()
+            res.json('Update cover image successfully!!!')
+        } else {
+            res.json('User doesn`t exits !!!')
+        }
     }
 }
 

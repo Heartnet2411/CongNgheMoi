@@ -45,7 +45,7 @@ const Register = ({ navigation, route }) => {
 
     React.useEffect(() => {
         fetch(
-            `http://192.168.1.14:3000/account/find-account-by-phone-number?phoneNumber=${phoneNumber}`,
+            `http://192.168.1.6:3000/account/find-account-by-phone-number?phoneNumber=${phoneNumber}`,
         )
             .then((res) => res.json())
             .then((data) => {

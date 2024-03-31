@@ -12,4 +12,8 @@ router.get('/findUser', userController.findUserByAccountID)
 
 router.put('/addFriend', userController.addFriend)
 
+router.put('/updateAvatar', userController.updateAvatar)
+
+router.put('/updateCoverImage', userController.updateCoverImage)
+
 export default router

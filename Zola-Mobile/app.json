@@ -4,7 +4,15 @@
     "slug": "Zola-Mobile",
     "plugins": [
       "@react-native-firebase/app",
-      "@react-native-firebase/auth"
+      "@react-native-firebase/auth",
+      ["expo-image-picker",
+      {
+          "photosPermission": "custom photos permission",
+          "cameraPermission": "Allow $(PRODUCT_NAME) to open the camera",
+
+          "//": "Disables the microphone permission",
+          "microphonePermission": false
+      }]
     ],
     "version": "1.0.0",
     "orientation": "portrait",

@@ -10,7 +10,6 @@ import {
 import React from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import auth from '@react-native-firebase/auth'
-import { findAccountByPhone } from '../utils/fetchData'
 
 const PhoneInput = ({ navigation, route }) => {
     const [phoneNumber, setPhoneNumber] = React.useState('')
