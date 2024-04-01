@@ -10,9 +10,7 @@ import {
 } from 'react-native'
 import React, { useState, useMemo } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import RadioGroup from 'react-native-radio-buttons-group'
-import DateTimePicker from 'react-native-ui-datepicker'
-import dayjs from 'dayjs'
+import { url } from '../utils/constant'
 
 const Register = ({ navigation, route }) => {
     const phoneNumber = route.params.phoneNumber
@@ -64,7 +62,7 @@ const Register = ({ navigation, route }) => {
         } else {
             try {
                 //gửi request lên server
-                fetch(`http://192.168.1.14:3000/account/create-account`, {
+                fetch(url + `/account/create-account`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',

@@ -208,7 +208,10 @@ const Login = ({ navigation, route }) => {
 
     React.useEffect(() => {
         fetchUser()
-    }, [])
+        const onFocused = navigation.addListener('focus', () => {
+            fetchUser()
+        })
+    }, [navigation])
 
     const handleLogout = () => {
         Alert.alert(

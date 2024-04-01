@@ -14,6 +14,7 @@ import RadioGroup from 'react-native-radio-buttons-group'
 import DateTimePicker from 'react-native-ui-datepicker'
 import dayjs from 'dayjs'
 import uploadDefaultAvatar from '../utils/uploadDefaultAvatar'
+import { url } from '../utils/constant'
 
 const Register = ({ navigation, route }) => {
     const phoneNumber = route.params.phoneNumber
@@ -45,7 +46,8 @@ const Register = ({ navigation, route }) => {
 
     React.useEffect(() => {
         fetch(
-            `http://192.168.1.6:3000/account/find-account-by-phone-number?phoneNumber=${phoneNumber}`,
+            url +
+                `/account/find-account-by-phone-number?phoneNumber=${phoneNumber}`,
         )
             .then((res) => res.json())
             .then((data) => {
@@ -88,7 +90,7 @@ const Register = ({ navigation, route }) => {
                 console.log('avatar', avatar)
                 const userName = lastName + ' ' + firstName
                 console.log('------------------------------')
-                fetch('http://192.168.1.14:3000/user/register', {
+                fetch(url + '/user/register', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',

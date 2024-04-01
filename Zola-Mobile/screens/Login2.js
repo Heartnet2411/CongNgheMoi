@@ -12,6 +12,7 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import { AntDesign } from '@expo/vector-icons'
 import axios from 'axios'
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import { url } from '../utils/constant'
 
 const Login2 = ({ navigation }) => {
     const [phoneNumber, setPhoneNumber] = useState()
@@ -59,7 +60,7 @@ const Login2 = ({ navigation }) => {
             password: password,
         }
         axios
-            .post('http://192.168.1.11:3000/account/login', account)
+            .post(url + '/account/login', account)
             .then((res) => {
                 console.log(res)
                 const token = res.data.token

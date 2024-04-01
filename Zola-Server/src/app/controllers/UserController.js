@@ -93,17 +93,18 @@ class UserController {
     async updateInfo(req, res) {
         const account_id = req.query.account_id
 
-        const userName = req.body.userName
+        const gender = req.body.gender
         const firstName = req.body.firstName
         const lastName = req.body.lastName
         const dateOfBirth = req.body.dateOfBirth
 
         const user = await User.findOne({ account_id: account_id })
         if (user) {
-            user.userName = userName
+            user.gender = gender
             user.firstName = firstName
             user.lastName = lastName
             user.dateOfBirth = dateOfBirth
+            user.userName = firstName + ' ' + lastName
             await user.save()
             res.json('Update info successfully!!!')
         } else {

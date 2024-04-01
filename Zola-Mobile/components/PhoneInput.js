@@ -10,6 +10,7 @@ import {
 import React from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import auth from '@react-native-firebase/auth'
+import { url } from '../utils/constant'
 
 const PhoneInput = ({ navigation, route }) => {
     const [phoneNumber, setPhoneNumber] = React.useState('')
@@ -24,16 +25,14 @@ const PhoneInput = ({ navigation, route }) => {
     const signUpPhoneNumber = async (phoneNumber) => {
         try {
             fetch(
-                `http://192.168.1.11:3000/account/find-account-by-phone-number?phoneNumber=${phoneNumber}`,
+                url +
+                    `/account/find-account-by-phone-number?phoneNumber=${phoneNumber}`,
             )
                 .then((res) => res.json())
                 .then((data) => {
                     console.log(data)
                     if (data == 'Account not found!!!') {
-                        // sendOPT(phoneNumber)
-                        navigation.navigate('Register', {
-                            phoneNumber: phoneNumber,
-                        })
+                        sendOPT(phoneNumber)
                     } else {
                         Alert.alert('Thông báo', 'Tài khoản đã tồn tại')
                     }

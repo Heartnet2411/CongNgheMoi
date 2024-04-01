@@ -16,4 +16,6 @@ router.put('/updateAvatar', userController.updateAvatar)
 
 router.put('/updateCoverImage', userController.updateCoverImage)
 
+router.put('/updateInfo', userController.updateInfo)
+
 export default router
