@@ -14,33 +14,25 @@ import { jwtDecode } from 'jwt-decode'
 import { decode } from 'base-64'
 import { url } from '../utils/constant'
 import { set } from 'core-js/core/dict'
+import { SafeAreaView } from 'react-native-safe-area-context'
 
 global.atob = decode
 
-export default function EditPassword({ route, navigation }) {
+export default function EditNewPassword({ route, navigation }) {
+    const phoneNumber = route.params.phoneNumber
     const [isVisible, setIsVisible] = useState(false)
-    const [oldPassword, setOldPassword] = useState('')
     const [newPassword, setNewPassword] = useState('')
     const [reNewPassword, setReNewPassword] = useState('')
-    const [message, setMessage] = useState('')
-    console.log('oldPassword', oldPassword)
-    console.log('newPassword', newPassword)
-    console.log('reNewPassword', reNewPassword)
 
     const handleInputPassword = () => {
         // regex cho mật khẩu có ít nhất 8 ký tự, ít nhất 1 chữ hoa, 1 chữ thường, 1 số
         const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/
-        if (oldPassword === '' || newPassword === '' || reNewPassword === '') {
+        if (newPassword === '' || reNewPassword === '') {
             Alert.alert('Thông báo', 'Vui lòng nhập đầy đủ thông tin')
         } else if (!passwordRegex.test(newPassword)) {
             Alert.alert(
                 'Thông báo',
                 'Mật khẩu phải có ít nhất 8 ký tự, ít nhất 1 chữ hoa, 1 chữ thường, 1 số',
-            )
-        } else if (oldPassword === newPassword) {
-            Alert.alert(
-                'Thông báo',
-                'Mật khẩu mới không được trùng với mật khẩu cũ',
             )
         } else if (newPassword !== reNewPassword) {
             Alert.alert('Thông báo', 'Mật khẩu không trùng khớp')
@@ -50,19 +42,19 @@ export default function EditPassword({ route, navigation }) {
     }
 
     const handleUpdatePassword = async () => {
-        const token = await AsyncStorage.getItem('AuthToken')
-        const decodedToken = jwtDecode(token)
-        const account_id = decodedToken.accountId
-
-        fetch(url + '/account/updatePassword?account_id=' + account_id, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
+        console.log('phoneNumber', phoneNumber)
+        fetch(
+            url + '/account/updatePasswordByPhone?phoneNumber=' + phoneNumber,
+            {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    password: newPassword,
+                }),
             },
-            body: JSON.stringify({
-                password: newPassword,
-            }),
-        })
+        )
             .then((response) => response.json())
             .then((data) => {
                 if (data === 'Update password successfully!!!') {
@@ -73,38 +65,23 @@ export default function EditPassword({ route, navigation }) {
                 console.error(error)
             })
             .finally(() => {
-                navigation.navigate('Personal')
-            })
-    }
-
-    const handleCheckPassword = async () => {
-        const token = await AsyncStorage.getItem('AuthToken')
-        const decodedToken = jwtDecode(token)
-        const account_id = decodedToken.accountId
-
-        fetch(url + '/account/find?account_id=' + account_id, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: `Bearer ${token}`,
-            },
-        })
-            .then((response) => response.json())
-            .then((responseJson) => {
-                if (responseJson.password !== oldPassword) {
-                    setMessage('Mật khẩu không đúng')
-                } else {
-                    setMessage('')
-                }
-            })
-            .catch((error) => {
-                console.error(error)
+                navigation.navigate('Login2')
             })
     }
 
     return (
-        <View style={styles.container}>
+        <SafeAreaView style={styles.container}>
             <View style={styles.wrap}>
+                <Text
+                    style={{
+                        fontSize: 25,
+                        fontWeight: 'bold',
+                        textAlign: 'center',
+                        paddingHorizontal: 50,
+                    }}
+                >
+                    Nhâp mật khẩu mới của bạn
+                </Text>
                 <View style={styles.infoWview}>
                     <TouchableOpacity
                         style={styles.visible}
@@ -115,22 +92,6 @@ export default function EditPassword({ route, navigation }) {
                         </Text>
                     </TouchableOpacity>
 
-                    <Text style={styles.infoPassword}>
-                        Nhập mật khẩu hiện tại:
-                    </Text>
-                    <TextInput
-                        style={[styles.info, { marginTop: 5 }]}
-                        placeholder="Nhập mật hiện tại"
-                        secureTextEntry={isVisible ? false : true}
-                        onChangeText={(e) => setOldPassword(e)}
-                        value={oldPassword}
-                        onBlur={() => {
-                            handleCheckPassword()
-                        }}
-                    />
-                    <Text style={{ color: 'red', fontSize: 16 }}>
-                        {message}
-                    </Text>
                     <Text style={styles.infoPassword}>Nhập mật khẩu mới:</Text>
                     <TextInput
                         style={[styles.info, { marginTop: 5 }]}
@@ -158,7 +119,7 @@ export default function EditPassword({ route, navigation }) {
                     Cập nhật
                 </Text>
             </TouchableOpacity>
-        </View>
+        </SafeAreaView>
     )
 }
 
@@ -169,6 +130,7 @@ const styles = StyleSheet.create({
     },
     wrap: {
         justifyContent: 'center',
+        marginTop: 30,
     },
     avatarView: {
         alignItems: 'center',
@@ -183,6 +145,7 @@ const styles = StyleSheet.create({
         width: '100%',
         paddingHorizontal: 20,
         position: 'relative',
+        marginTop: 20,
     },
     infoPassword: {
         fontSize: 18,

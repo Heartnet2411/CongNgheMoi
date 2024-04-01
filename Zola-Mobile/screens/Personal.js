@@ -29,6 +29,7 @@ import { decode } from 'base-64'
 import * as ImagePicker from 'expo-image-picker'
 import buffer from 'buffer'
 import { url } from '../utils/constant'
+import { set } from 'core-js/core/dict'
 
 global.atob = decode
 global.Buffer = global.Buffer || buffer.Buffer
@@ -357,7 +358,10 @@ const Login = ({ navigation, route }) => {
                         </TouchableOpacity>
                         <TouchableOpacity
                             style={styles.button}
-                            onPress={() => navigation.navigate('EditPassword')}
+                            onPress={() => {
+                                navigation.navigate('EditPassword')
+                                setModalVisible(!modalVisible)
+                            }}
                         >
                             <Entypo name="lock" size={20} color="black" />
                             <Text style={styles.buttonText}>Đổi mật khẩu</Text>

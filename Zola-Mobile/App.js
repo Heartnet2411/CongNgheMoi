@@ -17,6 +17,9 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import Chat from './screens/Chat'
 import { UserContext } from './UserContext'
 import AddFriend from './components/AddFriend'
+import ForgotPassword from './components/ForgotPassword'
+import ConfirmForgot from './components/ConfirmForgot'
+import EditNewPassword from './components/EditNewPassword'
 
 export default function App() {
     const Stack = createNativeStackNavigator()
@@ -99,6 +102,21 @@ export default function App() {
                     <Stack.Screen
                         name="CreateUser"
                         component={CreateUser}
+                        options={{ headerShown: false }}
+                    />
+                    <Stack.Screen
+                        name="ForgotPassword"
+                        component={ForgotPassword}
+                        options={{ headerShown: false }}
+                    />
+                    <Stack.Screen
+                        name="ConfirmForgot"
+                        component={ConfirmForgot}
+                        options={{ headerShown: false }}
+                    />
+                    <Stack.Screen
+                        name="EditNewPassword"
+                        component={EditNewPassword}
                         options={{ headerShown: false }}
                     />
                 </Stack.Navigator>

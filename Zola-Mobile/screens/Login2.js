@@ -104,7 +104,10 @@ const Login2 = ({ navigation }) => {
                         placeholder="Mật khẩu"
                         secureTextEntry
                     />
-                    <TouchableOpacity style={styles.getPwd}>
+                    <TouchableOpacity
+                        style={styles.getPwd}
+                        onPress={() => navigation.navigate('ForgotPassword')}
+                    >
                         <Text style={styles.txtGetPwd}>Lấy lại mật khẩu</Text>
                     </TouchableOpacity>
                     <TouchableOpacity

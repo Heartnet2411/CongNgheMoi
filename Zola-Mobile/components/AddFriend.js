@@ -9,35 +9,35 @@ import {
     Image,
     Dimensions,
 } from 'react-native'
-import React, { useEffect, useState,useContext } from 'react'
+import React, { useEffect, useState, useContext } from 'react'
 import { AntDesign } from '@expo/vector-icons'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import axios from 'axios'
-import {jwtDecode} from 'jwt-decode'
+import { jwtDecode } from 'jwt-decode'
 import { UserType } from '../UserContext'
 
-
-
 const AddFriend = ({ navigation, route }) => {
-    const {accountId,setAccountId} = useContext(UserType)
-const [users,setUsers]=useState([])
-useEffect(() => {
-    const fetchUser= async()=>{
-        const token=await AsyncStorage.getItem('AuthToken')
-        const decodedToken=jwtDecode(token);
-        const accountId=decodedToken.accountId;
-        setAccountId(accountId)
-        axios.get(`http://localhost:3000/user/findAllUsers`).then((res)=>{
-            setUsers(res.data)
-            }).catch((err)=>{
-                console.log(err)
-            });
-    };
-    fetchUser();
-}
-, [])
-console.log(users)
+    const { accountId, setAccountId } = useContext(UserType)
+    const [users, setUsers] = useState([])
+    useEffect(() => {
+        const fetchUser = async () => {
+            const token = await AsyncStorage.getItem('AuthToken')
+            const decodedToken = jwtDecode(token)
+            const accountId = decodedToken.accountId
+            setAccountId(accountId)
+            axios
+                .get(`http://localhost:3000/user/findAllUsers`)
+                .then((res) => {
+                    setUsers(res.data)
+                })
+                .catch((err) => {
+                    console.log(err)
+                })
+        }
+        fetchUser()
+    }, [])
+    console.log(users)
     return (
         <SafeAreaView style={styles.container}>
             <View style={styles.search}>
@@ -60,7 +60,9 @@ console.log(users)
                                     source={item.avatar}
                                     style={styles.avatar}
                                 />
-                                <Text style={styles.name}>{item.firstName}</Text>
+                                <Text style={styles.name}>
+                                    {item.firstName}
+                                </Text>
                                 <TouchableOpacity style={styles.add}>
                                     <AntDesign
                                         name="adduser"
@@ -71,7 +73,7 @@ console.log(users)
                             </View>
                         </View>
                     )}
-                    keyExtractor={item => item.id}
+                    keyExtractor={(item) => item.id}
                 />
             </View>
         </SafeAreaView>
@@ -80,7 +82,7 @@ console.log(users)
 
 export default AddFriend
 
-const windowHeight= Dimensions.get('window').height;
+const windowHeight = Dimensions.get('window').height
 const styles = StyleSheet.create({
     container: {
         flex: 1,
@@ -109,7 +111,7 @@ const styles = StyleSheet.create({
         marginHorizontal: 10,
     },
     list: {
-        height: Math.round(windowHeight)-60
+        height: Math.round(windowHeight) - 60,
     },
     contact: {
         flexDirection: 'row',

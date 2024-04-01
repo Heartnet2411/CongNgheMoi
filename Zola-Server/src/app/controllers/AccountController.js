@@ -48,6 +48,7 @@ class AccountController {
             })
     }
 
+    // get /find
     async findByID(req, res) {
         const id = req.query.account_id
 
@@ -86,8 +87,28 @@ class AccountController {
 
     // put /updatePassword
     async updatePassword(req, res) {
-        const { phoneNumber, password } = req.body
+        const id = req.query.account_id
+        const password = req.body.password
+        const account = await Account.findOne({ _id: id })
+        if (account) {
+            account.password = password
+            await account
+                .save()
+                .then(() => {
+                    res.json('Update password successfully!!!')
+                })
+                .catch((err) => {
+                    res.json('Update password failure!!!')
+                })
+        } else {
+            res.status(HTTP_STATUS_BAD_REQUEST).json('Account not found!!!')
+        }
+    }
 
+    //update password by phone number
+    async updatePasswordByPhoneNumber(req, res) {
+        const phoneNumber = req.query.phoneNumber
+        const password = req.body.password
         const account = await Account.findOne({ phoneNumber: phoneNumber })
         if (account) {
             account.password = password
