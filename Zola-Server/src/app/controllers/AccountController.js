@@ -67,7 +67,7 @@ class AccountController {
         await account
             .save()
             .then(() => {
-                res.json('Create account successfully!!!')
+                res.json(account)
             })
             .catch((err) => {
                 res.json('Create account failure!!!')

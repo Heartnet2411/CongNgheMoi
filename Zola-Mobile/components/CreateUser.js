@@ -15,16 +15,18 @@ import DateTimePicker from 'react-native-ui-datepicker'
 import dayjs from 'dayjs'
 import uploadDefaultAvatar from '../utils/uploadDefaultAvatar'
 import { url } from '../utils/constant'
+import axios from 'axios'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 const Register = ({ navigation, route }) => {
     const phoneNumber = route.params.phoneNumber
+    const password = route.params.password
     const [firstName, setFirstName] = React.useState('')
     const [lastName, setLastName] = React.useState('')
     const [gender, setGender] = React.useState('')
     const [dateOfBirth, setDateOfBirth] = React.useState('')
     const [dateChoose, setDateChoose] = useState(dayjs())
     const [modalVisible, setModalVisible] = useState(false)
-    const [id, setId] = useState()
 
     const radioButtons = useMemo(
         () => [
@@ -44,28 +46,12 @@ const Register = ({ navigation, route }) => {
 
     const [selectedId, setSelectedId] = useState()
 
-    React.useEffect(() => {
-        fetch(
-            url +
-                `/account/find-account-by-phone-number?phoneNumber=${phoneNumber}`,
-        )
-            .then((res) => res.json())
-            .then((data) => {
-                setId(data._id)
-                console.log(data)
-            })
-            .catch((err) => {
-                console.log(err)
-            })
-    }, [])
-
     const handleCreateUser = async (
         firstName,
         lastName,
         gender,
         dateOfBirth,
         phoneNumber,
-        id,
     ) => {
         const radioButton = radioButtons.find(
             (button) => button.id === selectedId,
@@ -86,36 +72,73 @@ const Register = ({ navigation, route }) => {
             try {
                 const avatar = uploadDefaultAvatar(lastName)
                 const coverImage =
-                    'https://myzolaappbucket.s3.ap-southeast-1.amazonaws.com/d449d8469620397e6031.jpg'
+                    'https://res.cloudinary.com/dpj4kdkxj/image/upload/v1712052217/hhj4mhywmprfrsvlpuex.jpg'
                 console.log('avatar', avatar)
                 const userName = lastName + ' ' + firstName
                 console.log('------------------------------')
-                fetch(url + '/user/register', {
+
+                //gửi request lên server
+                fetch(url + `/account/create-account`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                     },
                     body: JSON.stringify({
-                        account_id: id,
-                        userName: userName,
-                        firstName: firstName,
-                        lastName: lastName,
                         phoneNumber: phoneNumber,
-                        dateOfBirth: dateOfBirth,
-                        gender: gender,
-                        avatar: avatar,
-                        coverImage: coverImage,
+                        password: password,
                     }),
                 })
-                    .then((res) => {
-                        res.json()
-                    })
+                    .then((res) => res.json())
                     .then((data) => {
                         console.log(data)
-                        navigation.navigate('Login2')
+                        fetch(url + '/user/register', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({
+                                account_id: data._id,
+                                userName: userName,
+                                firstName: firstName,
+                                lastName: lastName,
+                                phoneNumber: phoneNumber,
+                                dateOfBirth: dateOfBirth,
+                                gender: gender,
+                                avatar: avatar,
+                                coverImage: coverImage,
+                            }),
+                        })
+                            .then((res) => {
+                                res.json()
+                            })
+                            .then((data) => {
+                                console.log(data)
+                                navigation.navigate('Login2')
+                            })
+                            .catch((err) => {
+                                console.log(err)
+                            })
                     })
-                    .catch((err) => {
-                        console.log(err)
+                    .finally(() => {
+                        const account = {
+                            phoneNumber: phoneNumber,
+                            password: password,
+                        }
+                        axios
+                            .post(url + '/account/login', account)
+                            .then((res) => {
+                                console.log(res)
+                                const token = res.data.token
+                                AsyncStorage.setItem('AuthToken', token)
+                                navigation.navigate('Message')
+                            })
+                            .catch((err) => {
+                                Alert.alert(
+                                    'Đăng nhập thất bại!!!',
+                                    'Vui lòng kiểm tra lại tài khoản và mật khẩu của bạn!',
+                                )
+                                console.log('Error at login', err)
+                            })
                     })
             } catch (error) {
                 console.log(error)
@@ -250,7 +273,6 @@ const Register = ({ navigation, route }) => {
                                 gender,
                                 dateOfBirth,
                                 phoneNumber,
-                                id,
                             )
                         }}
                     >

@@ -15,6 +15,7 @@ import { decode } from 'base-64'
 import { url } from '../utils/constant'
 import { set } from 'core-js/core/dict'
 import { SafeAreaView } from 'react-native-safe-area-context'
+import axios from 'axios'
 
 global.atob = decode
 
@@ -65,7 +66,25 @@ export default function EditNewPassword({ route, navigation }) {
                 console.error(error)
             })
             .finally(() => {
-                navigation.navigate('Login2')
+                const account = {
+                    phoneNumber: phoneNumber,
+                    password: newPassword,
+                }
+                axios
+                    .post(url + '/account/login', account)
+                    .then((res) => {
+                        console.log(res)
+                        const token = res.data.token
+                        AsyncStorage.setItem('AuthToken', token)
+                        navigation.navigate('Message')
+                    })
+                    .catch((err) => {
+                        Alert.alert(
+                            'Đăng nhập thất bại!!!',
+                            'Vui lòng kiểm tra lại tài khoản và mật khẩu của bạn!',
+                        )
+                        console.log('Error at login', err)
+                    })
             })
     }
 

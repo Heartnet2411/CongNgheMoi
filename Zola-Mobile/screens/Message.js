@@ -147,68 +147,70 @@ const Message = ({ navigation, route }) => {
             </LinearGradient>
             {/* List message */}
             <ScrollView style={styles.list}>
-                {listMess.map((item) => {
-                    return (
-                        <TouchableOpacity id={item.id} key={item.id}>
-                            <View
-                                style={{
-                                    flexDirection: 'row',
-                                    alignItems: 'center',
-                                    justifyContent: 'space-around',
-                                    borderBottomColor: '#ccc',
-                                    borderBottomWidth: 1,
-                                    backgroundColor: '#fff',
-                                    paddingHorizontal: 15,
-                                    paddingVertical: 7,
-                                }}
-                            >
-                                <Image
-                                    source={item.avatar}
-                                    style={{
-                                        width: 60,
-                                        height: 60,
-                                        borderRadius: 30,
-                                    }}
-                                />
+                <View>
+                    {listMess.map((item) => {
+                        return (
+                            <TouchableOpacity id={item.id} key={item.id}>
                                 <View
                                     style={{
-                                        marginLeft: 10,
-                                        width: 250,
+                                        flexDirection: 'row',
+                                        alignItems: 'center',
+                                        justifyContent: 'space-around',
+                                        borderBottomColor: '#ccc',
+                                        borderBottomWidth: 1,
+                                        backgroundColor: '#fff',
+                                        paddingHorizontal: 15,
+                                        paddingVertical: 7,
                                     }}
                                 >
-                                    <Text
+                                    <Image
+                                        source={item.avatar}
                                         style={{
-                                            fontFamily: 'Inter_600SemiBold',
-                                            fontSize: 18,
+                                            width: 60,
+                                            height: 60,
+                                            borderRadius: 30,
+                                        }}
+                                    />
+                                    <View
+                                        style={{
                                             marginLeft: 10,
+                                            width: 250,
                                         }}
                                     >
-                                        {item.name}
-                                    </Text>
+                                        <Text
+                                            style={{
+                                                fontFamily: 'Inter_600SemiBold',
+                                                fontSize: 18,
+                                                marginLeft: 10,
+                                            }}
+                                        >
+                                            {item.name}
+                                        </Text>
+                                        <Text
+                                            style={{
+                                                fontFamily: 'Inter_600SemiBold',
+                                                fontSize: 14,
+                                                color: '#8F9BB3',
+                                                marginLeft: 10,
+                                            }}
+                                        >
+                                            {item.content}
+                                        </Text>
+                                    </View>
                                     <Text
                                         style={{
                                             fontFamily: 'Inter_600SemiBold',
                                             fontSize: 14,
                                             color: '#8F9BB3',
-                                            marginLeft: 10,
                                         }}
                                     >
-                                        {item.content}
+                                        {item.time}
                                     </Text>
                                 </View>
-                                <Text
-                                    style={{
-                                        fontFamily: 'Inter_600SemiBold',
-                                        fontSize: 14,
-                                        color: '#8F9BB3',
-                                    }}
-                                >
-                                    {item.time}
-                                </Text>
-                            </View>
-                        </TouchableOpacity>
-                    )
-                })}
+                            </TouchableOpacity>
+                        )
+                    })}
+                </View>
             </ScrollView>
             <Tab />
         </SafeAreaView>

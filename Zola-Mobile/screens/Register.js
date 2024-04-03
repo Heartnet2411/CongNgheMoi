@@ -60,35 +60,10 @@ const Register = ({ navigation, route }) => {
             )
             return
         } else {
-            try {
-                //gửi request lên server
-                fetch(url + `/account/create-account`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        phoneNumber: phoneNumber,
-                        password: password,
-                    }),
-                })
-                    .then((res) => res.json())
-                    .then((data) => {
-                        console.log(data)
-                        if (data == 'Create account successfully!!!') {
-                            navigation.navigate('CreateUser', {
-                                phoneNumber: phoneNumber,
-                            })
-                        } else {
-                            Alert.alert(
-                                'Thông báo',
-                                'Có lỗi xảy ra xin vui lòng thử lại sau.',
-                            )
-                        }
-                    })
-            } catch (error) {
-                console.log(error)
-            }
+            navigation.navigate('CreateUser', {
+                phoneNumber: phoneNumber,
+                password: password,
+            })
         }
     }
 

@@ -309,7 +309,7 @@ const Login = ({ navigation, route }) => {
                         style={styles.buttonMain}
                         onPress={() => handleLogout()}
                     >
-                        <Entypo name="log-out" size={20} color="black" />
+                        <Entypo name="log-out" size={20} color="red" />
                         <Text style={styles.buttonText}>Đăng xuất</Text>
                     </TouchableOpacity>
                 </View>

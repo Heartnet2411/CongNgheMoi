@@ -17,10 +17,23 @@ LogBox.ignoreLogs([
 ])
 
 const ConfirmCode = ({ navigation, route }) => {
-    const confirm = route.params.confirm
+    let confirm = route.params.confirm
     const phoneNumber = route.params.phoneNumber
 
     const [code, setCode] = React.useState('')
+    const [time, setTime] = React.useState(60)
+
+    React.useEffect(() => {
+        const interval = setInterval(() => {
+            setTime((prevTime) => {
+                if (prevTime === 0) {
+                    clearInterval(interval)
+                }
+                return prevTime - 1
+            })
+        }, 1000)
+        return () => clearInterval(interval)
+    }, [])
 
     const confirmCode = async (code) => {
         try {
@@ -54,6 +67,17 @@ const ConfirmCode = ({ navigation, route }) => {
         }
     }
 
+    const handleReSendCode = () => {
+        const formattedPhoneNumber = `+84${phoneNumber.slice(1)}`
+        confirm = auth().signInWithPhoneNumber(formattedPhoneNumber)
+        setTime(60)
+
+        confirm.catch((error) => {
+            Alert.alert('Thông báo', 'Gửi lại mã xác nhận thất bại')
+            console.log(error)
+        })
+    }
+
     React.useEffect(() => {
         const subscriber = auth().onAuthStateChanged(onAuthStateChanged)
         return subscriber
@@ -81,6 +105,23 @@ const ConfirmCode = ({ navigation, route }) => {
                         setCode(value)
                     }}
                 />
+                <View style={styles.reSendCode}>
+                    <Text style={styles.reSendCodeText}>
+                        Chưa nhận được mã xác nhận?
+                    </Text>
+                    <TouchableOpacity
+                        style={styles.reSendCodeButton}
+                        disabled={time > 0 ? true : false}
+                        onPress={() => handleReSendCode()}
+                    >
+                        <Text style={styles.reSendCodeBtnText}>
+                            Gửi lại mã{' '}
+                        </Text>
+                        <Text style={styles.reSendCodeText}>
+                            {time > 0 ? `(${time}s)` : ''}
+                        </Text>
+                    </TouchableOpacity>
+                </View>
             </View>
 
             <View style={styles.buttonWrap}>
@@ -115,6 +156,8 @@ const styles = StyleSheet.create({
     },
     input: {
         height: windowHeight * 0.3,
+        width: windowWidth * 0.8,
+        alignItems: 'center',
     },
     buttonWrap: {
         width: '100%',
@@ -153,11 +196,29 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderColor: '#808080',
         borderRadius: 10,
-
         fontSize: 17,
         padding: 5,
         paddingHorizontal: 15,
     },
+
+    reSendCode: {
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginTop: 20,
+    },
+    reSendCodeText: {
+        fontSize: 17,
+        color: '#808080',
+    },
+    reSendCodeButton: {
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+    reSendCodeBtnText: {
+        color: '#5D5AFE',
+        fontSize: 17,
+    },
+
     buttonAuth: {
         backgroundColor: '#5D5AFE',
         width: windowWidth * 0.5,

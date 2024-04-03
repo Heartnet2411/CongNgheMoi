@@ -20,6 +20,20 @@ const ConfirmForgot = ({ navigation, route }) => {
     const confirm = route.params.confirm
     const phoneNumber = route.params.phoneNumber
 
+    const [time, setTime] = React.useState(60)
+
+    React.useEffect(() => {
+        const interval = setInterval(() => {
+            setTime((prevTime) => {
+                if (prevTime === 0) {
+                    clearInterval(interval)
+                }
+                return prevTime - 1
+            })
+        }, 1000)
+        return () => clearInterval(interval)
+    }, [])
+
     const [code, setCode] = React.useState('')
 
     const confirmCode = async (code) => {
@@ -83,6 +97,23 @@ const ConfirmForgot = ({ navigation, route }) => {
                         setCode(value)
                     }}
                 />
+                <View style={styles.reSendCode}>
+                    <Text style={styles.reSendCodeText}>
+                        Chưa nhận được mã xác nhận?
+                    </Text>
+                    <TouchableOpacity
+                        style={styles.reSendCodeButton}
+                        disabled={time > 0 ? true : false}
+                        onPress={() => handleReSendCode()}
+                    >
+                        <Text style={styles.reSendCodeBtnText}>
+                            Gửi lại mã{' '}
+                        </Text>
+                        <Text style={styles.reSendCodeText}>
+                            {time > 0 ? `(${time}s)` : ''}
+                        </Text>
+                    </TouchableOpacity>
+                </View>
             </View>
 
             <View style={styles.buttonWrap}>
@@ -117,6 +148,8 @@ const styles = StyleSheet.create({
     },
     input: {
         height: windowHeight * 0.3,
+        width: windowWidth * 0.8,
+        alignItems: 'center',
     },
     buttonWrap: {
         width: '100%',
@@ -147,6 +180,24 @@ const styles = StyleSheet.create({
         fontSize: 20,
         fontFamily: 'Inter_600SemiBold',
         marginTop: 50,
+    },
+
+    reSendCode: {
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginTop: 20,
+    },
+    reSendCodeText: {
+        fontSize: 17,
+        color: '#808080',
+    },
+    reSendCodeButton: {
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+    reSendCodeBtnText: {
+        color: '#5D5AFE',
+        fontSize: 17,
     },
 
     authInput: {

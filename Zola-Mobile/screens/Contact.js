@@ -21,6 +21,7 @@ import axios from 'axios'
 import { jwtDecode } from 'jwt-decode'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import LinearGradient from 'react-native-linear-gradient'
+import { url } from '../utils/constant'
 
 const Contact = ({ navigation }) => {
     const listContact = [
@@ -66,7 +67,8 @@ const Contact = ({ navigation }) => {
 
             axios
                 .get(
-                    `http://localhost:3000/user/findAllExceptCurrentUser?account_id=${accountId}`,
+                    url +
+                        `/user/findAllExceptCurrentUser?account_id=${accountId}`,
                 )
                 .then((res) => {
                     setUsers(res.data)

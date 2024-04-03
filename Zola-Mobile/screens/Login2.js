@@ -6,17 +6,20 @@ import {
     TextInput,
     TouchableOpacity,
     View,
+    Dimensions,
 } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import { AntDesign } from '@expo/vector-icons'
+import { AntDesign, Entypo } from '@expo/vector-icons'
 import axios from 'axios'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { url } from '../utils/constant'
+import LinearGradient from 'react-native-linear-gradient'
 
 const Login2 = ({ navigation }) => {
     const [phoneNumber, setPhoneNumber] = useState()
     const [password, setPassword] = useState()
+    const [isShowPassword, setIsShowPassword] = useState(false)
     useEffect(() => {
         const checkLoginStatus = async () => {
             try {
@@ -69,8 +72,8 @@ const Login2 = ({ navigation }) => {
             })
             .catch((err) => {
                 Alert.alert(
-                    'Login failure!!!',
-                    'Please check your username or password again!',
+                    'Đăng nhập thất bại!!!',
+                    'Vui lòng kiểm tra lại tài khoản và mật khẩu của bạn!',
                 )
                 console.log('Error at login', err)
             })
@@ -78,7 +81,12 @@ const Login2 = ({ navigation }) => {
     return (
         <SafeAreaView style={styles.container}>
             <KeyboardAvoidingView>
-                <View style={styles.header}>
+                <LinearGradient
+                    colors={['#474bff', '#478eff']}
+                    useAngle={true}
+                    angle={90}
+                    style={styles.header}
+                >
                     <TouchableOpacity onPress={() => navigation.goBack()}>
                         <AntDesign
                             style={styles.back}
@@ -88,22 +96,43 @@ const Login2 = ({ navigation }) => {
                         />
                     </TouchableOpacity>
                     <Text style={styles.login}>Đăng nhập</Text>
-                </View>
+                </LinearGradient>
                 <View style={styles.info}>
                     <Text style={styles.direction}>
                         Vui lòng nhập số điện thoại và mật khẩu để đăng nhập
                     </Text>
-                    <TextInput
-                        style={styles.input}
-                        placeholder="Số điện thoại"
-                        onChangeText={setPhoneNumber}
-                    />
-                    <TextInput
-                        onChangeText={setPassword}
-                        style={styles.input}
-                        placeholder="Mật khẩu"
-                        secureTextEntry
-                    />
+                    <View style={styles.inputWrap}>
+                        <TextInput
+                            style={styles.input}
+                            placeholder="Số điện thoại"
+                            onChangeText={setPhoneNumber}
+                        />
+                    </View>
+                    <View style={styles.inputWrap}>
+                        <TextInput
+                            onChangeText={setPassword}
+                            style={styles.input}
+                            placeholder="Mật khẩu"
+                            secureTextEntry={!isShowPassword}
+                        />
+                        {isShowPassword ? (
+                            <TouchableOpacity
+                                onPress={() => setIsShowPassword(false)}
+                            >
+                                <Entypo name="eye" size={24} color="black" />
+                            </TouchableOpacity>
+                        ) : (
+                            <TouchableOpacity
+                                onPress={() => setIsShowPassword(true)}
+                            >
+                                <Entypo
+                                    name="eye-with-line"
+                                    size={24}
+                                    color="black"
+                                />
+                            </TouchableOpacity>
+                        )}
+                    </View>
                     <TouchableOpacity
                         style={styles.getPwd}
                         onPress={() => navigation.navigate('ForgotPassword')}
@@ -123,6 +152,9 @@ const Login2 = ({ navigation }) => {
 }
 
 export default Login2
+
+const windowWidth = Dimensions.get('window').width
+const windowHeight = Dimensions.get('window').height
 
 const styles = StyleSheet.create({
     container: {
@@ -155,13 +187,20 @@ const styles = StyleSheet.create({
     info: {
         //alignItems: 'center',
     },
-    input: {
-        width: 360,
-        height: 40,
+    inputWrap: {
+        flexDirection: 'row',
+        alignItems: 'center',
         borderBottomWidth: 1,
         borderColor: '#ccc',
-        margin: 10,
-        padding: 10,
+        fontSize: 17,
+        marginHorizontal: 25,
+        marginBottom: 15,
+        paddingHorizontal: 10,
+    },
+    input: {
+        flex: 1,
+        height: 40,
+        borderColor: '#ccc',
         fontSize: 17,
     },
 
@@ -174,11 +213,11 @@ const styles = StyleSheet.create({
     },
     btnLogin: {
         alignItems: 'center',
-        marginTop: 20,
+        marginTop: 30,
         justifyContent: 'center',
         width: 200,
         height: 40,
-        backgroundColor: '#1B96CB',
+        backgroundColor: '#474bff',
         borderRadius: 20,
         alignSelf: 'center',
     },

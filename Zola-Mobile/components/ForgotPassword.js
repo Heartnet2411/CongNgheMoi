@@ -31,7 +31,7 @@ const ForgotPassword = ({ navigation, route }) => {
                 .then((res) => res.json())
                 .then((data) => {
                     console.log(data)
-                    if (data == 'Account not found!!!') {
+                    if (!data) {
                         Alert.alert('Thông báo', 'Số điện thoại không tồn tại')
                     } else {
                         // sendOPT(phoneNumber)

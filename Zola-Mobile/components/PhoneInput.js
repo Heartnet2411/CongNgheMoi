@@ -14,13 +14,6 @@ import { url } from '../utils/constant'
 
 const PhoneInput = ({ navigation, route }) => {
     const [phoneNumber, setPhoneNumber] = React.useState('')
-    const [confirm, setConfirm] = React.useState(null)
-    const [code, setCode] = React.useState('')
-    const [input1, setInput1] = React.useState('')
-    const [input2, setInput2] = React.useState('')
-    const [input3, setInput3] = React.useState('')
-    const [input4, setInput4] = React.useState('')
-    const [input5, setInput5] = React.useState('')
 
     const signUpPhoneNumber = async (phoneNumber) => {
         try {
@@ -31,10 +24,13 @@ const PhoneInput = ({ navigation, route }) => {
                 .then((res) => res.json())
                 .then((data) => {
                     console.log(data)
-                    if (data == 'Account not found!!!') {
-                        sendOPT(phoneNumber)
-                    } else {
+                    if (!data) {
                         Alert.alert('Thông báo', 'Tài khoản đã tồn tại')
+                    } else {
+                        // sendOPT(phoneNumber)
+                        navigation.navigate('Register', {
+                            phoneNumber: phoneNumber,
+                        })
                     }
                 })
                 .catch((err) => {

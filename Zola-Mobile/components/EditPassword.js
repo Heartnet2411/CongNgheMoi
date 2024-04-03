@@ -71,6 +71,10 @@ export default function EditPassword({ route, navigation }) {
             })
             .catch((error) => {
                 console.error(error)
+                Alert.alert(
+                    'Thông báo',
+                    'Có lỗi xảy ra xin vui lòng thử lại sau.',
+                )
             })
             .finally(() => {
                 navigation.navigate('Personal')
