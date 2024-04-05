@@ -68,7 +68,7 @@ const Contact = ({ navigation }) => {
             axios
                 .get(
                     url +
-                        `/user/findAllExceptCurrentUser?account_id=${accountId}`,
+                        `:3000/user/findAllExceptCurrentUser?account_id=${accountId}`,
                 )
                 .then((res) => {
                     setUsers(res.data)

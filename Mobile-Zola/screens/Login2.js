@@ -177,12 +177,11 @@ const styles = StyleSheet.create({
         marginLeft: 15,
     },
     direction: {
-        fontSize: 17,
-        marginTop: 10,
-        marginLeft: 10,
+        fontSize: 18,
+        marginTop: 30,
         textAlign: 'center',
-        padding: 5,
-        paddingHorizontal: 30,
+        marginBottom: 10,
+        paddingHorizontal: 50,
     },
     info: {
         //alignItems: 'center',

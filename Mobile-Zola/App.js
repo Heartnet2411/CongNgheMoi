@@ -1,3 +1,4 @@
+import 'text-encoding-polyfill'
 import { StyleSheet, Text, View } from 'react-native'
 import Login from './screens/Login'
 import Message from './screens/Message'
@@ -20,6 +21,10 @@ import AddFriend from './components/AddFriend'
 import ForgotPassword from './components/ForgotPassword'
 import ConfirmForgot from './components/ConfirmForgot'
 import EditNewPassword from './components/EditNewPassword'
+import Conversation from './components/Conversation'
+
+import TextEncoding from 'text-encoding'
+global.TextEncoder = TextEncoding.TextEncoder
 
 export default function App() {
     const Stack = createNativeStackNavigator()
@@ -29,6 +34,11 @@ export default function App() {
         <UserContext>
             <NavigationContainer>
                 <Stack.Navigator initialRouteName="Login">
+                    <Stack.Screen
+                        name="Conversation"
+                        component={Conversation}
+                        options={{ headerShown: false }}
+                    />
                     <Stack.Screen
                         name="Chat"
                         component={Chat}

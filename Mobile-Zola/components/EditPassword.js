@@ -13,7 +13,6 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 import { jwtDecode } from 'jwt-decode'
 import { decode } from 'base-64'
 import { url } from '../utils/constant'
-import { set } from 'core-js/core/dict'
 
 global.atob = decode
 

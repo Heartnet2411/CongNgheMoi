@@ -143,6 +143,21 @@ class UserController {
             res.json('User doesn`t exits !!!')
         }
     }
+
+    async findUserByUserID(req, res) {
+        const userId = req.params.userId
+        try {
+            const user = await User.findById({ _id: userId })
+            if (user) {
+                res.status(200).json(user)
+            } else {
+                res.status(404).json('User not found!!!')
+            }
+        } catch (error) {
+            console.log(error)
+            res.status(500).json('Error retrieving user')
+        }
+    }
 }
 
 export default new UserController()

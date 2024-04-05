@@ -18,4 +18,6 @@ router.put('/updateCoverImage', userController.updateCoverImage)
 
 router.put('/updateInfo', userController.updateInfo)
 
+router.get('/findUserByUserId/:userId', userController.findUserByUserID)
+
 export default router

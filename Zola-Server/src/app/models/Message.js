@@ -1,14 +1,31 @@
 import mongoose from 'mongoose'
 const Schema = mongoose.Schema
 
-const Message = new Schema({
-    conversation_id: { type: String, required: true, unique: true },
-    sender_id: { type: String, required: true },
-    content: { type: String, required: true },
-    dateSend: { type: Date, required: true },
-    type: { type: String, required: true },
-    senderName: { type: String, required: true },
-    senderAvatar: { type: String, required: true },
-    status: { type: String, required: true },
-})
+const Message = new Schema(
+    {
+        conversation_id: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Conversation',
+        },
+        senderId: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'User',
+        },
+        /* receiverId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+    },*/
+        contentType: {
+            type: String,
+            enum: ['text', 'image', 'video', 'audio', 'file'],
+        },
+        content: {
+            type: String,
+        },
+        /*imageURL: {
+        type: String,
+    }*/
+    },
+    { timestamps: true }
+)
 export default mongoose.model('Message', Message)

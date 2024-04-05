@@ -1,34 +1,36 @@
 import Conversation from '../models/Conversation.js'
 
 class ConversationController {
-    // post /create
-    async create(req, res) {
-        const member = req.body.member
-        const message_id = req.body.message_id
-        const groupName = req.body.groupName
-        const groupAvatar = req.body.groupAvatar
-        const memberCount = req.body.memberCount
-        const conversation = new Conversation({
-            member,
-            message_id,
-            groupName,
-            groupAvatar,
-            memberCount,
+    async createConversation(req, res) {
+        const newConversation = new Conversation({
+            members: [req.body.senderId, req.body.receiverId],
         })
-        await conversation
-            .save()
-            .then(() => {
-                res.json('Create conversation successfully!!!')
-            })
-            .catch((err) => {
-                res.json('Create conversation failure!!!')
-            })
+        try {
+            const result = await newConversation.save()
+            res.status(200).json(result)
+        } catch (err) {
+            res.status(500).json(err)
+        }
     }
-
-    async findAllConversations(req, res) {
-        const conversations = await Conversation.find()
-        res.json(conversations)
+    async userConversations(req, res) {
+        try {
+            const conversation = await Conversation.find({
+                members: { $in: [req.params.userId] },
+            })
+            res.status(200).json(conversation)
+        } catch (err) {
+            res.status(500).json(err)
+        }
+    }
+    async findConversations(req, res) {
+        try {
+            const conversation = await Conversation.findOne({
+                members: { $all: [req.params.firstId, req.params.secondId] },
+            })
+            res.status(200).json(conversation)
+        } catch (err) {
+            res.status(500).json(err)
+        }
     }
 }
-
 export default new ConversationController()

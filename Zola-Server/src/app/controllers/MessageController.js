@@ -1,42 +1,32 @@
-//import Message from '../models/Message.js'
+import Message from '../models/Message.js'
 
-/*class MessageController {
+class MessageController {
     // post /create
-    async create(req, res) {
-        const conversation_id = req.body.conversation_id
-        const sender_id = req.body.sender_id
-        const content = req.body.content
-        const dateSend = req.body.dateSend
-        const type = req.body.type
-        const senderName = req.body.senderName
-        const senderAvatar = req.body.senderAvatar
-        const status = req.body.status
-
-        const message = new Message({
+    async addMessage(req, res) {
+        const { conversation_id, senderId, content, contentType } = req.body
+        const newMessage = new Message({
             conversation_id,
-            sender_id,
+            senderId,
             content,
-            dateSend,
-            type,
-            senderName,
-            senderAvatar,
-            status,
+            contentType,
         })
-
-        await message
-            .save()
-            .then(() => {
-                res.json('Create message successfully!!!')
-            })
-            .catch((err) => {
-                res.json('Create message failure!!!')
-            })
+        try {
+            const result = await newMessage.save()
+            res.status(200).json(result)
+        } catch (err) {
+            res.status(500).json(err)
+        }
     }
-
-    async findAllMessages(req, res) {
-        const messages = await Message.find()
-        res.json(messages)
+    // get /:conversation_id
+    async getMessagesByConversationID(req, res) {
+        try {
+            const messages = await Message.find({
+                conversation_id: req.params.conversation_id,
+            })
+            res.status(200).json(messages)
+        } catch (err) {
+            res.status(500).json(err)
+        }
     }
 }
-
-export default new MessageController()*/
+export default new MessageController()

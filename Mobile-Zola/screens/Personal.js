@@ -29,7 +29,6 @@ import { decode } from 'base-64'
 import * as ImagePicker from 'expo-image-picker'
 import buffer from 'buffer'
 import { url } from '../utils/constant'
-import { set } from 'core-js/core/dict'
 
 global.atob = decode
 global.Buffer = global.Buffer || buffer.Buffer
