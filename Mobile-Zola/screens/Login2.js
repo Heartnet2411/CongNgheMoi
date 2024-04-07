@@ -81,10 +81,10 @@ const Login2 = ({ navigation }) => {
     return (
         <SafeAreaView style={styles.container}>
             <KeyboardAvoidingView>
-                <LinearGradient
-                    colors={['#474bff', '#478eff']}
-                    useAngle={true}
-                    angle={90}
+                <View
+                    // colors={['#474bff', '#478eff']}
+                    // useAngle={true}
+                    // angle={90}
                     style={styles.header}
                 >
                     <TouchableOpacity onPress={() => navigation.goBack()}>
@@ -96,7 +96,7 @@ const Login2 = ({ navigation }) => {
                         />
                     </TouchableOpacity>
                     <Text style={styles.login}>Đăng nhập</Text>
-                </LinearGradient>
+                </View>
                 <View style={styles.info}>
                     <Text style={styles.direction}>
                         Vui lòng nhập số điện thoại và mật khẩu để đăng nhập

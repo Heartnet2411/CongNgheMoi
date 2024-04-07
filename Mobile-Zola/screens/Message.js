@@ -1,5 +1,4 @@
 import {
-    SafeAreaView,
     StyleSheet,
     Text,
     View,
@@ -19,102 +18,11 @@ import { useState, useEffect } from 'react'
 import axios from 'axios'
 import { jwtDecode } from 'jwt-decode'
 import { ImageBackground } from 'react-native'
+import { url } from '../utils/constant'
 import Conversation from '../components/Conversation'
+import { SafeAreaView } from 'react-native-safe-area-context'
 
 const Message = ({ navigation, route }) => {
-    const listMess = [
-        {
-            id: 1,
-            name: 'Nguyễn Văn A',
-            avatar: require('../image/avatar.png'),
-            time: '10:00',
-            content: 'Chào bạn',
-        },
-        {
-            id: 2,
-            name: 'Nguyễn Văn B',
-            avatar: require('../image/avatar.png'),
-            time: '10:00',
-            content: 'Chào bạn',
-        },
-        {
-            id: 3,
-            name: 'Nguyễn Văn C',
-            avatar: require('../image/avatar.png'),
-            time: '10:00',
-            content: 'Chào bạn',
-        },
-        {
-            id: 4,
-            name: 'Nguyễn Văn D',
-            avatar: require('../image/avatar.png'),
-            time: '10:00',
-            content: 'Chào bạn',
-        },
-        {
-            id: 5,
-            name: 'Nguyễn Văn E',
-            avatar: require('../image/avatar.png'),
-            time: '10:00',
-            content: 'Chào bạn',
-        },
-        {
-            id: 6,
-            name: 'Nguyễn Văn F',
-            avatar: require('../image/avatar.png'),
-            time: '10:00',
-            content: 'Chào bạn',
-        },
-        {
-            id: 7,
-            name: 'Nguyễn Văn G',
-            avatar: require('../image/avatar.png'),
-            time: '10:00',
-            content: 'Chào bạn',
-        },
-        {
-            id: 8,
-            name: 'Nguyễn Văn H',
-            avatar: require('../image/avatar.png'),
-            time: '10:00',
-            content: 'Chào bạn',
-        },
-        {
-            id: 9,
-            name: 'Nguyễn Văn I',
-            avatar: require('../image/avatar.png'),
-            time: '10:00',
-            content: 'Chào bạn',
-        },
-        {
-            id: 10,
-            name: 'Nguyễn Văn K',
-            avatar: require('../image/avatar.png'),
-            time: '10:00',
-            content: 'Chào bạn',
-        },
-        {
-            id: 11,
-            name: 'Nguyễn Văn L',
-            avatar: require('../image/avatar.png'),
-            time: '10:00',
-            content: 'Chào bạn',
-        },
-        {
-            id: 12,
-            name: 'Nguyễn Văn M',
-            avatar: require('../image/avatar.png'),
-            time: '10:00',
-            content: 'Chào bạn',
-        },
-        {
-            id: 13,
-            name: 'Nguyễn Văn N',
-            avatar: require('../image/avatar.png'),
-            time: '10:00',
-            content: 'Chào bạn',
-        },
-    ]
     const { accountId, setAccountId } = useContext(UserType)
     const [userId, setUserId] = useState({})
     const [conversations, setConversations] = useState([])
@@ -124,9 +32,7 @@ const Message = ({ navigation, route }) => {
             const decodedToken = jwtDecode(token)
             setAccountId(decodedToken.accountId)
             axios
-                .get(
-                    `http://localhost:3000/user/findUser?account_id=${accountId}`,
-                )
+                .get(url + `/user/findUser?account_id=${accountId}`)
                 .then((res) => {
                     setUserId(res.data._id)
                 })
@@ -136,7 +42,7 @@ const Message = ({ navigation, route }) => {
         }
         const getConversations = async (userId) => {
             axios
-                .get(`http://localhost:3000/conversations/${userId}`)
+                .get(url + `/conversations/${userId}`)
                 .then((res) => {
                     setConversations(res.data)
                 })
@@ -149,7 +55,7 @@ const Message = ({ navigation, route }) => {
     }, [userId])
     useFonts({ Inter_600SemiBold })
     return (
-        <SafeAreaView>
+        <SafeAreaView style={styles.container}>
             <View>
                 <View style={styles.header}>
                     <TouchableOpacity style={styles.search}>
@@ -178,7 +84,7 @@ const Message = ({ navigation, route }) => {
                         />
                     </TouchableOpacity>
                 </View>
-                <ScrollView>
+                <ScrollView style={styles.body}>
                     <View style={styles.list}>
                         {conversations.map((conversation) => {
                             return (
@@ -209,7 +115,7 @@ const styles = StyleSheet.create({
         position: 'relative',
     },
     header: {
-        height: 60,
+        height: windowHeight * 0.08,
         backgroundColor: '#1B96CB',
         flexDirection: 'row',
         alignItems: 'center',
@@ -239,6 +145,6 @@ const styles = StyleSheet.create({
         marginLeft: 15,
     },
     list: {
-        height: Math.round(windowHeight) - 60,
+        height: windowHeight - windowHeight * 0.16,
     },
 })

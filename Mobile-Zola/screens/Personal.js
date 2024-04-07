@@ -9,6 +9,7 @@ import {
     Pressable,
     Dimensions,
     LogBox,
+    TouchableWithoutFeedback,
 } from 'react-native'
 import React, { useEffect } from 'react'
 import { K2D_700Bold, useFonts } from '@expo-google-fonts/k2d'
@@ -29,6 +30,7 @@ import { decode } from 'base-64'
 import * as ImagePicker from 'expo-image-picker'
 import buffer from 'buffer'
 import { url } from '../utils/constant'
+import axios from 'axios'
 
 global.atob = decode
 global.Buffer = global.Buffer || buffer.Buffer
@@ -191,18 +193,13 @@ const Login = ({ navigation, route }) => {
         const decodedToken = jwtDecode(token)
         const account_id = decodedToken.accountId
 
-        fetch(url + `/user/findUser?account_id=${account_id}`, {
-            method: 'GET',
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
-        })
-            .then((res) => res.json())
-            .then((data) => {
-                setUser(data)
+        axios
+            .get(url + `/user/findUser?account_id=${account_id}`)
+            .then((res) => {
+                setUser(res.data)
             })
-            .catch((error) => {
-                console.error('Error:', error)
+            .catch((err) => {
+                console.log(err)
             })
     }
 
@@ -238,7 +235,7 @@ const Login = ({ navigation, route }) => {
         <SafeAreaView style={styles.container}>
             <View
                 style={{
-                    height: windowHeight * 0.92,
+                    height: windowHeight - windowHeight * 0.08,
                 }}
             >
                 <View>
@@ -323,56 +320,103 @@ const Login = ({ navigation, route }) => {
                     setModalVisible(!modalVisible)
                 }}
             >
-                <View style={styles.centeredView}>
-                    <View style={styles.modalView}>
-                        <TouchableOpacity
-                            style={styles.button}
-                            onPress={() => pickImageCoverImage()}
-                        >
-                            <Entypo name="images" size={20} color="black" />
-                            <Text style={styles.buttonText}>Đổi ảnh bìa</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity
-                            style={styles.button}
-                            onPress={() => pickImageAvatar()}
-                        >
-                            <Entypo name="images" size={20} color="black" />
-                            <Text style={styles.buttonText}>
-                                Đổi ảnh đại diện
-                            </Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity
-                            style={styles.button}
-                            onPress={() => {
-                                navigation.navigate('EditInfo')
-                                setModalVisible(!modalVisible)
-                            }}
-                        >
-                            <MaterialIcons
-                                name="featured-play-list"
-                                size={20}
-                                color="black"
-                            />
-                            <Text style={styles.buttonText}>Đổi thông tin</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity
-                            style={styles.button}
-                            onPress={() => {
-                                navigation.navigate('EditPassword')
-                                setModalVisible(!modalVisible)
-                            }}
-                        >
-                            <Entypo name="lock" size={20} color="black" />
-                            <Text style={styles.buttonText}>Đổi mật khẩu</Text>
-                        </TouchableOpacity>
-                        <Pressable
-                            style={styles.buttonClose}
-                            onPress={() => setModalVisible(!modalVisible)}
-                        >
-                            <FontAwesome name="close" size={30} color="black" />
-                        </Pressable>
+                <TouchableWithoutFeedback
+                    style={{
+                        flex: 1,
+                        width: windowWidth,
+                        height: windowHeight,
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        backgroundColor: 'rgba(0,0,0,0.5)',
+                    }}
+                    onPress={() => setModalVisible(!modalVisible)}
+                >
+                    <View
+                        style={{
+                            flex: 1,
+                            width: windowWidth,
+                            height: windowHeight,
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            backgroundColor: 'rgba(0,0,0,0.5)',
+                        }}
+                    >
+                        <View style={styles.centeredView}>
+                            <View style={styles.modalView}>
+                                <TouchableOpacity
+                                    style={styles.button}
+                                    onPress={() => pickImageCoverImage()}
+                                >
+                                    <Entypo
+                                        name="images"
+                                        size={20}
+                                        color="black"
+                                    />
+                                    <Text style={styles.buttonText}>
+                                        Đổi ảnh bìa
+                                    </Text>
+                                </TouchableOpacity>
+                                <TouchableOpacity
+                                    style={styles.button}
+                                    onPress={() => pickImageAvatar()}
+                                >
+                                    <Entypo
+                                        name="images"
+                                        size={20}
+                                        color="black"
+                                    />
+                                    <Text style={styles.buttonText}>
+                                        Đổi ảnh đại diện
+                                    </Text>
+                                </TouchableOpacity>
+                                <TouchableOpacity
+                                    style={styles.button}
+                                    onPress={() => {
+                                        navigation.navigate('EditInfo')
+                                        setModalVisible(!modalVisible)
+                                    }}
+                                >
+                                    <MaterialIcons
+                                        name="featured-play-list"
+                                        size={20}
+                                        color="black"
+                                    />
+                                    <Text style={styles.buttonText}>
+                                        Đổi thông tin
+                                    </Text>
+                                </TouchableOpacity>
+                                <TouchableOpacity
+                                    style={styles.button}
+                                    onPress={() => {
+                                        navigation.navigate('EditPassword')
+                                        setModalVisible(!modalVisible)
+                                    }}
+                                >
+                                    <Entypo
+                                        name="lock"
+                                        size={20}
+                                        color="black"
+                                    />
+                                    <Text style={styles.buttonText}>
+                                        Đổi mật khẩu
+                                    </Text>
+                                </TouchableOpacity>
+                                <Pressable
+                                    style={styles.buttonClose}
+                                    onPress={() =>
+                                        setModalVisible(!modalVisible)
+                                    }
+                                >
+                                    <FontAwesome
+                                        name="close"
+                                        size={30}
+                                        color="black"
+                                    />
+                                </Pressable>
+                            </View>
+                        </View>
                     </View>
-                </View>
+                </TouchableWithoutFeedback>
             </Modal>
             <Tab />
         </SafeAreaView>
@@ -389,7 +433,6 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#fff',
         width: windowWidth,
-        height: windowHeight,
     },
 
     background: {

@@ -22,6 +22,17 @@ const Message = new Schema(
         content: {
             type: String,
         },
+
+        recalled: {
+            type: Boolean,
+            default: false,
+        },
+        deletedBy: [
+            {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: 'User',
+            },
+        ],
         /*imageURL: {
         type: String,
     }*/

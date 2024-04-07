@@ -12,6 +12,10 @@ import { Inter_600SemiBold } from '@expo-google-fonts/inter'
 const Login = ({ navigation, route }) => {
     useFonts({ K2D_700Bold })
     useFonts({ Inter_600SemiBold })
+    const [check, setCheck] = React.useState(false)
+    React.useEffect(() => {
+        setCheck(true)
+    })
     return (
         <SafeAreaView style={styles.container}>
             <View style={styles.title}>

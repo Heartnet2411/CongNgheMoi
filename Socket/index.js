@@ -1,6 +1,6 @@
 const io = require('socket.io')(8800, {
     cors: {
-        origin: 'http://localhost:8081',
+        origin: '*',
     },
 })
 let activeUsers = []
