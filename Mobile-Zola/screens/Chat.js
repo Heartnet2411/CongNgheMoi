@@ -26,6 +26,7 @@ import { io } from 'socket.io-client'
 import axios from 'axios'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import * as ImagePicker from 'expo-image-picker'
+import LinearGradient from 'react-native-linear-gradient'
 
 const Chat = ({ navigation, route }) => {
     const userData = route.params.userData
@@ -263,7 +264,17 @@ const Chat = ({ navigation, route }) => {
                         </TouchableOpacity>
                     ) : null}
                     <View style={styles.messageSend}>
-                        {type === 'text' ? (
+                        {recall ? (
+                            <Text
+                                style={{
+                                    fontSize: 17,
+                                    color: '#8F9BB3',
+                                    fontStyle: 'italic',
+                                }}
+                            >
+                                Tin nhắn đã được thu hồi
+                            </Text>
+                        ) : type === 'text' ? (
                             <Text
                                 style={{
                                     fontSize: 17,
@@ -271,7 +282,7 @@ const Chat = ({ navigation, route }) => {
                             >
                                 {content}
                             </Text>
-                        ) : (
+                        ) : type === 'text' ? (
                             <Image
                                 source={{ uri: content }}
                                 style={{
@@ -283,7 +294,7 @@ const Chat = ({ navigation, route }) => {
                                     alignSelf: 'center',
                                 }}
                             />
-                        )}
+                        ) : null}
                         <Text
                             style={{
                                 fontSize: 15,
@@ -361,16 +372,26 @@ const Chat = ({ navigation, route }) => {
 
     return (
         <SafeAreaView style={styles.container}>
-            <View style={styles.header}>
-                <TouchableOpacity onPress={() => navigation.goBack()}>
+            <LinearGradient
+                colors={['#474bff', '#478eff']}
+                useAngle={true}
+                angle={90}
+                style={styles.header}
+            >
+                <TouchableOpacity
+                    style={{
+                        paddingHorizontal: windowWidth * 0.02,
+                    }}
+                    onPress={() => navigation.goBack()}
+                >
                     <AntDesign name="left" size={30} color="white" />
                 </TouchableOpacity>
                 <Text style={styles.txtHeader}>{userData?.userName}</Text>
-            </View>
+            </LinearGradient>
             <View style={styles.body}>
                 <FlatList
                     style={{
-                        backgroundColor: '#ccc',
+                        backgroundColor: '#d4d4d4',
                     }}
                     data={messages}
                     renderItem={({ item }) => {
@@ -607,7 +628,7 @@ const windowHeight = Dimensions.get('window').height
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: 'white',
+        backgroundColor: '#fff',
         position: 'relative',
     },
     header: {
@@ -621,8 +642,6 @@ const styles = StyleSheet.create({
         color: '#fff',
         fontFamily: 'Inter_600SemiBold',
         fontSize: 20,
-        fontWeight: '700',
-        marginLeft: 10,
     },
     iconCloud: {
         marginLeft: 20,
@@ -666,19 +685,35 @@ const styles = StyleSheet.create({
         paddingHorizontal: 15,
         paddingVertical: 5,
         maxWidth: '75%',
+        shadowColor: '#000',
+        shadowOffset: {
+            width: 0,
+            height: 20,
+        },
+        shadowOpacity: 0.2,
+        shadowRadius: 3.84,
+        elevation: 5,
     },
     RightMsg: {
         alignItems: 'flex-end',
         width: windowWidth,
     },
     messageSend: {
-        backgroundColor: '#a6bdff', // Messenger blue
+        backgroundColor: '#98E4FF', // Messenger blue
         color: 'white',
         borderRadius: 15,
         paddingHorizontal: 15,
         paddingVertical: 5,
         maxWidth: '75%',
         marginRight: 10,
+        shadowColor: '#000',
+        shadowOffset: {
+            width: 0,
+            height: 20,
+        },
+        shadowOpacity: 0.2,
+        shadowRadius: 3.84,
+        elevation: 5,
     },
     iconattach: {
         marginLeft: 0,
@@ -708,7 +743,7 @@ const styles = StyleSheet.create({
         fontSize: 15,
     },
     modalMessageSend: {
-        backgroundColor: '#a6bdff', // Messenger blue
+        backgroundColor: '#98E4FF', // Messenger blue
         color: 'white',
         borderRadius: 15,
         paddingHorizontal: 15,

@@ -21,6 +21,7 @@ import { ImageBackground } from 'react-native'
 import { url } from '../utils/constant'
 import Conversation from '../components/Conversation'
 import { SafeAreaView } from 'react-native-safe-area-context'
+import LinearGradient from 'react-native-linear-gradient'
 
 const Message = ({ navigation, route }) => {
     const { accountId, setAccountId } = useContext(UserType)
@@ -52,12 +53,22 @@ const Message = ({ navigation, route }) => {
         }
         getUserIdByAccountId()
         getConversations(userId)
-    }, [userId])
+        const onFocused = navigation.addListener('focus', () => {
+            getConversations(userId)
+            getUserIdByAccountId()
+        })
+    }, [userId, navigation])
+
     useFonts({ Inter_600SemiBold })
     return (
         <SafeAreaView style={styles.container}>
             <View>
-                <View style={styles.header}>
+                <LinearGradient
+                    colors={['#474bff', '#478eff']}
+                    useAngle={true}
+                    angle={90}
+                    style={styles.header}
+                >
                     <TouchableOpacity style={styles.search}>
                         <EvilIcons
                             name="search"
@@ -67,7 +78,7 @@ const Message = ({ navigation, route }) => {
                         />
                         <Text style={styles.txtSearch}>Tìm kiếm</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity>
+                    <TouchableOpacity style={styles.btn}>
                         <MaterialCommunityIcons
                             style={styles.iconQR}
                             name="qrcode-scan"
@@ -75,7 +86,7 @@ const Message = ({ navigation, route }) => {
                             color="white"
                         />
                     </TouchableOpacity>
-                    <TouchableOpacity>
+                    <TouchableOpacity style={styles.btn}>
                         <Ionicons
                             name="add"
                             style={styles.iconAdd}
@@ -83,7 +94,7 @@ const Message = ({ navigation, route }) => {
                             color="white"
                         />
                     </TouchableOpacity>
-                </View>
+                </LinearGradient>
                 <ScrollView style={styles.body}>
                     <View style={styles.list}>
                         {conversations.map((conversation) => {
@@ -123,10 +134,13 @@ const styles = StyleSheet.create({
     search: {
         flexDirection: 'row',
         alignItems: 'center',
-        width: 280,
+        flex: 1,
     },
     iconSearch: {
-        marginLeft: 10,
+        marginLeft: windowWidth * 0.02,
+    },
+    btn: {
+        paddingRight: windowWidth * 0.02,
     },
     txtSearch: {
         marginLeft: 15,

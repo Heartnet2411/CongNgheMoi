@@ -12,9 +12,13 @@ import { url } from '../utils/constant'
 import { useNavigation, useRoute } from '@react-navigation/native'
 
 const Conversation = ({ data, currentUserId }) => {
+    console.log(data)
     const [userData, setUserData] = useState(null)
     const navigation = useNavigation()
+    const [newestMessage, setNewestMessage] = useState('')
+    const [newestMessageTime, setNewestMessageTime] = useState('')
     const route = useRoute()
+    console.log(newestMessage)
 
     useEffect(() => {
         const userId = data.members.find((id) => id !== currentUserId)
@@ -23,9 +27,31 @@ const Conversation = ({ data, currentUserId }) => {
                 setUserData(res.data)
             })
         }
+        //get newest message
+        const getNewestMessage = async () => {
+            axios
+                .post(`${url}/messages/findNewestMessage/${data._id}`, {
+                    userId: currentUserId,
+                })
+                .then((res) => {
+                    setNewestMessage(res.data)
+                    setNewestMessageTime(
+                        new Date(res.data.createdAt).getHours() +
+                            ':' +
+                            new Date(res.data.createdAt).getMinutes(),
+                    )
+                })
+                .catch((error) => {
+                    console.log('error message', error)
+                })
+        }
+        getNewestMessage()
         getUserData()
     }, [data, currentUserId])
-    console.log(userData)
+    // console.log(userData)
+
+    useEffect(() => {}, [data])
+
     return (
         <TouchableOpacity
             onPress={() =>
@@ -54,7 +80,7 @@ const Conversation = ({ data, currentUserId }) => {
                 <View
                     style={{
                         marginLeft: 10,
-                        width: 250,
+                        flex: 1,
                     }}
                 >
                     <Text
@@ -71,7 +97,9 @@ const Conversation = ({ data, currentUserId }) => {
                             fontSize: 14,
                             color: '#8F9BB3',
                         }}
-                    ></Text>
+                    >
+                        {newestMessage?.content}
+                    </Text>
                 </View>
                 <Text
                     style={{
@@ -79,7 +107,9 @@ const Conversation = ({ data, currentUserId }) => {
                         fontSize: 14,
                         color: '#8F9BB3',
                     }}
-                ></Text>
+                >
+                    {newestMessageTime}
+                </Text>
             </View>
         </TouchableOpacity>
     )

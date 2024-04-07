@@ -72,6 +72,33 @@ class MessageController {
             res.status(500).json({ error: 'Lỗi' })
         }
     }
+
+    async findNewestMessage(req, res) {
+        try {
+            let index = 0
+            let message = await Message.findOne(
+                {
+                    conversation_id: req.params.conversation_id,
+                },
+                null,
+                { sort: { createdAt: -1 }, limit: 1, skip: index }
+            )
+            while (message.deletedBy.includes(req.body.userId)) {
+                index++
+                message = await Message.findOne(
+                    {
+                        conversation_id: req.params.conversation_id,
+                    },
+                    null,
+                    { sort: { createdAt: -1 }, limit: 1, skip: index }
+                )
+            }
+            console.log('message', message)
+            res.status(200).json(message)
+        } catch (err) {
+            res.status(500).json(err)
+        }
+    }
 }
 
 export default new MessageController()
