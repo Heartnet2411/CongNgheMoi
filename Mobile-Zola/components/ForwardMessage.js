@@ -14,7 +14,7 @@ import { useNavigation, useRoute } from '@react-navigation/native'
 import { Ionicons } from '@expo/vector-icons'
 import { MaterialCommunityIcons } from '@expo/vector-icons'
 
-const ForwardMessage = ({ data, currentUserId, message }) => {
+const ForwardMessage = ({ data, currentUserId, message, type }) => {
     console.log(data)
     const [userData, setUserData] = useState(null)
     const navigation = useNavigation()
@@ -36,13 +36,14 @@ const ForwardMessage = ({ data, currentUserId, message }) => {
         userData,
         conversation,
         message,
+        type,
     }) => {
         try {
             const messages = {
                 senderId: currentUserId,
                 content: message,
                 conversation_id: conversation._id,
-                contentType: 'text',
+                contentType: type,
             }
             //send message to database
             try {
@@ -73,6 +74,7 @@ const ForwardMessage = ({ data, currentUserId, message }) => {
                     userData: userData,
                     conversation: data,
                     message: message,
+                    type: type,
                 })
             }
         >

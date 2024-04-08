@@ -770,6 +770,7 @@ const Chat = ({ navigation, route }) => {
                                                 data={conversation}
                                                 currentUserId={currentUserId}
                                                 message={modalMessage}
+                                                type={type}
                                             />
                                         )
                                     })}
