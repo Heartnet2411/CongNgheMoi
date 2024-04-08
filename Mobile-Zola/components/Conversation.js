@@ -50,8 +50,6 @@ const Conversation = ({ data, currentUserId }) => {
     }, [data, currentUserId])
     // console.log(userData)
 
-    useEffect(() => {}, [data])
-
     return (
         <TouchableOpacity
             onPress={() =>
@@ -91,15 +89,38 @@ const Conversation = ({ data, currentUserId }) => {
                     >
                         {userData?.userName}
                     </Text>
-                    <Text
-                        style={{
-                            fontFamily: 'Inter_600SemiBold',
-                            fontSize: 14,
-                            color: '#8F9BB3',
-                        }}
-                    >
-                        {newestMessage?.content}
-                    </Text>
+                    {newestMessage.recalled === true ? (
+                        <Text
+                            style={{
+                                fontFamily: 'Inter_600SemiBold',
+                                fontSize: 14,
+                                color: '#8F9BB3',
+                                fontStyle: 'italic',
+                            }}
+                        >
+                            Tin nhắn đã được thu hồi
+                        </Text>
+                    ) : newestMessage.contentType === 'text' ? (
+                        <Text
+                            style={{
+                                fontFamily: 'Inter_600SemiBold',
+                                fontSize: 14,
+                                color: '#8F9BB3',
+                            }}
+                        >
+                            {newestMessage?.content}
+                        </Text>
+                    ) : newestMessage.contentType === 'image' ? (
+                        <Text
+                            style={{
+                                fontFamily: 'Inter_600SemiBold',
+                                fontSize: 14,
+                                color: '#8F9BB3',
+                            }}
+                        >
+                            [Hình ảnh]
+                        </Text>
+                    ) : null}
                 </View>
                 <Text
                     style={{

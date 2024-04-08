@@ -10,6 +10,7 @@ import {
     Modal,
     TouchableWithoutFeedback,
     Alert,
+    ScrollView,
 } from 'react-native'
 import React, { useState, useEffect, useRef } from 'react'
 import {
@@ -18,6 +19,8 @@ import {
     MaterialIcons,
     Feather,
     MaterialCommunityIcons,
+    FontAwesome,
+    Ionicons,
 } from '@expo/vector-icons'
 import Tab from '../components/Tab'
 import { url } from '../utils/constant'
@@ -27,6 +30,9 @@ import axios from 'axios'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import * as ImagePicker from 'expo-image-picker'
 import LinearGradient from 'react-native-linear-gradient'
+import ForwardMessage from '../components/ForwardMessage'
+
+const socketUrl = 'https://192.168.1.8:8800/'
 
 const Chat = ({ navigation, route }) => {
     const userData = route.params.userData
@@ -40,13 +46,17 @@ const Chat = ({ navigation, route }) => {
     //const [receiveMessage,setReceiveMessage]=useState(null)
     const [isShowModalSend, setIsShowModalSend] = useState(false)
     const [isShowModalRecive, setIsShowModalRecive] = useState(false)
+    const [modalForward, setModalForward] = useState(false)
     const [modalMessage, setModalMessage] = useState('')
     const [modalAvatar, setModalAvatar] = useState('')
     const [modalTime, setModalTime] = useState('')
     const [messageId, setMessageId] = useState('')
     const [date, setDate] = useState('')
     const [type, setType] = useState('text')
+    const [userConversation, setUserConversation] = useState([])
     const socket = useRef()
+    const inputRef = useRef()
+    const bodyRef = useRef()
 
     const handleSendImage = async () => {
         let result = await ImagePicker.launchImageLibraryAsync({
@@ -103,7 +113,7 @@ const Chat = ({ navigation, route }) => {
     }
 
     useEffect(() => {
-        socket.current = io(`http://192.168.1.6:8800`)
+        socket.current = io(socketUrl)
         socket.current.emit('new-user-add', currentUserId)
         socket.current.on('get-users', (users) => {
             setOnlineUsers(users)
@@ -176,6 +186,7 @@ const Chat = ({ navigation, route }) => {
                 (member) => member !== currentUserId,
             )
             setSendMessage({ ...message, receiverId: receiverId })
+            inputRef.current.blur()
         }
     }
 
@@ -185,43 +196,95 @@ const Chat = ({ navigation, route }) => {
     }, [messages])
 
     const handleReSend = async () => {
-        //check time 24h
-        const dateNow = new Date().getDate()
+        Alert.alert(
+            'Thu hồi tin nhắn',
+            'Bạn có chắc chắn muốn thu hồi tin nhắn này?',
+            [
+                {
+                    text: 'Hủy',
+                    onPress: () => setIsShowModalSend(false),
+                    style: 'cancel',
+                },
+                {
+                    text: 'Đồng ý',
+                    onPress: async () => {
+                        //check time 24h
+                        const dateNow = new Date().getDate()
 
-        if (dateNow - new Date(date).getDate() > 1) {
-            Alert.alert('Thông báo', 'Không thể thu hồi tin nhắn sau 24h')
-            setIsShowModalSend(false)
-            return
-        } else {
-            try {
-                const { data } = await axios.put(
-                    url + `/messages/recallMessage/${messageId}`,
-                )
-                fetchMessages()
-                setIsShowModalSend(false)
-            } catch (error) {
-                console.log(error)
-            }
-        }
+                        if (dateNow - new Date(date).getDate() > 1) {
+                            Alert.alert(
+                                'Thông báo',
+                                'Không thể thu hồi tin nhắn sau 24h',
+                            )
+                            setIsShowModalSend(false)
+                            return
+                        } else {
+                            try {
+                                const { data } = await axios.put(
+                                    url +
+                                        `/messages/recallMessage/${messageId}`,
+                                )
+                                fetchMessages()
+                                setIsShowModalSend(false)
+                            } catch (error) {
+                                console.log(error)
+                            }
+                        }
+                    },
+                },
+            ],
+        )
     }
 
     const handleDelete = async () => {
-        try {
+        Alert.alert('Xóa tin nhắn', 'Bạn có chắc chắn muốn xóa tin nhắn này?', [
+            {
+                text: 'Hủy',
+                onPress: () => setIsShowModalSend(false),
+                style: 'cancel',
+            },
+            {
+                text: 'Đồng ý',
+                onPress: async () => {
+                    try {
+                        axios
+                            .put(url + `/messages/deleteMessage`, {
+                                message_id: messageId,
+                                user_id: currentUserId,
+                            })
+                            .finally(() => {
+                                fetchMessages()
+                            })
+                        setIsShowModalSend(false)
+                        setIsShowModalRecive(false)
+                    } catch (error) {
+                        setIsShowModalSend(false)
+                        setIsShowModalRecive(false)
+                        console.log(error)
+                    }
+                },
+            },
+        ])
+    }
+
+    const handleForwardMessage = (modalMessage) => {
+        console.log('forward', modalMessage)
+        setModalForward(true)
+        setIsShowModalSend(false)
+        setIsShowModalRecive(false)
+        const getConversations = async (currentUserId) => {
             axios
-                .put(url + `/messages/deleteMessage`, {
-                    message_id: messageId,
-                    user_id: currentUserId,
+                .get(url + `/conversations/${currentUserId}`)
+                .then((res) => {
+                    setUserConversation(res.data)
+                    console.log(res.data)
                 })
-                .finally(() => {
-                    fetchMessages()
+                .catch((error) => {
+                    console.log('error message', error)
                 })
-            setIsShowModalSend(false)
-            setIsShowModalRecive(false)
-        } catch (error) {
-            setIsShowModalSend(false)
-            setIsShowModalRecive(false)
-            console.log(error)
         }
+
+        getConversations(currentUserId)
     }
 
     const ItemSend = ({ content, createdAt, messageId, recall, type }) => {
@@ -231,7 +294,6 @@ const Chat = ({ navigation, route }) => {
         if (minutes < 10) {
             minutes = '0' + minutes
         }
-        console.log(type)
         return (
             <View style={styles.RightMsg}>
                 <View
@@ -282,7 +344,7 @@ const Chat = ({ navigation, route }) => {
                             >
                                 {content}
                             </Text>
-                        ) : type === 'text' ? (
+                        ) : type === 'image' ? (
                             <Image
                                 source={{ uri: content }}
                                 style={{
@@ -309,7 +371,7 @@ const Chat = ({ navigation, route }) => {
         )
     }
 
-    const ItemReceive = ({ content, createdAt, messageId, type }) => {
+    const ItemReceive = ({ content, createdAt, messageId, recall, type }) => {
         const date = new Date(createdAt)
         const hours = date.getHours()
         let minutes = date.getMinutes()
@@ -332,13 +394,37 @@ const Chat = ({ navigation, route }) => {
                         />
                     </TouchableOpacity>
                     <View style={styles.messageReceive}>
-                        <Text
-                            style={{
-                                fontSize: 17,
-                            }}
-                        >
-                            {content}
-                        </Text>
+                        {recall ? (
+                            <Text
+                                style={{
+                                    fontSize: 17,
+                                    color: '#8F9BB3',
+                                    fontStyle: 'italic',
+                                }}
+                            >
+                                Tin nhắn đã được thu hồi
+                            </Text>
+                        ) : type === 'text' ? (
+                            <Text
+                                style={{
+                                    fontSize: 17,
+                                }}
+                            >
+                                {content}
+                            </Text>
+                        ) : type === 'image' ? (
+                            <Image
+                                source={{ uri: content }}
+                                style={{
+                                    width: windowWidth * 0.7,
+
+                                    height: 'auto', // 100% 'auto
+                                    minHeight: 200,
+                                    objectFit: 'contain',
+                                    alignSelf: 'center',
+                                }}
+                            />
+                        ) : null}
                         <Text
                             style={{
                                 fontSize: 15,
@@ -348,23 +434,28 @@ const Chat = ({ navigation, route }) => {
                             {hours}:{minutes}
                         </Text>
                     </View>
-                    <TouchableOpacity
-                        style={{ paddingVertical: 10, paddingHorizontal: 5 }}
-                        onPress={() => {
-                            setIsShowModalRecive(true)
-                            setModalMessage(content)
-                            setModalTime(`${hours}:${minutes}`)
-                            setModalAvatar(userData?.avatar)
-                            setMessageId(messageId)
-                            setType(type)
-                        }}
-                    >
-                        <MaterialCommunityIcons
-                            name="dots-vertical"
-                            size={24}
-                            color="black"
-                        />
-                    </TouchableOpacity>
+                    {recall ? null : (
+                        <TouchableOpacity
+                            style={{
+                                paddingVertical: 10,
+                                paddingHorizontal: 5,
+                            }}
+                            onPress={() => {
+                                setIsShowModalRecive(true)
+                                setModalMessage(content)
+                                setModalTime(`${hours}:${minutes}`)
+                                setModalAvatar(userData?.avatar)
+                                setMessageId(messageId)
+                                setType(type)
+                            }}
+                        >
+                            <MaterialCommunityIcons
+                                name="dots-vertical"
+                                size={24}
+                                color="black"
+                            />
+                        </TouchableOpacity>
+                    )}
                 </View>
             </View>
         )
@@ -386,7 +477,9 @@ const Chat = ({ navigation, route }) => {
                 >
                     <AntDesign name="left" size={30} color="white" />
                 </TouchableOpacity>
-                <Text style={styles.txtHeader}>{userData?.userName}</Text>
+                <TouchableOpacity ref={bodyRef}>
+                    <Text style={styles.txtHeader}>{userData?.userName}</Text>
+                </TouchableOpacity>
             </LinearGradient>
             <View style={styles.body}>
                 <FlatList
@@ -411,6 +504,7 @@ const Chat = ({ navigation, route }) => {
                                     content={item.content}
                                     createdAt={item.createdAt}
                                     messageId={item._id}
+                                    recall={item.recalled}
                                     type={item.contentType}
                                 />
                             )
@@ -422,26 +516,33 @@ const Chat = ({ navigation, route }) => {
                 ></FlatList>
             </View>
             <View style={styles.chat}>
+                <TouchableOpacity style={styles.iconBtn}>
+                    <AntDesign name="smileo" size={24} color="black" />
+                </TouchableOpacity>
                 <TextInput
+                    ref={inputRef}
                     style={{
-                        width: windowWidth - 150,
+                        flex: 1,
                         height: 45,
                         borderRadius: 10,
-                        marginLeft: 10,
-                        borderColor: 'gray',
-                        borderWidth: 1,
+                        fontSize: 17,
+                        paddingHorizontal: 10,
                     }}
                     value={newMessage}
                     onChangeText={(value) => setNewMessage(value)}
+                    placeholder="Nhập tin nhắn..."
                 />
-                <TouchableOpacity style={styles.iconattach}>
-                    <MaterialIcons name="attachment" size={30} color="black" />
+                <TouchableOpacity style={styles.iconBtn}>
+                    <AntDesign name="paperclip" size={26} color="black" />
                 </TouchableOpacity>
-                <TouchableOpacity onPress={handleSendImage}>
-                    <Feather name="image" size={27} color="black" />
+                <TouchableOpacity
+                    style={styles.iconBtn}
+                    onPress={handleSendImage}
+                >
+                    <Ionicons name="image-outline" size={26} color="black" />
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.iconSend} onPress={handleSend}>
-                    <MaterialIcons name="send" size={30} color="black" />
+                <TouchableOpacity style={styles.iconBtn} onPress={handleSend}>
+                    <FontAwesome name="send-o" size={24} color="black" />
                 </TouchableOpacity>
             </View>
 
@@ -481,9 +582,7 @@ const Chat = ({ navigation, route }) => {
                                         source={{ uri: modalMessage }}
                                         style={{
                                             width: windowWidth * 0.7,
-
-                                            height: 'auto',
-                                            minHeight: 200,
+                                            height: 200,
                                             objectFit: 'contain',
                                             alignSelf: 'center',
                                         }}
@@ -500,7 +599,12 @@ const Chat = ({ navigation, route }) => {
                             </View>
                         </View>
                         <View style={styles.modalWrap}>
-                            <TouchableOpacity style={styles.modalBtn}>
+                            <TouchableOpacity
+                                style={styles.modalBtn}
+                                onPress={() =>
+                                    handleForwardMessage(modalMessage)
+                                }
+                            >
                                 <Feather name="send" size={24} color="black" />
                                 <Text style={styles.modalText}>
                                     Chuyển tiếp
@@ -577,9 +681,7 @@ const Chat = ({ navigation, route }) => {
                                         source={{ uri: modalMessage }}
                                         style={{
                                             width: windowWidth * 0.7,
-
-                                            height: 'auto',
-                                            minHeight: 200,
+                                            height: 200,
                                             objectFit: 'contain',
                                             alignSelf: 'center',
                                         }}
@@ -596,7 +698,12 @@ const Chat = ({ navigation, route }) => {
                             </View>
                         </View>
                         <View style={styles.modalWrap}>
-                            <TouchableOpacity style={styles.modalBtn}>
+                            <TouchableOpacity
+                                style={styles.modalBtn}
+                                onPress={() =>
+                                    handleForwardMessage(modalMessage)
+                                }
+                            >
                                 <Feather name="send" size={24} color="black" />
                                 <Text style={styles.modalText}>
                                     Chuyển tiếp
@@ -614,6 +721,60 @@ const Chat = ({ navigation, route }) => {
                                 />
                                 <Text style={styles.modalText}>Xóa</Text>
                             </TouchableOpacity>
+                        </View>
+                    </View>
+                </TouchableWithoutFeedback>
+            </Modal>
+
+            <Modal
+                animationType="fade"
+                transparent={true}
+                visible={modalForward}
+            >
+                <TouchableWithoutFeedback
+                    onPress={() => setModalForward(false)}
+                    style={{
+                        flex: 1,
+                        backgroundColor: '#00000044',
+                    }}
+                >
+                    <View
+                        style={{
+                            flex: 1,
+                            backgroundColor: '#00000044',
+                        }}
+                    >
+                        <View style={styles.forwardView}>
+                            <TouchableOpacity
+                                style={styles.modalBtnClose}
+                                onPress={() => {
+                                    setModalForward(false)
+                                    fetchMessages()
+                                }}
+                            >
+                                <AntDesign
+                                    name="closecircleo"
+                                    size={24}
+                                    color="black"
+                                />
+                            </TouchableOpacity>
+                            <View
+                                style={{
+                                    marginTop: 30,
+                                }}
+                            >
+                                <ScrollView>
+                                    {userConversation.map((conversation) => {
+                                        return (
+                                            <ForwardMessage
+                                                data={conversation}
+                                                currentUserId={currentUserId}
+                                                message={modalMessage}
+                                            />
+                                        )
+                                    })}
+                                </ScrollView>
+                            </View>
                         </View>
                     </View>
                 </TouchableWithoutFeedback>
@@ -659,6 +820,8 @@ const styles = StyleSheet.create({
         position: 'absolute',
         bottom: 0,
         width: windowWidth,
+        paddingHorizontal: windowWidth * 0.02,
+        alignSelf: 'center',
     },
     avatar: {
         width: windowWidth * 0.1,
@@ -715,11 +878,8 @@ const styles = StyleSheet.create({
         shadowRadius: 3.84,
         elevation: 5,
     },
-    iconattach: {
-        marginLeft: 0,
-    },
-    iconSend: {
-        marginLeft: 10,
+    iconBtn: {
+        padding: windowWidth * 0.015,
     },
 
     modalWrap: {
@@ -759,5 +919,22 @@ const styles = StyleSheet.create({
         paddingVertical: 5,
         maxWidth: '85%',
         alignSelf: 'flex-start',
+    },
+
+    forwardView: {
+        backgroundColor: '#fff',
+        width: windowWidth * 0.9,
+        height: windowHeight * 0.8,
+        alignSelf: 'center',
+        marginTop: windowHeight * 0.1,
+        borderRadius: 20,
+        padding: 10,
+        position: 'relative',
+    },
+    modalBtnClose: {
+        position: 'absolute',
+        top: 10,
+        right: 10,
+        padding: 10,
     },
 })
