@@ -37,7 +37,7 @@ import * as DocumentPicker from 'expo-document-picker'
 import * as FileSystem from 'expo-file-system'
 import * as Permissions from 'expo-permissions'
 
-const socketUrl = 'https://192.168.1.13:8800/'
+const socketUrl = 'https://192.168.1.4:8800/'
 
 const Chat = ({ navigation, route }) => {
     const userData = route.params.userData

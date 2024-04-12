@@ -11,7 +11,12 @@ import {
 import React, { useContext } from 'react'
 import { Inter_600SemiBold, useFonts } from '@expo-google-fonts/inter'
 import Tab from '../components/Tab'
-import { EvilIcons, MaterialCommunityIcons, Ionicons } from '@expo/vector-icons'
+import {
+    EvilIcons,
+    MaterialCommunityIcons,
+    Ionicons,
+    AntDesign,
+} from '@expo/vector-icons'
 import { UserType } from '../UserContext'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { useState, useEffect } from 'react'
@@ -82,15 +87,22 @@ const Message = ({ navigation, route }) => {
                         <MaterialCommunityIcons
                             style={styles.iconQR}
                             name="qrcode-scan"
-                            size={25}
+                            size={24}
                             color="white"
                         />
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.btn}>
-                        <Ionicons
-                            name="add"
-                            style={styles.iconAdd}
-                            size={30}
+                    <TouchableOpacity
+                        style={[
+                            styles.btn,
+                            {
+                                marginRight: windowWidth * 0.02,
+                            },
+                        ]}
+                        onPress={() => navigation.navigate('CreateGroup')}
+                    >
+                        <AntDesign
+                            name="addusergroup"
+                            size={25}
                             color="white"
                         />
                     </TouchableOpacity>
@@ -140,7 +152,8 @@ const styles = StyleSheet.create({
         marginLeft: windowWidth * 0.02,
     },
     btn: {
-        paddingRight: windowWidth * 0.02,
+        padding: windowWidth * 0.01,
+        marginRight: windowWidth * 0.01,
     },
     txtSearch: {
         marginLeft: 15,

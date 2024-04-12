@@ -23,6 +23,7 @@ import ConfirmForgot from './components/ConfirmForgot'
 import EditNewPassword from './components/EditNewPassword'
 import Conversation from './components/Conversation'
 import ForwardMessage from './components/ForwardMessage'
+import CreateGroup from './components/CreateGroup'
 
 import TextEncoding from 'text-encoding'
 global.TextEncoder = TextEncoding.TextEncoder
@@ -35,6 +36,11 @@ export default function App() {
         <UserContext>
             <NavigationContainer>
                 <Stack.Navigator initialRouteName="Login">
+                    <Stack.Screen
+                        name="CreateGroup"
+                        component={CreateGroup}
+                        options={{ headerTitle: 'Nhóm mới' }}
+                    />
                     <Stack.Screen
                         name="ForwardMessage"
                         component={ForwardMessage}
