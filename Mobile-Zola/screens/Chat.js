@@ -11,6 +11,7 @@ import {
     TouchableWithoutFeedback,
     Alert,
     ScrollView,
+    Button,
 } from 'react-native'
 import React, { useState, useEffect, useRef } from 'react'
 import {
@@ -31,8 +32,12 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import * as ImagePicker from 'expo-image-picker'
 import LinearGradient from 'react-native-linear-gradient'
 import ForwardMessage from '../components/ForwardMessage'
+import { Video, ResizeMode, Audio } from 'expo-av'
+import * as DocumentPicker from 'expo-document-picker'
+import * as FileSystem from 'expo-file-system'
+import * as Permissions from 'expo-permissions'
 
-const socketUrl = 'https://192.168.1.8:8800/'
+const socketUrl = 'https://192.168.1.13:8800/'
 
 const Chat = ({ navigation, route }) => {
     const userData = route.params.userData
@@ -58,55 +63,257 @@ const Chat = ({ navigation, route }) => {
     const inputRef = useRef()
     const bodyRef = useRef()
 
+    const [recording, setRecording] = useState()
+    const [downloadProgress, setDownloadProgress] = useState(0)
+    console.log(downloadProgress)
+
+    const requestWritePermission = async () => {
+        const { status } = await Permissions.askAsync(
+            Permissions.WRITE_EXTERNAL_STORAGE,
+        )
+        if (status !== 'granted') {
+            console.error('Quyền ghi file bị từ chối')
+            return false
+        }
+        return true
+    }
+
+    const handleDownloadFile = async (url) => {
+        try {
+            if (requestWritePermission) {
+                const localUri =
+                    FileSystem.documentDirectory + url.split('/').pop()
+
+                const downloadResumable = FileSystem.createDownloadResumable(
+                    url,
+                    localUri,
+                    {},
+                )
+                const { uri } = await downloadResumable.downloadAsync()
+                console.log('Finished downloading to ', uri)
+            } else {
+                console.error('Quyền ghi file bị từ chối')
+            }
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    const pickDocument = async () => {
+        try {
+            console.log('Chọn tệp')
+            const result = await DocumentPicker.getDocumentAsync()
+            console.log('Tệp đã được chọn:', result)
+
+            if (result) {
+                // get file type
+                const fileType = result.assets[0].name.split('.').pop()
+                if (
+                    fileType === 'jpg' ||
+                    fileType === 'jpeg' ||
+                    fileType === 'png'
+                ) {
+                    handleSendImageMessage(result.assets[0].uri)
+                } else if (fileType === 'mp4') {
+                    handleSendVideoMessage(result.assets[0].uri)
+                } else {
+                    handleSendDocumentMessage(
+                        result.assets[0].uri,
+                        result.assets[0].mimeType,
+                        result.assets[0].name,
+                    )
+                }
+            } else {
+                console.log('Hủy chọn tệp')
+            }
+        } catch (error) {
+            console.error('Lỗi chọn tệp:', error)
+        }
+    }
+
+    async function startRecording() {
+        try {
+            const { status } = await Audio.requestPermissionsAsync()
+
+            if (status !== 'granted') {
+                console.error('Permission to access microphone was denied')
+                return
+            }
+            await Audio.setAudioModeAsync({
+                allowsRecordingIOS: true,
+                playsInSilentModeIOS: true,
+            })
+
+            console.log('Starting recording..')
+            const { recording } = await Audio.Recording.createAsync(
+                Audio.RecordingOptionsPresets.HIGH_QUALITY,
+            )
+            setRecording(recording)
+            console.log('Recording started')
+        } catch (err) {
+            console.error('Failed to start recording', err)
+        }
+    }
+
+    async function stopRecording() {
+        console.log('Stopping recording..')
+        setRecording(undefined)
+        await recording.stopAndUnloadAsync()
+        await Audio.setAudioModeAsync({
+            allowsRecordingIOS: false,
+        })
+        const uri = recording.getURI()
+        console.log('Recording stopped and stored at', uri)
+    }
+
+    const handleSendImageMessage = async (imageMessage) => {
+        const data = new FormData()
+        data.append('file', {
+            uri: imageMessage,
+            type: 'image/jpeg' || 'image/png' || 'image/jpg',
+            name: 'image.jpg',
+        })
+        data.append('upload_preset', 'myzolaapp')
+        data.append('cloud_name', 'dpj4kdkxj')
+
+        fetch('https://api.cloudinary.com/v1_1/dpj4kdkxj/image/upload', {
+            method: 'POST',
+            body: data,
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
+        })
+            .then((response) => {
+                return response.json()
+            })
+            .then((data) => {
+                console.log('Success:', data)
+                const message = {
+                    senderId: currentUserId,
+                    content: data.url,
+                    conversation_id: conversation._id,
+                    contentType: 'image',
+                }
+                //send message to database
+                axios
+                    .post(url + `/messages/`, message)
+                    .then(({ data }) => {
+                        setMessages([data, ...messages])
+                    })
+                    .catch((error) => {
+                        console.log(error)
+                    })
+            })
+            .catch((error) => {
+                console.error('Error:', error)
+            })
+            .finally(() => {})
+    }
+
+    const handleSendDocumentMessage = async (uri, mimeType, name) => {
+        const data = new FormData()
+        data.append('file', {
+            uri: uri,
+            type: mimeType,
+            name: name,
+        })
+        data.append('upload_preset', 'myzolaapp')
+        data.append('cloud_name', 'dpj4kdkxj')
+
+        fetch('https://api.cloudinary.com/v1_1/dpj4kdkxj/upload', {
+            method: 'POST',
+            body: data,
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
+        })
+            .then((response) => {
+                return response.json()
+            })
+            .then((data) => {
+                console.log('Success:', data)
+                const message = {
+                    senderId: currentUserId,
+                    content: data.url,
+                    conversation_id: conversation._id,
+                    contentType: 'file',
+                }
+                //send message to database
+                axios
+                    .post(url + `/messages/`, message)
+                    .then(({ data }) => {
+                        setMessages([data, ...messages])
+                    })
+                    .catch((error) => {
+                        console.log(error)
+                    })
+            })
+            .catch((error) => {
+                console.error('Error:', error)
+            })
+            .finally(() => {})
+    }
+
+    const handleSendVideoMessage = async (videoMessage) => {
+        const data = new FormData()
+        data.append('file', {
+            uri: videoMessage,
+            type: 'video/mp4',
+            name: 'video.mp4',
+        })
+        data.append('upload_preset', 'myzolaapp')
+        data.append('cloud_name', 'dpj4kdkxj')
+
+        fetch('https://api.cloudinary.com/v1_1/dpj4kdkxj/video/upload', {
+            method: 'POST',
+            body: data,
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
+        })
+            .then((response) => {
+                return response.json()
+            })
+            .then((data) => {
+                console.log('Success:', data)
+                const message = {
+                    senderId: currentUserId,
+                    content: data.url,
+                    conversation_id: conversation._id,
+                    contentType: 'video',
+                }
+                //send message to database
+                axios
+                    .post(url + `/messages/`, message)
+                    .then(({ data }) => {
+                        setMessages([data, ...messages])
+                    })
+                    .catch((error) => {
+                        console.log(error)
+                    })
+            })
+            .catch((error) => {
+                console.error('Error:', error)
+            })
+            .finally(() => {})
+    }
+
     const handleSendImage = async () => {
         let result = await ImagePicker.launchImageLibraryAsync({
-            mediaTypes: ImagePicker.MediaTypeOptions.Images,
+            mediaTypes: ImagePicker.MediaTypeOptions.All,
             allowsEditing: true,
             quality: 1,
         })
 
-        if (!result.canceled) {
-            const data = new FormData()
-            data.append('file', {
-                uri: result.assets[0].uri,
-                type: 'image/jpeg' || 'image/png' || 'image/jpg',
-                name: 'image.jpg',
-            })
-            data.append('upload_preset', 'myzolaapp')
-            data.append('cloud_name', 'dpj4kdkxj')
+        console.log(result.assets[0])
 
-            fetch('https://api.cloudinary.com/v1_1/dpj4kdkxj/image/upload', {
-                method: 'POST',
-                body: data,
-                headers: {
-                    'Content-Type': 'multipart/form-data',
-                },
-            })
-                .then((response) => {
-                    return response.json()
-                })
-                .then((data) => {
-                    console.log('Success:', data)
-                    const message = {
-                        senderId: currentUserId,
-                        content: data.url,
-                        conversation_id: conversation._id,
-                        contentType: 'image',
-                    }
-                    //send message to database
-                    axios
-                        .post(url + `/messages/`, message)
-                        .then(({ data }) => {
-                            setMessages([data, ...messages])
-                        })
-                        .catch((error) => {
-                            console.log(error)
-                        })
-                })
-                .catch((error) => {
-                    console.error('Error:', error)
-                })
-                .finally(() => {})
+        if (!result.canceled) {
+            //check file if it is image or video
+            if (result.assets[0].type === 'image') {
+                handleSendImageMessage(result.assets[0].uri)
+            } else if (result.assets[0].type === 'video') {
+                handleSendVideoMessage(result.assets[0].uri)
+            }
         } else {
             console.log('canceled')
         }
@@ -356,6 +563,117 @@ const Chat = ({ navigation, route }) => {
                                     alignSelf: 'center',
                                 }}
                             />
+                        ) : type === 'video' ? (
+                            <View>
+                                <Video
+                                    style={styles.video}
+                                    source={{
+                                        uri: content,
+                                    }}
+                                    resizeMode={ResizeMode.CONTAIN}
+                                    isLooping
+                                    useNativeControls
+                                />
+                                {/* <View style={styles.buttons}>
+                                    <Button
+                                        title={
+                                            status.isPlaying ? 'Pause' : 'Play'
+                                        }
+                                        onPress={() =>
+                                            status.isPlaying
+                                                ? video.current.pauseAsync()
+                                                : video.current.playAsync()
+                                        }
+                                    />
+                                </View> */}
+                            </View>
+                        ) : type === 'file' ? (
+                            <View>
+                                <TouchableOpacity
+                                    onPress={() => {
+                                        handleDownloadFile(content)
+                                    }}
+                                    style={{
+                                        backgroundColor: '#fff',
+                                        padding: 10,
+                                        borderRadius: 10,
+                                        marginVertical: 10,
+                                        flexDirection: 'row',
+                                        alignItems: 'center',
+                                    }}
+                                >
+                                    {content.split('.').pop() === 'pdf' ? (
+                                        <Image
+                                            style={{
+                                                width: 30,
+                                                height: 30,
+                                                marginRight: 10,
+                                            }}
+                                            source={require('../image/pptx-file.png')}
+                                        />
+                                    ) : content.split('.').pop() === 'docx' ? (
+                                        <Image
+                                            style={{
+                                                width: 30,
+                                                height: 30,
+                                                marginRight: 10,
+                                            }}
+                                            source={require('../image/docx-file.png')}
+                                        />
+                                    ) : content.split('.').pop() === 'rar' ? (
+                                        <Image
+                                            style={{
+                                                width: 30,
+                                                height: 30,
+                                                marginRight: 10,
+                                            }}
+                                            source={require('../image/rar.png')}
+                                        />
+                                    ) : content.split('.').pop() === 'xlsx' ? (
+                                        <Image
+                                            style={{
+                                                width: 30,
+                                                height: 30,
+                                                marginRight: 10,
+                                            }}
+                                            source={require('../image/xlsx-file.png')}
+                                        />
+                                    ) : content.split('.').pop() === 'txt' ? (
+                                        <Image
+                                            style={{
+                                                width: 30,
+                                                height: 30,
+                                                marginRight: 10,
+                                            }}
+                                            source={require('../image/txt.png')}
+                                        />
+                                    ) : (
+                                        <Image
+                                            style={{
+                                                width: 30,
+                                                height: 30,
+                                                marginRight: 10,
+                                            }}
+                                            source={require('../image/file.png')}
+                                        />
+                                    )}
+                                    <Text
+                                        style={{
+                                            fontSize: 16,
+                                            maxWidth: windowWidth * 0.5,
+                                        }}
+                                    >
+                                        {content
+                                            .split('/')
+                                            .pop()
+                                            .split('_')
+                                            .slice(0, -1)
+                                            .join('_') +
+                                            '.' +
+                                            content.split('.').pop()}
+                                    </Text>
+                                </TouchableOpacity>
+                            </View>
                         ) : null}
                         <Text
                             style={{
@@ -532,7 +850,25 @@ const Chat = ({ navigation, route }) => {
                     onChangeText={(value) => setNewMessage(value)}
                     placeholder="Nhập tin nhắn..."
                 />
-                <TouchableOpacity style={styles.iconBtn}>
+                <TouchableOpacity
+                    style={styles.iconBtn}
+                    onPress={recording ? stopRecording : startRecording}
+                >
+                    {recording ? (
+                        <MaterialIcons
+                            name="settings-voice"
+                            size={24}
+                            color="black"
+                        />
+                    ) : (
+                        <MaterialIcons
+                            name="keyboard-voice"
+                            size={24}
+                            color="black"
+                        />
+                    )}
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.iconBtn} onPress={pickDocument}>
                     <AntDesign name="paperclip" size={26} color="black" />
                 </TouchableOpacity>
                 <TouchableOpacity
@@ -937,5 +1273,16 @@ const styles = StyleSheet.create({
         top: 10,
         right: 10,
         padding: 10,
+    },
+    video: {
+        width: windowWidth * 0.7,
+        height: 'auto', // 100% 'auto
+        minHeight: 200,
+        alignSelf: 'center',
+    },
+    buttons: {
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
     },
 })

@@ -12,11 +12,23 @@
       ["expo-image-picker",
       {
           "photosPermission": "custom photos permission",
-          "cameraPermission": "Allow $(PRODUCT_NAME) to open the camera",
+          "cameraPermission": "Allow Zola to open the camera",
 
           "//": "Disables the microphone permission",
           "microphonePermission": false
-      }]
+      }],
+      [
+        "expo-av",
+        {
+          "microphonePermission": "Allow Zola to access your microphone."
+        }
+      ],
+      [
+        "expo-document-picker",
+        {
+          "iCloudContainerEnvironment": "Production"
+        }
+      ]
     ],
     "extra": {
       "eas": {

@@ -24,38 +24,7 @@ import LinearGradient from 'react-native-linear-gradient'
 import { url } from '../utils/constant'
 
 const Contact = ({ navigation }) => {
-    const listContact = [
-        {
-            id: 1,
-            name: 'Nguyễn Văn A',
-            avatar: require('../image/avatar.png'),
-        },
-        {
-            id: 2,
-            name: 'Nguyễn Văn B',
-            avatar: require('../image/avatar.png'),
-        },
-        {
-            id: 3,
-            name: 'Nguyễn Văn C',
-            avatar: require('../image/avatar.png'),
-        },
-        {
-            id: 4,
-            name: 'Nguyễn Văn D',
-            avatar: require('../image/avatar.png'),
-        },
-        {
-            id: 5,
-            name: 'Nguyễn Văn E',
-            avatar: require('../image/avatar.png'),
-        },
-        {
-            id: 6,
-            name: 'Nguyễn Văn F',
-            avatar: require('../image/avatar.png'),
-        },
-    ]
+    const listContact = []
     const { accountId, setAccountId } = useContext(UserType)
     const [users, setUsers] = useState([])
     useEffect(() => {
