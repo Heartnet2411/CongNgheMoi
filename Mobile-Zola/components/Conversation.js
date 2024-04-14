@@ -67,28 +67,51 @@ const Conversation = ({ data, currentUserId }) => {
                     margin: 10,
                 }}
             >
-                <Image
-                    source={{ uri: userData?.avatar }}
-                    style={{
-                        width: 60,
-                        height: 60,
-                        borderRadius: 30,
-                    }}
-                />
+                {data.members.length == 2 ? (
+                    <Image
+                        source={{ uri: userData?.avatar }}
+                        style={{
+                            width: 60,
+                            height: 60,
+                            borderRadius: 30,
+                        }}
+                    />
+                ) : (
+                    <Image
+                        source={{ uri: data?.avatar }}
+                        style={{
+                            width: 60,
+                            height: 60,
+                            borderRadius: 30,
+                        }}
+                    />
+                )}
                 <View
                     style={{
                         marginLeft: 10,
                         flex: 1,
                     }}
                 >
-                    <Text
-                        style={{
-                            fontFamily: 'Inter_600SemiBold',
-                            fontSize: 18,
-                        }}
-                    >
-                        {userData?.userName}
-                    </Text>
+                    {data.members.length == 2 ? (
+                        <Text
+                            style={{
+                                fontFamily: 'Inter_600SemiBold',
+                                fontSize: 18,
+                            }}
+                        >
+                            {userData?.userName}
+                        </Text>
+                    ) : (
+                        <Text
+                            style={{
+                                fontFamily: 'Inter_600SemiBold',
+                                fontSize: 18,
+                            }}
+                            numberOfLines={1}
+                        >
+                            {data.conversationName}
+                        </Text>
+                    )}
                     {newestMessage.recalled === true ? (
                         <Text
                             style={{

@@ -8,42 +8,14 @@ import {
     StyleSheet,
     Dimensions,
 } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useContext } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { Feather } from '@expo/vector-icons'
-
-const list = [
-    {
-        id: 1,
-        name: 'Nguyễn Văn A',
-        avatar: 'https://res.cloudinary.com/dpj4kdkxj/image/upload/v1711876036/image_rzag2e.jpg',
-        phoneNumber: '0123456789',
-    },
-    {
-        id: 2,
-        name: 'Nguyễn Văn B',
-        avatar: 'https://res.cloudinary.com/dpj4kdkxj/image/upload/v1711876036/image_rzag2e.jpg',
-        phoneNumber: '0123456799',
-    },
-    {
-        id: 3,
-        name: 'Trần Văn C',
-        avatar: 'https://res.cloudinary.com/dpj4kdkxj/image/upload/v1711876036/image_rzag2e.jpg',
-        phoneNumber: '0123456788',
-    },
-    {
-        id: 4,
-        name: 'Nguyễn Văn D',
-        avatar: 'https://res.cloudinary.com/dpj4kdkxj/image/upload/v1711876036/image_rzag2e.jpg',
-        phoneNumber: '0123456777',
-    },
-    {
-        id: 5,
-        name: 'Lê Văn E',
-        avatar: 'https://res.cloudinary.com/dpj4kdkxj/image/upload/v1711876036/image_rzag2e.jpg',
-        phoneNumber: '0123456666',
-    },
-]
+import { UserType } from '../UserContext'
+import AsyncStorage from '@react-native-async-storage/async-storage'
+import axios from 'axios'
+import { jwtDecode } from 'jwt-decode'
+import { url } from '../utils/constant'
 
 const CreateGroup = () => {
     const [search, setSearch] = useState('')
@@ -51,31 +23,99 @@ const CreateGroup = () => {
     const [groupName, setGroupName] = useState('')
     const [groupAvatar, setGroupAvatar] = useState('')
     const [users, setUsers] = useState([])
-
+    const { accountId, setAccountId, conversations, setConversations } =
+        useContext(UserType)
+    const [userId, setUserId] = useState('')
+    const [friends, setFriends] = useState([])
+    const [name, setName] = useState('')
     useEffect(() => {
-        setUsers(list)
+        const getUserIdByAccountId = async () => {
+            const token = await AsyncStorage.getItem('AuthToken')
+            const decodedToken = jwtDecode(token)
+            const accountId = decodedToken.accountId
+            setAccountId(accountId)
+            axios
+                .get(`${url}/user/findUser?account_id=${accountId}`)
+                .then((res) => {
+                    setUserId(res.data._id)
+                    setName(res.data.lastName)
+                })
+                .catch((err) => {
+                    console.log(err)
+                })
+        }
+        getUserIdByAccountId()
     }, [])
-
+    const fetchFriends = async () => {
+        try {
+            const response = await axios.get(`${url}/user/getFriends/${userId}`)
+            if (response.status === 200) {
+                const friendsData = response.data.map((friend) => ({
+                    _id: friend._id,
+                    userName: friend.userName,
+                    phoneNumber: friend.phoneNumber,
+                    lastName: friend.lastName,
+                    avatar: friend.avatar,
+                }))
+                setFriends(friendsData)
+            }
+        } catch (error) {
+            console.log('error message', error)
+        }
+    }
+    useEffect(() => {
+        if (userId !== '') {
+            fetchFriends(userId)
+        }
+    }, [userId])
+    useEffect(() => {
+        setUsers(friends)
+    }, [friends])
+    console.log(users)
     const removeAccents = (str) => {
         return str.normalize('NFD').replace(/[\u0300-\u036f]/g, '')
     }
     const handleFindUser = (search) => {
         setSearch(search)
         if (search === '') {
-            setUsers(list)
+            setUsers(friends)
         } else {
             setUsers(
-                list.filter(
+                friends.filter(
                     (user) =>
                         user.phoneNumber.includes(search) ||
-                        removeAccents(user.name)
+                        removeAccents(user.userName)
                             .toLowerCase()
                             .includes(removeAccents(search).toLowerCase()),
                 ),
             )
         }
     }
+    const createGroup = async () => {
+        if (members.length < 2) {
+            return alert('Nhóm phải có ít nhất 3 thành viên')
+        }
+        try {
+            const { data } = await axios.post(
+                `${url}/conversations/create-group`,
+                {
+                    user_id: userId,
+                    friend_ids: members.map((member) => member._id),
+                    members: [userId, ...members.map((member) => member._id)],
+                    conversationName:
+                        groupName === '' ? defaultGroupName : groupName,
+                    groupLeader: userId,
+                },
+            )
 
+            setConversations([data, ...conversations])
+            console.log('create group success')
+        } catch (error) {
+            console.log('create fail', error)
+        }
+    }
+    const defaultGroupName =
+        members.map((member) => member.lastName).join(', ') + ` ,${name}`
     return (
         <View style={style.container}>
             <View style={style.groupInfo}>
@@ -85,7 +125,7 @@ const CreateGroup = () => {
                 />
                 <TextInput
                     style={style.groupName}
-                    placeholder="Dặt tên nhóm"
+                    placeholder="Đặt tên nhóm"
                     value={groupName}
                     onChangeText={(text) => setGroupName(text)}
                 />
@@ -102,13 +142,13 @@ const CreateGroup = () => {
                 <ScrollView>
                     {users.map((user) => (
                         <TouchableOpacity
-                            key={user.id}
+                            key={user._id}
                             style={style.userFriend}
                             onPress={() => {
                                 if (members.includes(user)) {
                                     setMembers(
                                         members.filter(
-                                            (item) => item.id !== user.id,
+                                            (item) => item._id !== user._id,
                                         ),
                                     )
                                 } else {
@@ -120,7 +160,7 @@ const CreateGroup = () => {
                                 style={style.userAvatar}
                                 source={{ uri: user.avatar }}
                             />
-                            <Text style={style.groupName}>{user.name}</Text>
+                            <Text style={style.groupName}>{user.userName}</Text>
                             {members.includes(user) ? (
                                 <Feather
                                     name="check-square"
@@ -139,7 +179,12 @@ const CreateGroup = () => {
                 </ScrollView>
             </View>
             <View style={style.btnWrap}>
-                <TouchableOpacity style={style.btn}>
+                <TouchableOpacity
+                    style={style.btn}
+                    onPress={() => {
+                        createGroup()
+                    }}
+                >
                     <Text style={style.btnText}>Tạo nhóm</Text>
                 </TouchableOpacity>
             </View>

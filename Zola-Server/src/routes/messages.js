@@ -11,5 +11,4 @@ router.post(
     '/findNewestMessage/:conversation_id',
     messageController.findNewestMessage
 )
-
 export default router

@@ -24,6 +24,8 @@ import EditNewPassword from './components/EditNewPassword'
 import Conversation from './components/Conversation'
 import ForwardMessage from './components/ForwardMessage'
 import CreateGroup from './components/CreateGroup'
+import Profile from './components/Profile'
+import ChatInfo from './components/ChatInfo'
 
 import TextEncoding from 'text-encoding'
 global.TextEncoder = TextEncoding.TextEncoder
@@ -36,6 +38,16 @@ export default function App() {
         <UserContext>
             <NavigationContainer>
                 <Stack.Navigator initialRouteName="Login">
+                    <Stack.Screen
+                        name="ChatInfo"
+                        component={ChatInfo}
+                        options={{ headerTitle: 'Tùy chọn' }}
+                    />
+                    <Stack.Screen
+                        name="Profile"
+                        component={Profile}
+                        options={{ headerTitle: 'Thông tin cá nhân' }}
+                    />
                     <Stack.Screen
                         name="CreateGroup"
                         component={CreateGroup}

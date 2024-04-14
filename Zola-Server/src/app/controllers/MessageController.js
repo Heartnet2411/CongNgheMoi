@@ -1,4 +1,6 @@
 import Message from '../models/Message.js'
+import User from '../models/User.js'
+import Conversation from '../models/Conversation.js'
 
 class MessageController {
     // post /create
@@ -11,10 +13,22 @@ class MessageController {
             contentType,
         })
         try {
-            const result = await newMessage.save()
-            res.status(200).json(result)
+            var message = await Message.create(newMessage)
+            var message = await Message.create(newMessage)
+            message = await Message.populate(message, [
+                { path: 'senderId', select: 'userName avatar phoneNumber' },
+                { path: 'conversation_id' },
+            ])
+            message = await User.populate(message, {
+                path: 'conversation_id.members',
+                select: 'userName avatar phoneNumber',
+            })
+            await Conversation.findByIdAndUpdate(conversation_id, {
+                lastMessage: message._id,
+            })
+            res.status(200).json(message)
         } catch (err) {
-            res.status(500).json(err)
+            throw new Error(err.message)
         }
     }
     // get /:conversation_id
@@ -23,6 +37,8 @@ class MessageController {
             const messages = await Message.find({
                 conversation_id: req.params.conversation_id,
             })
+                .populate('senderId', 'userName avatar phoneNumber lastName')
+                .populate('conversation_id')
             res.status(200).json(messages)
         } catch (err) {
             res.status(500).json(err)
@@ -35,15 +51,6 @@ class MessageController {
             message.recalled = true
             const result = await message.save()
             res.status(200).json(result)
-        } catch (err) {
-            res.status(500).json(err)
-        }
-    }
-
-    async deleteMessage(req, res) {
-        try {
-            const message = await Message.findByIdAndDelete(req.params.id)
-            res.status(200).json('Message has been deleted...')
         } catch (err) {
             res.status(500).json(err)
         }
@@ -100,5 +107,4 @@ class MessageController {
         }
     }
 }
-
 export default new MessageController()

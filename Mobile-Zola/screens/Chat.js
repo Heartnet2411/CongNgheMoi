@@ -37,7 +37,7 @@ import * as DocumentPicker from 'expo-document-picker'
 import * as FileSystem from 'expo-file-system'
 import * as Permissions from 'expo-permissions'
 
-const socketUrl = 'https://192.168.1.4:8800/'
+const socketUrl = 'https://192.168.1.13:8800/'
 
 const Chat = ({ navigation, route }) => {
     const userData = route.params.userData
@@ -56,6 +56,7 @@ const Chat = ({ navigation, route }) => {
     const [modalAvatar, setModalAvatar] = useState('')
     const [modalTime, setModalTime] = useState('')
     const [messageId, setMessageId] = useState('')
+    const [userId, setUserId] = useState('')
     const [date, setDate] = useState('')
     const [type, setType] = useState('text')
     const [userConversation, setUserConversation] = useState([])
@@ -344,19 +345,36 @@ const Chat = ({ navigation, route }) => {
             }
         })
     }, [messages])
+    //alway scroll to last message
+    useEffect(() => {
+        setNumMessage(messages.length - 1)
+    }, [messages])
+
+    useEffect(() => {
+        socket.current = io(socketUrl)
+        socket.current.emit('setup', currentUserId)
+        socket.current.on('connected', () => setSocketConnected(true))
+        socket.current.on('typing', () => setIsTyping(true))
+        socket.current.on('stop typing', () => setIsTyping(false))
+        //socket.current.emit('new-user-add', currentUserId)
+        // socket.current.on('get-users', (users) => {
+        // setOnlineUsers(users)
+        // })
+    }, [currentUserId])
 
     const fetchMessages = async () => {
         try {
             const response = await fetch(url + `/messages/${conversation._id}`)
             const data = await response.json()
             // neu có id của người dùng trong deletedBy thì không hiển thị tin nhắn
-            const dataFilter = data.filter((message) => {
-                if (message.deletedBy.includes(currentUserId)) {
-                    return false
-                }
-                return true
-            })
-            setMessages(dataFilter.reverse())
+            // const dataFilter = data.filter((message) => {
+            // if (message.deletedBy.includes(currentUserId)) {
+            // return false
+            // }
+            // return true
+            // })
+            setMessages(data.reverse())
+            socket.current.emit('join chat', conversation._id)
         } catch (error) {
             console.log(error)
         }
@@ -367,81 +385,100 @@ const Chat = ({ navigation, route }) => {
             fetchMessages()
         }
     }, [conversation])
-
+    //console.log(messages)
     const handleSend = async (e) => {
-        if (newMessage === '') {
-            return
-        } else {
-            console.log(newMessage)
-            e.preventDefault()
-            const message = {
-                senderId: currentUserId,
-                content: newMessage,
-                conversation_id: conversation._id,
-                contentType: 'text',
-            }
-            //send message to database
-            try {
-                const { data } = await axios.post(url + `/messages/`, message)
-                setMessages([data, ...messages])
-                setNewMessage('')
-            } catch (error) {
-                console.log(error)
-            }
-            //send message to socket server
-            const receiverId = conversation.members.find(
-                (member) => member !== currentUserId,
-            )
-            setSendMessage({ ...message, receiverId: receiverId })
-            inputRef.current.blur()
+        // console.log(newMessage)
+        e.preventDefault()
+        const message = {
+            senderId: currentUserId,
+            content: newMessage,
+            conversation_id: conversation._id,
+            contentType: 'text',
         }
+        //send message to database
+        try {
+            const { data } = await axios.post(url + `/messages/`, message)
+            socket.current.emit('new message', data)
+            setMessages([data, ...messages])
+
+            setNewMessage('')
+        } catch (error) {
+            console.log(error)
+        }
+        // send message to socket server
+        // const receiverId = conversation.members.find(
+        // (member) => member !== currentUserId,
+        // )
+        // setSendMessage({ ...message, receiverId })
     }
 
     //alway scroll to last message
+    // useEffect(() => {
+    // setNumMessage(messages.length - 1)
+    // }, [messages])
     useEffect(() => {
-        setNumMessage(messages.length - 1)
+        socket.current.on('message received', (message) => {
+            // if (
+            // message !== null &&
+            // message.conversation_id === conversation._id
+            // )
+            // {
+            setMessages([message, ...messages])
+            //}
+        })
     }, [messages])
 
     const handleReSend = async () => {
-        Alert.alert(
-            'Thu hồi tin nhắn',
-            'Bạn có chắc chắn muốn thu hồi tin nhắn này?',
-            [
-                {
-                    text: 'Hủy',
-                    onPress: () => setIsShowModalSend(false),
-                    style: 'cancel',
-                },
-                {
-                    text: 'Đồng ý',
-                    onPress: async () => {
-                        //check time 24h
-                        const dateNow = new Date().getDate()
+        // alert(
+        // 'Thu hồi tin nhắn',
+        // 'Bạn có chắc chắn muốn thu hồi tin nhắn này?',
+        //[
+        // {
+        // text: 'Hủy',
+        // onPress: () => setIsShowModalSend(false),
+        // style: 'cancel',
+        // },
+        // {
+        // text: 'Đồng ý',
+        // onPress: async () => {
+        //check time 24h
+        // const dateNow = new Date().getDate()
 
-                        if (dateNow - new Date(date).getDate() > 1) {
-                            Alert.alert(
-                                'Thông báo',
-                                'Không thể thu hồi tin nhắn sau 24h',
-                            )
-                            setIsShowModalSend(false)
-                            return
-                        } else {
-                            try {
-                                const { data } = await axios.put(
-                                    url +
-                                        `/messages/recallMessage/${messageId}`,
-                                )
-                                fetchMessages()
-                                setIsShowModalSend(false)
-                            } catch (error) {
-                                console.log(error)
-                            }
-                        }
-                    },
-                },
-            ],
-        )
+        // if (dateNow - new Date(date).getDate() > 1) {
+        // alert('Thông báo', 'Không thể thu hồi tin nhắn sau 24h')
+        // setIsShowModalSend(false)
+        // return
+        // } else {
+        try {
+            const { data } = await axios.put(
+                url + `/messages/recallMessage/${messageId}`,
+            )
+            fetchMessages()
+            //setMessages([data, ...messages])
+            setIsShowModalSend(false)
+        } catch (error) {
+            console.log(error)
+        }
+        //recall message to socket
+        socket.current.emit('messageRecalled', messageId)
+
+        // setSendMessage()
     }
+    useEffect(() => {
+        socket.current.on('messageRecalled', (messageId) => {
+            // setMessages(messages.map(message =>
+            // message._id === messageId ? { ...message, recalled: true } : message
+            // ));
+            setMessages(
+                messages.map((message) => {
+                    if (message._id === messageId) {
+                        return { ...message, recalled: true }
+                    }
+                    return message
+                }),
+            )
+        })
+    }, [messages])
 
     const handleDelete = async () => {
         Alert.alert('Xóa tin nhắn', 'Bạn có chắc chắn muốn xóa tin nhắn này?', [
@@ -689,7 +726,16 @@ const Chat = ({ navigation, route }) => {
         )
     }
 
-    const ItemReceive = ({ content, createdAt, messageId, recall, type }) => {
+    const ItemReceive = ({
+        content,
+        createdAt,
+        messageId,
+        recall,
+        type,
+        user_id,
+        avatar,
+        lastName,
+    }) => {
         const date = new Date(createdAt)
         const hours = date.getHours()
         let minutes = date.getMinutes()
@@ -712,6 +758,9 @@ const Chat = ({ navigation, route }) => {
                         />
                     </TouchableOpacity>
                     <View style={styles.messageReceive}>
+                        {conversation.members.length === 2 ? null : (
+                            <Text style={styles.senderName}>{lastName}</Text>
+                        )}
                         {recall ? (
                             <Text
                                 style={{
@@ -765,6 +814,7 @@ const Chat = ({ navigation, route }) => {
                                 setModalAvatar(userData?.avatar)
                                 setMessageId(messageId)
                                 setType(type)
+                                setUserId(user_id)
                             }}
                         >
                             <MaterialCommunityIcons
@@ -789,24 +839,76 @@ const Chat = ({ navigation, route }) => {
             >
                 <TouchableOpacity
                     style={{
-                        paddingHorizontal: windowWidth * 0.02,
+                        paddingHorizontal: windowWidth * 0.03,
                     }}
                     onPress={() => navigation.goBack()}
                 >
-                    <AntDesign name="left" size={30} color="white" />
+                    <AntDesign name="left" size={26} color="white" />
                 </TouchableOpacity>
-                <TouchableOpacity ref={bodyRef}>
-                    <Text style={styles.txtHeader}>{userData?.userName}</Text>
+                <TouchableOpacity ref={bodyRef} style={{ flex: 1 }}>
+                    {conversation.members.length === 2 ? (
+                        <View
+                            style={{
+                                flexDirection: 'row',
+                                alignItems: 'center',
+                            }}
+                        >
+                            <Image
+                                style={styles.avatar}
+                                source={{ uri: userData?.avatar }}
+                            />
+                            <Text style={styles.txtHeader}>
+                                {userData?.userName}
+                            </Text>
+                        </View>
+                    ) : (
+                        <View
+                            style={{
+                                flexDirection: 'row',
+                                alignItems: 'center',
+                            }}
+                        >
+                            <Image
+                                style={styles.avatar}
+                                source={{ uri: conversation.avatar }}
+                            />
+                            <Text style={styles.txtHeader}>
+                                {conversation.conversationName}
+                            </Text>
+                        </View>
+                    )}
+                </TouchableOpacity>
+                <TouchableOpacity
+                    style={{
+                        paddingHorizontal: windowWidth * 0.01,
+                    }}
+                >
+                    <Feather name="user-plus" size={24} color="white" />
+                </TouchableOpacity>
+                <TouchableOpacity
+                    style={{
+                        paddingHorizontal: windowWidth * 0.03,
+                    }}
+                    onPress={() =>
+                        navigation.navigate('ChatInfo', {
+                            conversation,
+                        })
+                    }
+                >
+                    <Feather name="list" size={26} color="white" />
                 </TouchableOpacity>
             </LinearGradient>
             <View style={styles.body}>
                 <FlatList
                     style={{
-                        backgroundColor: '#d4d4d4',
+                        backgroundColor: '#e5e5e5',
                     }}
                     data={messages}
                     renderItem={({ item }) => {
-                        if (item.senderId === currentUserId) {
+                        if (
+                            item.senderId?._id === currentUserId ||
+                            item.senderId === currentUserId
+                        ) {
                             return (
                                 <ItemSend
                                     content={item.content}
@@ -824,6 +926,9 @@ const Chat = ({ navigation, route }) => {
                                     messageId={item._id}
                                     recall={item.recalled}
                                     type={item.contentType}
+                                    user_id={item?.senderId?._id}
+                                    avatar={item.senderId?.avatar}
+                                    lastName={item.senderId?.lastName}
                                 />
                             )
                         }
@@ -1037,6 +1142,19 @@ const Chat = ({ navigation, route }) => {
                             <TouchableOpacity
                                 style={styles.modalBtn}
                                 onPress={() =>
+                                    navigation.navigate('Profile', { userId })
+                                }
+                            >
+                                <FontAwesome
+                                    name="user-circle-o"
+                                    size={24}
+                                    color="black"
+                                />
+                                <Text style={styles.modalText}>Thông tin</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity
+                                style={styles.modalBtn}
+                                onPress={() =>
                                     handleForwardMessage(modalMessage)
                                 }
                             >
@@ -1139,7 +1257,7 @@ const styles = StyleSheet.create({
     txtHeader: {
         color: '#fff',
         fontFamily: 'Inter_600SemiBold',
-        fontSize: 20,
+        fontSize: 18,
     },
     iconCloud: {
         marginLeft: 20,
@@ -1180,7 +1298,7 @@ const styles = StyleSheet.create({
         width: windowWidth,
     },
     messageReceive: {
-        backgroundColor: '#e5e5ea', // light gray
+        backgroundColor: '#fff', // light gray
         borderRadius: 15,
         paddingHorizontal: 15,
         paddingVertical: 5,
@@ -1199,7 +1317,7 @@ const styles = StyleSheet.create({
         width: windowWidth,
     },
     messageSend: {
-        backgroundColor: '#98E4FF', // Messenger blue
+        backgroundColor: '#C4E4FF', // Messenger blue
         color: 'white',
         borderRadius: 15,
         paddingHorizontal: 15,
@@ -1238,6 +1356,8 @@ const styles = StyleSheet.create({
     },
     modalText: {
         fontSize: 15,
+        textAlign: 'center',
+        height: 20,
     },
     modalMessageSend: {
         backgroundColor: '#98E4FF', // Messenger blue
@@ -1250,7 +1370,7 @@ const styles = StyleSheet.create({
     },
 
     modalMessageRevice: {
-        backgroundColor: '#e5e5ea', // light gray
+        backgroundColor: '#fff', // light gray
         borderRadius: 15,
         paddingHorizontal: 15,
         paddingVertical: 5,
@@ -1284,5 +1404,9 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',
+    },
+    senderName: {
+        fontSize: 15,
+        color: 'green',
     },
 })

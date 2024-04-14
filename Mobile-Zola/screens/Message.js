@@ -29,9 +29,10 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import LinearGradient from 'react-native-linear-gradient'
 
 const Message = ({ navigation, route }) => {
-    const { accountId, setAccountId } = useContext(UserType)
+    const { accountId, setAccountId, conversations, setConversations } =
+        useContext(UserType)
     const [userId, setUserId] = useState({})
-    const [conversations, setConversations] = useState([])
+    // const [conversations, setConversations] = useState([])
     useEffect(() => {
         const getUserIdByAccountId = async () => {
             const token = await AsyncStorage.getItem('AuthToken')
@@ -108,17 +109,15 @@ const Message = ({ navigation, route }) => {
                     </TouchableOpacity>
                 </LinearGradient>
                 <ScrollView style={styles.body}>
-                    <View style={styles.list}>
-                        {conversations.map((conversation) => {
-                            return (
-                                <Conversation
-                                    data={conversation}
-                                    currentUserId={userId}
-                                    key={conversation._id}
-                                />
-                            )
-                        })}
-                    </View>
+                    {conversations.map((conversation) => {
+                        return (
+                            <Conversation
+                                data={conversation}
+                                currentUserId={userId}
+                                key={conversation._id}
+                            />
+                        )
+                    })}
                 </ScrollView>
                 <Tab />
             </View>
@@ -171,7 +170,7 @@ const styles = StyleSheet.create({
         height: 35,
         marginLeft: 15,
     },
-    list: {
+    body: {
         height: windowHeight - windowHeight * 0.16,
     },
 })

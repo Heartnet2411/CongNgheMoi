@@ -69,11 +69,32 @@ class UserController {
         const user = await User.findOne({ _id: user_id })
 
         if (user) {
-            user.friend.push({ friend_id: account_id, name, avatar })
+            user.friend.push({ friend_id: account_id, name, avatar, lastName })
             await user.save()
             res.json('Add friend successfully!!!')
         } else {
             res.json('User doesn`t exits !!!')
+        }
+    }
+
+    async getInfoFriend(req, res) {
+        try {
+            const { userId } = req.params
+            const user = await User.findOne({ _id: userId })
+            if (!user) {
+                return res.status(404).json({ message: 'User not found' })
+            }
+
+            const friendIds = user.friend.map((friend) => friend.friend_id)
+            const friends = await User.find(
+                { _id: { $in: friendIds } },
+                'userName phoneNumber avatar lastName'
+            )
+
+            res.status(200).json(friends)
+        } catch (error) {
+            console.error(error)
+            res.status(500).json({ message: 'Internal server error' })
         }
     }
 

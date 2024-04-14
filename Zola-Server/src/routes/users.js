@@ -20,4 +20,6 @@ router.put('/updateInfo', userController.updateInfo)
 
 router.get('/findUserByUserId/:userId', userController.findUserByUserID)
 
+router.get('/getFriends/:userId', userController.getInfoFriend)
+
 export default router
