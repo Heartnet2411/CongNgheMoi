@@ -791,6 +791,117 @@ const Chat = ({ navigation, route }) => {
                                     alignSelf: 'center',
                                 }}
                             />
+                        ) : type === 'video' ? (
+                            <View>
+                                <Video
+                                    style={styles.video}
+                                    source={{
+                                        uri: content,
+                                    }}
+                                    resizeMode={ResizeMode.CONTAIN}
+                                    isLooping
+                                    useNativeControls
+                                />
+                                {/* <View style={styles.buttons}>
+                                    <Button
+                                        title={
+                                            status.isPlaying ? 'Pause' : 'Play'
+                                        }
+                                        onPress={() =>
+                                            status.isPlaying
+                                                ? video.current.pauseAsync()
+                                                : video.current.playAsync()
+                                        }
+                                    />
+                                </View> */}
+                            </View>
+                        ) : type === 'file' ? (
+                            <View>
+                                <TouchableOpacity
+                                    onPress={() => {
+                                        handleDownloadFile(content)
+                                    }}
+                                    style={{
+                                        backgroundColor: '#fff',
+                                        padding: 10,
+                                        borderRadius: 10,
+                                        marginVertical: 10,
+                                        flexDirection: 'row',
+                                        alignItems: 'center',
+                                    }}
+                                >
+                                    {content.split('.').pop() === 'pdf' ? (
+                                        <Image
+                                            style={{
+                                                width: 30,
+                                                height: 30,
+                                                marginRight: 10,
+                                            }}
+                                            source={require('../image/pptx-file.png')}
+                                        />
+                                    ) : content.split('.').pop() === 'docx' ? (
+                                        <Image
+                                            style={{
+                                                width: 30,
+                                                height: 30,
+                                                marginRight: 10,
+                                            }}
+                                            source={require('../image/docx-file.png')}
+                                        />
+                                    ) : content.split('.').pop() === 'rar' ? (
+                                        <Image
+                                            style={{
+                                                width: 30,
+                                                height: 30,
+                                                marginRight: 10,
+                                            }}
+                                            source={require('../image/rar.png')}
+                                        />
+                                    ) : content.split('.').pop() === 'xlsx' ? (
+                                        <Image
+                                            style={{
+                                                width: 30,
+                                                height: 30,
+                                                marginRight: 10,
+                                            }}
+                                            source={require('../image/xlsx-file.png')}
+                                        />
+                                    ) : content.split('.').pop() === 'txt' ? (
+                                        <Image
+                                            style={{
+                                                width: 30,
+                                                height: 30,
+                                                marginRight: 10,
+                                            }}
+                                            source={require('../image/txt.png')}
+                                        />
+                                    ) : (
+                                        <Image
+                                            style={{
+                                                width: 30,
+                                                height: 30,
+                                                marginRight: 10,
+                                            }}
+                                            source={require('../image/file.png')}
+                                        />
+                                    )}
+                                    <Text
+                                        style={{
+                                            fontSize: 16,
+                                            maxWidth: windowWidth * 0.5,
+                                        }}
+                                    >
+                                        {content
+                                            .split('/')
+                                            .pop()
+                                            .split('_')
+                                            .slice(0, -1)
+                                            .join('_') +
+                                            '.' +
+                                            content.split('.').pop()}
+                                    </Text>
+                                </TouchableOpacity>
+                            </View>
                         ) : null}
                         <Text
                             style={{
@@ -892,6 +1003,7 @@ const Chat = ({ navigation, route }) => {
                     onPress={() =>
                         navigation.navigate('ChatInfo', {
                             conversation,
+                            currentUserId,
                         })
                     }
                 >

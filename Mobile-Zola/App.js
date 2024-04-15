@@ -26,6 +26,9 @@ import ForwardMessage from './components/ForwardMessage'
 import CreateGroup from './components/CreateGroup'
 import Profile from './components/Profile'
 import ChatInfo from './components/ChatInfo'
+import MembersList from './components/MembersList'
+import MemberInfo from './components/MemberInfo'
+import MemberKey from './components/MemberKey'
 
 import TextEncoding from 'text-encoding'
 global.TextEncoder = TextEncoding.TextEncoder
@@ -38,6 +41,21 @@ export default function App() {
         <UserContext>
             <NavigationContainer>
                 <Stack.Navigator initialRouteName="Login">
+                    <Stack.Screen
+                        name="MemberKey"
+                        component={MemberKey}
+                        options={{ headerShown: false }}
+                    />
+                    <Stack.Screen
+                        name="MemberInfo"
+                        component={'MemberInfo'}
+                        options={{ headerShown: false }}
+                    />
+                    <Stack.Screen
+                        name="MembersList"
+                        component={MembersList}
+                        options={{ headerTitle: 'Danh sách thành viên' }}
+                    />
                     <Stack.Screen
                         name="ChatInfo"
                         component={ChatInfo}

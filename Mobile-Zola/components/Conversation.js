@@ -143,6 +143,26 @@ const Conversation = ({ data, currentUserId }) => {
                         >
                             [Hình ảnh]
                         </Text>
+                    ) : newestMessage.contentType === 'video' ? (
+                        <Text
+                            style={{
+                                fontFamily: 'Inter_600SemiBold',
+                                fontSize: 14,
+                                color: '#8F9BB3',
+                            }}
+                        >
+                            [Video]
+                        </Text>
+                    ) : newestMessage.contentType === 'file' ? (
+                        <Text
+                            style={{
+                                fontFamily: 'Inter_600SemiBold',
+                                fontSize: 14,
+                                color: '#8F9BB3',
+                            }}
+                        >
+                            [File]
+                        </Text>
                     ) : null}
                 </View>
                 <Text
