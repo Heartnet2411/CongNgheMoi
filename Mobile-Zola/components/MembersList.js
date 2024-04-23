@@ -5,15 +5,39 @@ import {
     TouchableOpacity,
     Dimensions,
     ScrollView,
+    Modal,
+    TouchableWithoutFeedback,
 } from 'react-native'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import MemberInfo from './MemberInfo'
 import MemberKey from './MemberKey'
+import { url } from '../utils/constant'
+import axios from 'axios'
 
 const MembersList = ({ navigation, route }) => {
-    const conversation = route.params.conversation
+    let conver = route.params.conversation
+    const currentUserId = route.params.currentUserId
     const [active1, setActive1] = useState(true)
     const [active2, setActive2] = useState(false)
+    const [conversation, setConversation] = useState(conversation)
+
+    const fetchConversation = async () => {
+        try {
+            axios
+                .get(`${url}/conversations/findConversationById/${conver._id}`)
+                .then((res) => {
+                    setConversation(res.data)
+                })
+        } catch (error) {
+            console.log(error)
+        }
+    }
+    useEffect(() => {
+        fetchConversation()
+        const onFocused = navigation.addListener('focus', () => {
+            fetchConversation()
+        })
+    }, [navigation])
 
     return (
         <View style={styles.container}>
@@ -45,29 +69,52 @@ const MembersList = ({ navigation, route }) => {
             <ScrollView style={styles.list}>
                 {active1
                     ? // List of members
-                      conversation.members.map((member) => {
+                      conversation?.members.map((member) => {
                           if (
-                              member === conversation.groupLeader ||
-                              conversation.deputyLeader.includes(member)
+                              member === conversation?.groupLeader ||
+                              conversation?.deputyLeader.includes(member)
                           ) {
                               return (
-                                  <MemberKey key={member._id} member={member} />
+                                  <MemberKey
+                                      key={member._id}
+                                      member={member}
+                                      leader={conversation?.groupLeader}
+                                      deputyLeader={conversation?.deputyLeader}
+                                      currentUserId={currentUserId}
+                                      id={conversation?._id}
+                                      fetchConversation={fetchConversation}
+                                  />
                               )
                           } else {
                               return (
                                   <MemberInfo
                                       key={member._id}
                                       member={member}
+                                      leader={conversation?.groupLeader}
+                                      deputyLeader={conversation?.deputyLeader}
+                                      currentUserId={currentUserId}
+                                      id={conversation?._id}
+                                      fetchConversation={fetchConversation}
                                   />
                               )
                           }
                       })
                     : // List of leaders
                       [
-                          conversation.groupLeader,
-                          ...conversation.deputyLeader,
+                          conversation?.groupLeader,
+                          ...conversation?.deputyLeader,
                       ].map((leader) => {
-                          return <MemberKey key={leader._id} member={leader} />
+                          return (
+                              <MemberKey
+                                  key={leader._id}
+                                  member={leader}
+                                  leader={conversation?.groupLeader}
+                                  deputyLeader={conversation?.deputyLeader}
+                                  currentUserId={currentUserId}
+                                  id={conversation?._id}
+                                  fetchConversation={fetchConversation}
+                              />
+                          )
                       })}
             </ScrollView>
         </View>

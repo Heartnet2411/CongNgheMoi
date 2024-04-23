@@ -63,6 +63,8 @@ const Message = ({ navigation, route }) => {
             getConversations(userId)
             getUserIdByAccountId()
         })
+
+        //bắt sk navigate
     }, [userId, navigation])
 
     useFonts({ Inter_600SemiBold })

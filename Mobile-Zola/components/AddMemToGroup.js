@@ -7,6 +7,7 @@ import {
     ScrollView,
     StyleSheet,
     Dimensions,
+    Alert,
 } from 'react-native'
 import React, { useEffect, useState, useContext } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
@@ -17,17 +18,17 @@ import axios from 'axios'
 import { jwtDecode } from 'jwt-decode'
 import { url } from '../utils/constant'
 
-const CreateGroup = ({ navigation, route }) => {
-    const [search, setSearch] = useState('')
-    const [members, setMembers] = useState([])
-    const [groupName, setGroupName] = useState('')
-    const [groupAvatar, setGroupAvatar] = useState('')
-    const [users, setUsers] = useState([])
+const AddMemToGroup = ({ navigation, route }) => {
     const { accountId, setAccountId, conversations, setConversations } =
         useContext(UserType)
+    const [search, setSearch] = useState('')
+    const [members, setMembers] = useState([])
+    const [users, setUsers] = useState([])
     const [userId, setUserId] = useState('')
     const [friends, setFriends] = useState([])
     const [name, setName] = useState('')
+
+    const conversation = route.params.conversation
     useEffect(() => {
         const getUserIdByAccountId = async () => {
             const token = await AsyncStorage.getItem('AuthToken')
@@ -71,10 +72,7 @@ const CreateGroup = ({ navigation, route }) => {
     useEffect(() => {
         setUsers(friends)
     }, [friends])
-    console.log(users)
-    const removeAccents = (str) => {
-        return str.normalize('NFD').replace(/[\u0300-\u036f]/g, '')
-    }
+
     const handleFindUser = (search) => {
         setSearch(search)
         if (search === '') {
@@ -91,60 +89,51 @@ const CreateGroup = ({ navigation, route }) => {
             )
         }
     }
-    const createGroup = async () => {
-        if (members.length < 2) {
-            return alert('Nhóm phải có ít nhất 3 thành viên')
-        }
+    const removeAccents = (str) => {
+        return str.normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+    }
+    const handleAddMember = async () => {
         try {
-            const { data } = await axios
-                .post(`${url}/conversations/create-group`, {
-                    user_id: userId,
+            const response = await axios.post(
+                `${url}/conversations/add-member`,
+                {
                     friend_ids: members.map((member) => member._id),
-                    members: [userId, ...members.map((member) => member._id)],
-                    conversationName:
-                        groupName === '' ? defaultGroupName : groupName,
-                    groupLeader: userId,
-                })
-                .finally(() => {
-                    navigation.navigate('Message')
-                })
+                    conversation_id: conversation._id,
+                },
+            )
+            if (response.status === 200) {
+                const newConversations = conversations.map((item) =>
+                    item._id === conversation._id
+                        ? { ...item, members: response.data.members }
+                        : item,
+                )
 
-            setConversations([data, ...conversations])
-            console.log('create group success')
+                Alert.alert('Thêm thành công')
+                setConversations(newConversations)
+
+                navigation.navigate('ChatInfo', { conversation: conversation })
+            }
         } catch (error) {
-            console.log('create fail', error)
+            console.log('error message', error)
         }
     }
-    const defaultGroupName =
-        members.map((member) => member.lastName).join(', ') + ` ,${name}`
     return (
-        <View style={style.container}>
-            <View style={style.groupInfo}>
-                <Image
-                    style={style.groupAvatar}
-                    source={require('../image/file.png')}
-                />
+        <View style={styles.container}>
+            <View style={styles.search}>
                 <TextInput
-                    style={style.groupName}
-                    placeholder="Đặt tên nhóm"
-                    value={groupName}
-                    onChangeText={(text) => setGroupName(text)}
-                />
-            </View>
-            <View style={style.search}>
-                <TextInput
-                    style={style.searchFriends}
+                    style={styles.searchFriends}
                     placeholder="Tìm tên hoặc số điện thoại"
                     value={search}
                     onChangeText={(text) => handleFindUser(text)}
                 />
             </View>
-            <View style={style.chooseMember}>
+            <View style={styles.chooseMember}>
                 <ScrollView>
                     {users.map((user) => (
                         <TouchableOpacity
                             key={user._id}
-                            style={style.userFriend}
+                            disabled={conversation.members.includes(user._id)}
+                            style={styles.userFriend}
                             onPress={() => {
                                 if (members.includes(user)) {
                                     setMembers(
@@ -158,11 +147,27 @@ const CreateGroup = ({ navigation, route }) => {
                             }}
                         >
                             <Image
-                                style={style.userAvatar}
+                                style={styles.userAvatar}
                                 source={{ uri: user.avatar }}
                             />
-                            <Text style={style.groupName}>{user.userName}</Text>
-                            {members.includes(user) ? (
+                            {conversation.members.includes(user._id) ? (
+                                <Text
+                                    style={{
+                                        color: 'gray',
+                                        marginLeft: 10,
+                                        fontSize: 18,
+                                        flex: 1,
+                                    }}
+                                >
+                                    {user.userName}
+                                </Text>
+                            ) : (
+                                <Text style={styles.groupName}>
+                                    {user.userName}
+                                </Text>
+                            )}
+                            {members.includes(user) ||
+                            conversation.members.includes(user._id) ? (
                                 <Feather
                                     name="check-square"
                                     size={24}
@@ -179,26 +184,20 @@ const CreateGroup = ({ navigation, route }) => {
                     ))}
                 </ScrollView>
             </View>
-            <View style={style.btnWrap}>
-                <TouchableOpacity
-                    style={style.btn}
-                    onPress={() => {
-                        createGroup()
-                    }}
-                >
-                    <Text style={style.btnText}>Tạo nhóm</Text>
+            <View style={styles.btnWrap}>
+                <TouchableOpacity style={styles.btn} onPress={handleAddMember}>
+                    <Text style={styles.btnText}>Thêm vào nhóm</Text>
                 </TouchableOpacity>
             </View>
         </View>
     )
 }
 
-export default CreateGroup
-
+export default AddMemToGroup
 const windowHeight = Dimensions.get('window').height
 const windowWidth = Dimensions.get('window').width
 
-const style = StyleSheet.create({
+const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: 'white',
@@ -221,12 +220,12 @@ const style = StyleSheet.create({
     },
     search: {
         marginBottom: windowHeight * 0.02,
-
         marginHorizontal: windowWidth * 0.05,
         borderWidth: 1,
         borderRadius: 10,
         borderColor: 'gray',
         paddingHorizontal: 10,
+        marginTop: 20,
     },
     searchFriends: {
         height: 40,

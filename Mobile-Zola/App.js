@@ -29,6 +29,8 @@ import ChatInfo from './components/ChatInfo'
 import MembersList from './components/MembersList'
 import MemberInfo from './components/MemberInfo'
 import MemberKey from './components/MemberKey'
+import AddMemToGroup from './components/AddMemToGroup'
+import LoadMember from './components/LoadMember'
 
 import TextEncoding from 'text-encoding'
 global.TextEncoder = TextEncoding.TextEncoder
@@ -41,6 +43,16 @@ export default function App() {
         <UserContext>
             <NavigationContainer>
                 <Stack.Navigator initialRouteName="Login">
+                    <Stack.Screen
+                        name="LoadMember"
+                        component={LoadMember}
+                        options={{ headerTitle: 'Danh sách thành viên' }}
+                    />
+                    <Stack.Screen
+                        name="AddMemToGroup"
+                        component={AddMemToGroup}
+                        options={{ headerTitle: 'Thêm thành viên' }}
+                    />
                     <Stack.Screen
                         name="MemberKey"
                         component={MemberKey}

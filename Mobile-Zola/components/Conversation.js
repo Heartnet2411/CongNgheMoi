@@ -21,7 +21,7 @@ const Conversation = ({ data, currentUserId }) => {
     console.log(newestMessage)
 
     useEffect(() => {
-        const userId = data.members.find((id) => id !== currentUserId)
+        const userId = data.members?.find((id) => id !== currentUserId)
         const getUserData = async () => {
             axios.get(`${url}/user/findUserByUserId/${userId}`).then((res) => {
                 setUserData(res.data)
@@ -67,7 +67,7 @@ const Conversation = ({ data, currentUserId }) => {
                     margin: 10,
                 }}
             >
-                {data.members.length == 2 ? (
+                {data.members?.length == 2 ? (
                     <Image
                         source={{ uri: userData?.avatar }}
                         style={{
@@ -92,7 +92,7 @@ const Conversation = ({ data, currentUserId }) => {
                         flex: 1,
                     }}
                 >
-                    {data.members.length == 2 ? (
+                    {data.members?.length == 2 ? (
                         <Text
                             style={{
                                 fontFamily: 'Inter_600SemiBold',

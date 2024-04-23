@@ -1,16 +1,10 @@
 import mongoose from 'mongoose'
 const Schema = mongoose.Schema
 
-const Friend = new Schema({
-    friend_id: { type: String },
-    name: { type: String },
-    avatar: { type: String },
-})
-
 const User = new Schema(
     {
         account_id: { type: String, required: true, unique: true },
-        conversation_id: { type: Array },
+        conversation_id: { type: Array, required: true },
         userName: { type: String, required: true },
         firstName: { type: String, required: true },
         lastName: { type: String, required: true },
@@ -18,8 +12,25 @@ const User = new Schema(
         dateOfBirth: { type: String, required: true },
         gender: { type: String, required: true },
         avatar: { type: String, required: true },
-        coverImage: { type: String },
-        friend: [Friend],
+        coverImage: { type: String, required: true },
+        friendRequests: [
+            {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: 'User',
+            },
+        ],
+        friend: [
+            {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: 'User',
+            },
+        ],
+        sentFriendRequests: [
+            {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: 'User',
+            },
+        ],
     },
 
     { timestamps: true }

@@ -1,4 +1,5 @@
 import mongoose from 'mongoose'
+
 const Schema = mongoose.Schema
 const Conversation = new Schema(
     {
@@ -20,5 +21,11 @@ const Conversation = new Schema(
     },
     { timestamps: true }
 )
+
+import mongoosedelete from 'mongoose-delete'
+Conversation.plugin(mongoosedelete, {
+    deletedAt: true,
+    overrideMethods: 'all',
+})
 
 export default mongoose.model('Conversation', Conversation)

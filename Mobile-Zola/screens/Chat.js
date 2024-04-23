@@ -37,12 +37,13 @@ import * as DocumentPicker from 'expo-document-picker'
 import * as FileSystem from 'expo-file-system'
 import * as Permissions from 'expo-permissions'
 
-const socketUrl = 'https://192.168.1.13:8800/'
+const socketUrl = 'https://192.168.1.14:8800/'
 
 const Chat = ({ navigation, route }) => {
     const userData = route.params.userData
-    const conversation = route.params.conversation
+    const conver = route.params.conversation
     const currentUserId = route.params.currentUserId
+    const [conversation, setConversation] = useState(null)
     const [messages, setMessages] = useState([])
     const [newMessage, setNewMessage] = useState('')
     const [onlineUsers, setOnlineUsers] = useState([])
@@ -66,7 +67,6 @@ const Chat = ({ navigation, route }) => {
 
     const [recording, setRecording] = useState()
     const [downloadProgress, setDownloadProgress] = useState(0)
-    console.log(downloadProgress)
 
     const requestWritePermission = async () => {
         const { status } = await Permissions.askAsync(
@@ -80,24 +80,23 @@ const Chat = ({ navigation, route }) => {
     }
 
     const handleDownloadFile = async (url) => {
-        try {
-            if (requestWritePermission) {
-                const localUri =
-                    FileSystem.documentDirectory + url.split('/').pop()
-
-                const downloadResumable = FileSystem.createDownloadResumable(
-                    url,
-                    localUri,
-                    {},
-                )
-                const { uri } = await downloadResumable.downloadAsync()
-                console.log('Finished downloading to ', uri)
-            } else {
-                console.error('Quyền ghi file bị từ chối')
-            }
-        } catch (error) {
-            console.log(error)
-        }
+        // try {
+        //     if (requestWritePermission) {
+        //         const localUri =
+        //             FileSystem.documentDirectory + url.split('/').pop()
+        //         const downloadResumable = FileSystem.createDownloadResumable(
+        //             url,
+        //             localUri,
+        //             {},
+        //         )
+        //         const { uri } = await downloadResumable.downloadAsync()
+        //         console.log('Finished downloading to ', uri)
+        //     } else {
+        //         console.error('Quyền ghi file bị từ chối')
+        //     }
+        // } catch (error) {
+        //     console.log(error)
+        // }
     }
 
     const pickDocument = async () => {
@@ -380,11 +379,28 @@ const Chat = ({ navigation, route }) => {
         }
     }
 
+    const fetchConversation = async () => {
+        try {
+            axios
+                .get(`${url}/conversations/findConversationById/${conver._id}`)
+                .then((res) => {
+                    setConversation(res.data)
+                })
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
     useEffect(() => {
+        fetchConversation()
         if (conversation !== null) {
             fetchMessages()
         }
-    }, [conversation])
+        const onFocused = navigation.addListener('focus', () => {
+            fetchMessages()
+            fetchConversation()
+        })
+    }, [conversation, navigation])
     //console.log(messages)
     const handleSend = async (e) => {
         // console.log(newMessage)
@@ -758,7 +774,7 @@ const Chat = ({ navigation, route }) => {
                         />
                     </TouchableOpacity>
                     <View style={styles.messageReceive}>
-                        {conversation.members.length === 2 ? null : (
+                        {conversation?.members?.length === 2 ? null : (
                             <Text style={styles.senderName}>{lastName}</Text>
                         )}
                         {recall ? (
@@ -940,6 +956,14 @@ const Chat = ({ navigation, route }) => {
         )
     }
 
+    const ItemNotify = ({ content }) => {
+        return (
+            <View style={styles.notify}>
+                <Text style={styles.notifyText}>{content}</Text>
+            </View>
+        )
+    }
+
     return (
         <SafeAreaView style={styles.container}>
             <LinearGradient
@@ -957,7 +981,7 @@ const Chat = ({ navigation, route }) => {
                     <AntDesign name="left" size={26} color="white" />
                 </TouchableOpacity>
                 <TouchableOpacity ref={bodyRef} style={{ flex: 1 }}>
-                    {conversation.members.length === 2 ? (
+                    {conversation?.members?.length === 2 ? (
                         <View
                             style={{
                                 flexDirection: 'row',
@@ -981,10 +1005,10 @@ const Chat = ({ navigation, route }) => {
                         >
                             <Image
                                 style={styles.avatar}
-                                source={{ uri: conversation.avatar }}
+                                source={{ uri: conversation?.avatar }}
                             />
                             <Text style={styles.txtHeader}>
-                                {conversation.conversationName}
+                                {conversation?.conversationName}
                             </Text>
                         </View>
                     )}
@@ -1017,7 +1041,9 @@ const Chat = ({ navigation, route }) => {
                     }}
                     data={messages}
                     renderItem={({ item }) => {
-                        if (
+                        if (item.contentType === 'notify') {
+                            return <ItemNotify content={item.content} />
+                        } else if (
                             item.senderId?._id === currentUserId ||
                             item.senderId === currentUserId
                         ) {
@@ -1520,5 +1546,17 @@ const styles = StyleSheet.create({
     senderName: {
         fontSize: 15,
         color: 'green',
+    },
+    notify: {
+        width: windowWidth * 0.8,
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginVertical: 10,
+        alignSelf: 'center',
+    },
+    notifyText: {
+        backgroundColor: '#D3D3D3',
+        padding: 10,
+        borderRadius: 10,
     },
 })

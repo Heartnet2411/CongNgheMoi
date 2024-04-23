@@ -17,7 +17,7 @@ const Message = new Schema(
     },*/
         contentType: {
             type: String,
-            enum: ['text', 'image', 'video', 'audio', 'file'],
+            enum: ['text', 'image', 'video', 'audio', 'file', 'notify'],
         },
         content: {
             type: String,

@@ -72,7 +72,7 @@ const Register = ({ navigation, route }) => {
             try {
                 const avatar = uploadDefaultAvatar(lastName)
                 const coverImage =
-                    'https://res.cloudinary.com/dpj4kdkxj/image/upload/v1712052217/hhj4mhywmprfrsvlpuex.jpg'
+                    'https://res.cloudinary.com/dpj4kdkxj/image/upload/v1713537768/Avatar/csf5zjkyt7g6x5a4sgsb.jpg'
                 console.log('avatar', avatar)
                 const userName = lastName + ' ' + firstName
                 console.log('------------------------------')
