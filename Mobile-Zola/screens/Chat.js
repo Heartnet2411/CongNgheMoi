@@ -1007,15 +1007,21 @@ const Chat = ({ navigation, route }) => {
                                 style={styles.avatar}
                                 source={{ uri: conversation?.avatar }}
                             />
-                            <Text style={styles.txtHeader}>
-                                {conversation?.conversationName}
-                            </Text>
+                            <View style={styles.txtHeaderWrap}>
+                                <Text
+                                    style={styles.txtHeader}
+                                    numberOfLines={1}
+                                    ellipsizeMode="tail"
+                                >
+                                    {conversation?.conversationName}
+                                </Text>
+                            </View>
                         </View>
                     )}
                 </TouchableOpacity>
                 <TouchableOpacity
                     style={{
-                        paddingHorizontal: windowWidth * 0.01,
+                        paddingLeft: windowWidth * 0.01,
                     }}
                 >
                     <Feather name="user-plus" size={24} color="white" />
@@ -1391,6 +1397,10 @@ const styles = StyleSheet.create({
         backgroundColor: '#1B96CB',
         flexDirection: 'row',
         alignItems: 'center',
+    },
+    txtHeaderWrap: {
+        width: windowWidth * 0.5,
+        overflow: 'hidden',
     },
     txtHeader: {
         color: '#fff',
