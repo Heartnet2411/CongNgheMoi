@@ -30,7 +30,7 @@ const Conversation = ({ data, currentUserId }) => {
         //get newest message
         const getNewestMessage = async () => {
             axios
-                .post(`${url}/messages/findNewestMessage/${data._id}`, {
+                .post(`${url}/message/findNewestMessage/${data._id}`, {
                     userId: currentUserId,
                 })
                 .then((res) => {

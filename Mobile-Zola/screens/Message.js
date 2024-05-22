@@ -49,7 +49,7 @@ const Message = ({ navigation, route }) => {
         }
         const getConversations = async (userId) => {
             axios
-                .get(url + `/conversations/${userId}`)
+                .get(url + `/conversation/${userId}`)
                 .then((res) => {
                     setConversations(res.data)
                 })

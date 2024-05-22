@@ -48,13 +48,14 @@ const ForwardMessage = ({ data, currentUserId, message, type }) => {
             //send message to database
             try {
                 const { data } = await axios
-                    .post(url + `/messages/`, messages)
+                    .post(url + `/message/`, messages)
                     .finally(() => {
                         Alert.alert(
                             'Thông báo',
                             'Chuyển tiếp tin nhắn thành công',
                         )
                     })
+                socket.emit('send-message', data)
             } catch (error) {
                 console.log(error)
             }

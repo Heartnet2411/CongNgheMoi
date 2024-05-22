@@ -97,7 +97,7 @@ const CreateGroup = ({ navigation, route }) => {
         }
         try {
             const { data } = await axios
-                .post(`${url}/conversations/create-group`, {
+                .post(`${url}/conversation/create-group`, {
                     user_id: userId,
                     friend_ids: members.map((member) => member._id),
                     members: [userId, ...members.map((member) => member._id)],

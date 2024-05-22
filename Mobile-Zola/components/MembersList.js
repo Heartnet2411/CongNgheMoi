@@ -24,7 +24,7 @@ const MembersList = ({ navigation, route }) => {
     const fetchConversation = async () => {
         try {
             axios
-                .get(`${url}/conversations/findConversationById/${conver._id}`)
+                .get(`${url}/conversation/findConversationById/${conver._id}`)
                 .then((res) => {
                     setConversation(res.data)
                 })

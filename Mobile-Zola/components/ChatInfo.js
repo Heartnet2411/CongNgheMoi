@@ -71,7 +71,7 @@ const ChatInfo = ({ navigation, route }) => {
     const fetchConversation = async () => {
         try {
             axios
-                .get(`${url}/conversations/findConversationById/${conver._id}`)
+                .get(`${url}/conversation/findConversationById/${conver._id}`)
                 .then((res) => {
                     setConversation(res.data)
                     setGroupName(res.data.conversationName)
@@ -105,7 +105,7 @@ const ChatInfo = ({ navigation, route }) => {
         try {
             axios
                 .put(
-                    `${url}/conversations/updateConversationAvatar`,
+                    `${url}/conversation/updateConversationAvatar`,
                     {
                         conversation_id: conversation._id,
                         avatar: urlImage,
@@ -136,7 +136,7 @@ const ChatInfo = ({ navigation, route }) => {
                     //send message to database
                     try {
                         const { data } = await axios.post(
-                            url + `/messages/`,
+                            url + `/message/`,
                             message,
                         )
                         // socket.current.emit('new message', data)
@@ -208,7 +208,7 @@ const ChatInfo = ({ navigation, route }) => {
                                 //chang group leader
                                 await axios
                                     .put(
-                                        `${url}/conversations/authorizeGroupLeader`,
+                                        `${url}/conversation/authorizeGroupLeader`,
                                         {
                                             conversation_id: conversationID,
                                             user_id: userID,
@@ -253,7 +253,7 @@ const ChatInfo = ({ navigation, route }) => {
                     text: 'Đồng ý',
                     onPress: async () => {
                         await axios
-                            .put(`${url}/conversations/disbandGroup`, {
+                            .put(`${url}/conversation/disbandGroup`, {
                                 conversation_id: conversationID,
                                 user_id: userID,
                             })

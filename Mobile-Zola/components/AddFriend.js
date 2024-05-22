@@ -16,65 +16,72 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 import axios from 'axios'
 import { jwtDecode } from 'jwt-decode'
 import { UserType } from '../UserContext'
+import User from './User'
 
 const AddFriend = ({ navigation, route }) => {
     const { accountId, setAccountId } = useContext(UserType)
-    const [users, setUsers] = useState([])
-    useEffect(() => {
-        const fetchUser = async () => {
-            const token = await AsyncStorage.getItem('AuthToken')
-            const decodedToken = jwtDecode(token)
-            const accountId = decodedToken.accountId
-            setAccountId(accountId)
-            axios
-                .get(`http://localhost:3000/user/findAllUsers`)
-                .then((res) => {
-                    setUsers(res.data)
-                })
-                .catch((err) => {
-                    console.log(err)
-                })
+    const [phoneNumber, setPhoneNumber] = useState('')
+    const [user, setUser] = useState({})
+    // useEffect(() => {
+    // const fetchUser= async()=>{
+    // const token=await AsyncStorage.getItem('AuthToken')
+    // const decodedToken=jwtDecode(token);
+    // const accountId=decodedToken.accountId;
+    // setAccountId(accountId)
+    // axios.get(`http://localhost:3000/user/findAllExceptCurrentUser?account_id=${accountId}`).then((res)=>{
+    //setUsers(res.data)
+    // }).catch((err)=>{
+    // console.log(err)
+    // });
+    // };
+    // fetchUser();
+    // }
+    //, [])
+
+    const handleSearch = async () => {
+        try {
+            const response = await axios.get(
+                `http://localhost:3001/user/findUserByPhoneNumber/${phoneNumber}`,
+            )
+            if (response.status === 200) {
+                setUser(response.data)
+                console.log(user)
+            }
+        } catch (error) {
+            console.log('Not found')
+            console.log(error)
         }
-        fetchUser()
-    }, [])
-    console.log(users)
+    }
     return (
         <SafeAreaView style={styles.container}>
             <View style={styles.search}>
                 <TextInput
                     style={styles.input}
                     placeholder="Nhập số điện thoại"
+                    onChangeText={(text) => setPhoneNumber(text)}
+                    // defaultValue={phoneNumber}
                 />
                 <TouchableOpacity>
-                    <AntDesign name="search1" size={24} color="black" />
+                    <AntDesign
+                        name="search1"
+                        size={24}
+                        color="black"
+                        onPress={() => {
+                            handleSearch()
+                        }}
+                    />
                 </TouchableOpacity>
             </View>
             <View style={styles.recommend}>
-                <Text style={styles.txtRecommend}>Danh sách gợi ý</Text>
-                <FlatList
-                    data={users}
-                    renderItem={({ item }) => (
-                        <View style={styles.list}>
-                            <View style={styles.contact}>
-                                <Image
-                                    source={item.avatar}
-                                    style={styles.avatar}
-                                />
-                                <Text style={styles.name}>
-                                    {item.firstName}
-                                </Text>
-                                <TouchableOpacity style={styles.add}>
-                                    <AntDesign
-                                        name="adduser"
-                                        size={24}
-                                        color="black"
-                                    />
-                                </TouchableOpacity>
-                            </View>
-                        </View>
-                    )}
-                    keyExtractor={(item) => item.id}
-                />
+                <Text style={styles.txtRecommend}>Kết quả</Text>
+                <ScrollView>
+                    <View style={styles.list}>
+                        {user.length === 0 && (
+                            <Text>Không tìm thấy người dùng</Text>
+                        )}
+                        {user && <User item={user} />}
+                    </View>
+                </ScrollView>
             </View>
         </SafeAreaView>
     )
@@ -112,25 +119,5 @@ const styles = StyleSheet.create({
     },
     list: {
         height: Math.round(windowHeight) - 60,
-    },
-    contact: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        margin: 10,
-    },
-    avatar: {
-        width: 50,
-        height: 50,
-        borderRadius: 25,
-    },
-    name: {
-        marginLeft: 30,
-        fontFamily: 'Inter_600SemiBold',
-        fontSize: 18,
-        color: 'black',
-        fontWeight: 'bold',
-    },
-    add: {
-        marginLeft: 150,
     },
 })

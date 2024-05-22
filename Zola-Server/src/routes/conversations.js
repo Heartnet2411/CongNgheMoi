@@ -1,41 +1,115 @@
 import express from 'express'
-
 const router = express.Router()
-import ConversationController from '../app/controllers/ConversationController.js'
 
-router.post('/', ConversationController.createConversation)
+import conversationController from '../app/controllers/ConversationController.js'
+//  Web--------------------------
+
+// router.post('/create', conversationController.create)
+
+router.post(
+    '/createConversationsWeb',
+    conversationController.createConversationsWeb
+)
+router.post(
+    '/createConversationsGroupWeb',
+    conversationController.createConversationsGroupWeb
+)
+// viết 1 hàm lấy conversation_id từ friend_id và user_id
+router.post(
+    '/getConversationIDWeb',
+    conversationController.getConversationIDWeb
+)
+// thêm thành viên vào nhóm
+router.post(
+    '/addMemberToConversationGroupWeb',
+    conversationController.addMemberToConversationGroupWeb
+)
+// xoá thành viên khỏi nhóm
+router.post(
+    '/removeMemberFromConversationGroupWeb',
+    conversationController.removeMemberFromConversationGroupWeb
+)
+// gán quyền phóng nhóm cho thành viên
+router.post(
+    '/authorizeDeputyLeaderWeb',
+    conversationController.authorizeDeputyLeaderWeb
+)
+// gán quyền trưởng nhóm cho thành viên
+router.post(
+    '/authorizeGroupLeaderWeb',
+    conversationController.authorizeGroupLeaderWeb
+)
+// rời nhóm
+router.post('/leaveGroupWeb', conversationController.leaveGroupWeb)
+// giản tán nhóm
+router.post('/disbandGroupWeb', conversationController.disbandGroupWeb)
+// api lấy danh sách nhóm chứa user_id và có thuộc tính GroupLeader
+router.post(
+    '/getConversationGroupByUserIDWeb',
+    conversationController.getConversationGroupByUserIDWeb
+)
+// api lấy danh sách member từ conversation_id
+router.post(
+    '/getMemberFromConversationIDWeb',
+    conversationController.getMemberFromConversationIDWeb
+)
+// api gỡ quyền phó nhóm
+router.post(
+    '/deleteDeputyLeaderWeb',
+    conversationController.deleteDeputyLeaderWeb
+)
+// api lấy id của GroupLeader và DeputyLeader
+router.post(
+    '/getGroupLeaderAndDeputyLeaderWeb',
+    conversationController.getGroupLeaderAndDeputyLeaderWeb
+)
+// api đổi tênn nhóm
+router.post(
+    '/changeConversationNameWeb',
+    conversationController.changeConversationNameWeb
+)
+// api check nhóm
+router.post('/checkGroupWeb', conversationController.checkGroupWeb)
+// api check giữa user_id và friend_id
+router.post('/checkGroupCommonWeb', conversationController.checkGroupCommonWeb)
+
+//-------------------------------------------------
+// add mobile
+
+router.post('/', conversationController.createConversation)
 router.post(
     '/create-group',
-    ConversationController.createConversationsGroupMobile
+    conversationController.createConversationsGroupMobile
 )
-router.get('/:userId', ConversationController.userConversations)
+router.get('/:userId', conversationController.userConversations)
 router.get(
     '/findConversationById/:conversationId',
-    ConversationController.findConversationById
+    conversationController.findConversationById
 )
-router.get('/find/:firstId/:secondId', ConversationController.findConversations)
+router.get('/find/:firstId/:secondId', conversationController.findConversations)
 router.put(
     '/authorizeDeputyLeader',
-    ConversationController.authorizeDeputyLeader
+    conversationController.authorizeDeputyLeader
 )
 router.put(
     '/unauthorizeDeputyLeader',
-    ConversationController.unauthorizeDeputyLeader
+    conversationController.unauthorizeDeputyLeader
 )
 router.put(
     '/removeMemberFromConversationGroup',
-    ConversationController.removeMemberFromConversationGroupWeb
+    conversationController.removeMemberFromConversationGroupMobile
 )
 router.put(
     '/updateConversationAvatar',
-    ConversationController.updateConversationAvatar
+    conversationController.updateConversationAvatar
 )
-router.put('/leaveGroup', ConversationController.leaveGroup)
+router.put('/leaveGroup', conversationController.leaveGroup)
 router.post(
     '/add-member',
-    ConversationController.addMemberToConversationGroupMobile
+    conversationController.addMemberToConversationGroupMobile
 )
-router.put('/change-groupname', ConversationController.changeGroupName)
-router.put('/authorizeGroupLeader', ConversationController.authorizeGroupLeader)
-router.put('/disbandGroup', ConversationController.disbandGroupWeb)
+router.put('/change-groupname', conversationController.changeGroupName)
+router.put('/authorizeGroupLeader', conversationController.authorizeGroupLeader)
+router.put('/disbandGroup', conversationController.disbandGroupMobile)
+//--
 export default router

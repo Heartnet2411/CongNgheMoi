@@ -37,7 +37,7 @@ import * as DocumentPicker from 'expo-document-picker'
 import * as FileSystem from 'expo-file-system'
 import * as Permissions from 'expo-permissions'
 
-const socketUrl = 'https://192.168.1.14:8800/'
+//const socketUrl = 'https://192.168.1.14:8800/'
 
 const Chat = ({ navigation, route }) => {
     const userData = route.params.userData
@@ -61,7 +61,12 @@ const Chat = ({ navigation, route }) => {
     const [date, setDate] = useState('')
     const [type, setType] = useState('text')
     const [userConversation, setUserConversation] = useState([])
-    const socket = useRef()
+    const [recallMessage, setRecallMessage] = useState([])
+    // Tạo một biến trạng thái để lưu trữ kết nối socket
+    const [socket, setSocket] = useState(null)
+    const [typing, setTyping] = useState(false)
+    const [istyping, setIsTyping] = useState(false)
+
     const inputRef = useRef()
     const bodyRef = useRef()
 
@@ -191,12 +196,12 @@ const Chat = ({ navigation, route }) => {
                 const message = {
                     senderId: currentUserId,
                     content: data.url,
-                    conversation_id: conversation._id,
+                    conversation_id: conversation?._id,
                     contentType: 'image',
                 }
                 //send message to database
                 axios
-                    .post(url + `/messages/`, message)
+                    .post(url + `/message/`, message)
                     .then(({ data }) => {
                         setMessages([data, ...messages])
                     })
@@ -235,12 +240,12 @@ const Chat = ({ navigation, route }) => {
                 const message = {
                     senderId: currentUserId,
                     content: data.url,
-                    conversation_id: conversation._id,
+                    conversation_id: conversation?._id,
                     contentType: 'file',
                 }
                 //send message to database
                 axios
-                    .post(url + `/messages/`, message)
+                    .post(url + `/message/`, message)
                     .then(({ data }) => {
                         setMessages([data, ...messages])
                     })
@@ -279,12 +284,12 @@ const Chat = ({ navigation, route }) => {
                 const message = {
                     senderId: currentUserId,
                     content: data.url,
-                    conversation_id: conversation._id,
+                    conversation_id: conversation?._id,
                     contentType: 'video',
                 }
                 //send message to database
                 axios
-                    .post(url + `/messages/`, message)
+                    .post(url + `/message/`, message)
                     .then(({ data }) => {
                         setMessages([data, ...messages])
                     })
@@ -320,60 +325,56 @@ const Chat = ({ navigation, route }) => {
     }
 
     useEffect(() => {
-        socket.current = io(socketUrl)
-        socket.current.emit('new-user-add', currentUserId)
-        socket.current.on('get-users', (users) => {
-            setOnlineUsers(users)
-        })
-    }, [currentUserId])
-    //sending message to socket server
-    useEffect(() => {
-        if (sendMessage !== null) {
-            socket.current.emit('send-message', sendMessage)
-        }
-    }, [sendMessage])
-    //receive  new messages from socket server
-    useEffect(() => {
-        socket.current.on('receive-message', (message) => {
-            //console.log("received",message)
-            if (
-                message !== null &&
-                message.conversation_id === conversation._id
-            ) {
-                setMessages([...messages, message])
+        const newSocket = io('http://192.168.1.125:3005')
+        newSocket.emit('conversation_id', conversation?._id)
+
+        newSocket.on('receive-message', (data) => {
+            // alert('Received message:', data)
+            console.log(data)
+            const messageArray = JSON.parse(data)
+            // Kiểm tra xem messageArray có phải là mảng hay không
+            if (Array.isArray(messageArray)) {
+                setMessages((prevMessages) => [
+                    ...messageArray,
+                    ...prevMessages,
+                ])
+            } else {
+                // Nếu không, chuyển nó thành một mảng và thêm vào messages
+                setMessages((prevMessages) => [messageArray, ...prevMessages])
             }
         })
-    }, [messages])
-    //alway scroll to last message
-    useEffect(() => {
-        setNumMessage(messages.length - 1)
-    }, [messages])
+        // thu hồi socket được nhận là
+        newSocket.on('message-recalled', (data) => {
+            // kiểm tra xem có lắng nghe được message-recalled từ server không
+            const messageArray = JSON.parse(data)
 
-    useEffect(() => {
-        socket.current = io(socketUrl)
-        socket.current.emit('setup', currentUserId)
-        socket.current.on('connected', () => setSocketConnected(true))
-        socket.current.on('typing', () => setIsTyping(true))
-        socket.current.on('stop typing', () => setIsTyping(false))
-        //socket.current.emit('new-user-add', currentUserId)
-        // socket.current.on('get-users', (users) => {
-        // setOnlineUsers(users)
-        // })
-    }, [currentUserId])
+            setRecallMessage((prevMessages) => [
+                ...prevMessages,
+                messageArray?._id,
+            ])
+
+            // Update the messages state to reflect the recalled message
+            setMessages((prevMessages) => {
+                return prevMessages.map((message) => {
+                    if (message?._id === messageArray?._id) {
+                        // If the message is the one that was recalled, mark it as recalled
+                        return { ...message, recalled: true }
+                    } else {
+                        // Otherwise, return the message as is
+                        return message
+                    }
+                })
+            })
+        })
+        setSocket(newSocket)
+    }, [])
 
     const fetchMessages = async () => {
         try {
-            const response = await fetch(url + `/messages/${conversation._id}`)
+            const response = await fetch(url + `/message/${conversation?._id}`)
             const data = await response.json()
-            // neu có id của người dùng trong deletedBy thì không hiển thị tin nhắn
-            // const dataFilter = data.filter((message) => {
-            // if (message.deletedBy.includes(currentUserId)) {
-            // return false
-            // }
-            // return true
-            // })
+
             setMessages(data.reverse())
-            socket.current.emit('join chat', conversation._id)
         } catch (error) {
             console.log(error)
         }
@@ -382,7 +383,7 @@ const Chat = ({ navigation, route }) => {
     const fetchConversation = async () => {
         try {
             axios
-                .get(`${url}/conversations/findConversationById/${conver._id}`)
+                .get(`${url}/conversation/findConversationById/${conver?._id}`)
                 .then((res) => {
                     setConversation(res.data)
                 })
@@ -392,15 +393,33 @@ const Chat = ({ navigation, route }) => {
     }
 
     useEffect(() => {
-        fetchConversation()
-        if (conversation !== null) {
-            fetchMessages()
+        const fetchData = async () => {
+            try {
+                // Fetch conversation data
+                fetchConversation()
+                // Fetch message data
+                fetchMessages()
+            } catch (error) {
+                console.log(error)
+            }
         }
+
+        fetchData()
+
         const onFocused = navigation.addListener('focus', () => {
-            fetchMessages()
-            fetchConversation()
+            fetchData()
         })
+
+        return () => {
+            onFocused()
+        }
     }, [conversation, navigation])
+
+    // Hàm callback để thực hiện công việc sau khi messages đã được cập nhật
+    useEffect(() => {
+        setNumMessage(messages.length - 1)
+    }, [messages])
+
     //console.log(messages)
     const handleSend = async (e) => {
         // console.log(newMessage)
@@ -408,41 +427,20 @@ const Chat = ({ navigation, route }) => {
         const message = {
             senderId: currentUserId,
             content: newMessage,
-            conversation_id: conversation._id,
+            conversation_id: conversation?._id,
             contentType: 'text',
         }
         //send message to database
         try {
-            const { data } = await axios.post(url + `/messages/`, message)
-            socket.current.emit('new message', data)
+            const { data } = await axios.post(url + `/message/`, message)
+            socket.emit('send-message', data)
             setMessages([data, ...messages])
 
             setNewMessage('')
         } catch (error) {
             console.log(error)
         }
-        // send message to socket server
-        // const receiverId = conversation.members.find(
-        // (member) => member !== currentUserId,
-        // )
-        // setSendMessage({ ...message, receiverId })
     }
-
-    //alway scroll to last message
-    // useEffect(() => {
-    // setNumMessage(messages.length - 1)
-    // }, [messages])
-    useEffect(() => {
-        socket.current.on('message received', (message) => {
-            // if (
-            // message !== null &&
-            // message.conversation_id === conversation._id
-            // )
-            // {
-            setMessages([message, ...messages])
-            //}
-        })
-    }, [messages])
 
     const handleReSend = async () => {
         // alert(
@@ -467,34 +465,16 @@ const Chat = ({ navigation, route }) => {
         // } else {
         try {
             const { data } = await axios.put(
-                url + `/messages/recallMessage/${messageId}`,
+                url + `/message/recallMessage/${messageId}`,
             )
             fetchMessages()
             //setMessages([data, ...messages])
             setIsShowModalSend(false)
+            socket.emit('message-recalled', data)
         } catch (error) {
             console.log(error)
         }
-        //recall message to socket
-        socket.current.emit('messageRecalled', messageId)
-
-        // setSendMessage()
     }
-    useEffect(() => {
-        socket.current.on('messageRecalled', (messageId) => {
-            // setMessages(messages.map(message =>
-            // message._id === messageId ? { ...message, recalled: true } : message
-            // ));
-            setMessages(
-                messages.map((message) => {
-                    if (message._id === messageId) {
-                        return { ...message, recalled: true }
-                    }
-                    return message
-                }),
-            )
-        })
-    }, [messages])
 
     const handleDelete = async () => {
         Alert.alert('Xóa tin nhắn', 'Bạn có chắc chắn muốn xóa tin nhắn này?', [
@@ -508,7 +488,7 @@ const Chat = ({ navigation, route }) => {
                 onPress: async () => {
                     try {
                         axios
-                            .put(url + `/messages/deleteMessage`, {
+                            .put(url + `/message/deleteMessage`, {
                                 message_id: messageId,
                                 user_id: currentUserId,
                             })
@@ -534,7 +514,7 @@ const Chat = ({ navigation, route }) => {
         setIsShowModalRecive(false)
         const getConversations = async (currentUserId) => {
             axios
-                .get(url + `/conversations/${currentUserId}`)
+                .get(url + `/conversation/${currentUserId}`)
                 .then((res) => {
                     setUserConversation(res.data)
                     console.log(res.data)
@@ -1071,7 +1051,12 @@ const Chat = ({ navigation, route }) => {
                                     recall={item.recalled}
                                     type={item.contentType}
                                     user_id={item?.senderId?._id}
-                                    avatar={item.senderId?.avatar}
+                                    avatar={
+                                        typeof item?.senderId === 'object' &&
+                                        item?.senderId !== null
+                                            ? item.senderId?.avatar
+                                            : item.avatar
+                                    }
                                     lastName={item.senderId?.lastName}
                                 />
                             )

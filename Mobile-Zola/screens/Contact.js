@@ -1,4 +1,5 @@
 import {
+    SafeAreaView,
     StyleSheet,
     Text,
     View,
@@ -10,53 +11,68 @@ import {
 import React, { useEffect, useContext, useState } from 'react'
 import {
     MaterialIcons,
-    Feather,
+    EvilIcons,
     AntDesign,
     FontAwesome5,
+    Feather,
 } from '@expo/vector-icons'
 import Tab from '../components/Tab'
 import { UserType } from '../UserContext'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import axios from 'axios'
 import { jwtDecode } from 'jwt-decode'
-import { SafeAreaView } from 'react-native-safe-area-context'
-import LinearGradient from 'react-native-linear-gradient'
-import { url } from '../utils/constant'
 
 const Contact = ({ navigation }) => {
-    const listContact = []
     const { accountId, setAccountId } = useContext(UserType)
+    const [userId, setUserId] = useState('')
+    const [friends, setFriends] = useState([])
     const [users, setUsers] = useState([])
+
     useEffect(() => {
-        const fetchUser = async () => {
+        const getUserIdByAccountId = async () => {
             const token = await AsyncStorage.getItem('AuthToken')
             const decodedToken = jwtDecode(token)
             const accountId = decodedToken.accountId
             setAccountId(accountId)
-
             axios
                 .get(
-                    url +
-                        `:3000/user/findAllExceptCurrentUser?account_id=${accountId}`,
+                    `http://localhost:3001/user/findUser?account_id=${accountId}`,
                 )
                 .then((res) => {
-                    setUsers(res.data)
+                    setUserId(res.data._id)
                 })
                 .catch((err) => {
                     console.log(err)
                 })
         }
-        fetchUser()
+        getUserIdByAccountId()
     }, [])
-    console.log('users', users, 'accountid', accountId)
+    const fetchFriends = async () => {
+        try {
+            const response = await axios.get(
+                `http://localhost:3001/user/getFriends/${userId}`,
+            )
+            if (response.status === 200) {
+                const friendsData = response.data.map((friend) => ({
+                    _id: friend._id,
+                    userName: friend.userName,
+                    phoneNumber: friend.phoneNumber,
+                    avatar: friend.avatar,
+                }))
+                setFriends(friendsData)
+            }
+        } catch (error) {
+            console.log('error message', error)
+        }
+    }
+    useEffect(() => {
+        if (userId) {
+            fetchFriends(userId)
+        }
+    }, [userId])
     return (
         <SafeAreaView style={styles.container}>
-            <LinearGradient
-                colors={['#474bff', '#478eff']}
-                useAngle={true}
-                angle={90}
-                style={styles.header}
-            >
+            <View style={styles.header}>
                 <TouchableOpacity style={styles.search}>
                     <View style={styles.iconSearch}>
                         <Feather name="search" size={26} color="white" />
@@ -76,7 +92,7 @@ const Contact = ({ navigation }) => {
                         style={styles.iconAdd}
                     />
                 </TouchableOpacity>
-            </LinearGradient>
+            </View>
             <View style={styles.option}>
                 <TouchableOpacity
                     style={{
@@ -105,7 +121,12 @@ const Contact = ({ navigation }) => {
                 </TouchableOpacity>
             </View>
             <View style={styles.FriendRequests}>
-                <TouchableOpacity style={styles.btnRequest}>
+                <TouchableOpacity
+                    style={styles.btnRequest}
+                    onPress={() => {
+                        navigation.navigate('FriendRequest')
+                    }}
+                >
                     <FontAwesome5
                         name="user-friends"
                         size={24}
@@ -116,9 +137,9 @@ const Contact = ({ navigation }) => {
             </View>
             <ScrollView>
                 <View style={styles.list}>
-                    {listContact.map((item) => {
+                    {friends.map((item) => {
                         return (
-                            <View key={item.id}>
+                            <View key={item._id}>
                                 <TouchableOpacity style={styles.contact}>
                                     <View style={styles.avatarWrap}>
                                         <Image
@@ -127,7 +148,9 @@ const Contact = ({ navigation }) => {
                                         />
                                     </View>
 
-                                    <Text style={styles.name}>{item.name}</Text>
+                                    <Text style={styles.name}>
+                                        {item.userName}
+                                    </Text>
                                     <TouchableOpacity style={styles.message}>
                                         <AntDesign
                                             name="message1"

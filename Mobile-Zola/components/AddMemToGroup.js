@@ -95,7 +95,7 @@ const AddMemToGroup = ({ navigation, route }) => {
     const handleAddMember = async () => {
         try {
             const response = await axios.post(
-                `${url}/conversations/add-member`,
+                `${url}/conversation/add-member`,
                 {
                     friend_ids: members.map((member) => member._id),
                     conversation_id: conversation._id,

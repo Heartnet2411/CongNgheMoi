@@ -41,7 +41,7 @@ const MemberInfo = ({
         try {
             await axios
                 .put(
-                    `${url}/conversations/authorizeDeputyLeader`,
+                    `${url}/conversation/authorizeDeputyLeader`,
                     {
                         conversation_id: id,
                         user_id: currentUserId,
@@ -69,7 +69,7 @@ const MemberInfo = ({
                     //send message to database
                     try {
                         const { data } = await axios.post(
-                            url + `/messages/`,
+                            url + `/message/`,
                             message,
                         )
                         // socket.current.emit('new message', data)
@@ -86,7 +86,7 @@ const MemberInfo = ({
         try {
             await axios
                 .put(
-                    `${url}/conversations/removeMemberFromConversationGroup`,
+                    `${url}/conversation/removeMemberFromConversationGroup`,
                     {
                         conversation_id: id,
                         user_id: currentUserId,
@@ -117,7 +117,7 @@ const MemberInfo = ({
                     //send message to database
                     try {
                         const { data } = await axios.post(
-                            url + `/messages/`,
+                            url + `/message/`,
                             message,
                         )
                         // socket.current.emit('new message', data)

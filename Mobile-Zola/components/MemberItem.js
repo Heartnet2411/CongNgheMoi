@@ -34,7 +34,7 @@ const MemberItem = ({ member, leader, deputyLeader, currentUserId, id }) => {
         try {
             await axios
                 .put(
-                    `${url}/conversations/authorizeGroupLeader`,
+                    `${url}/conversation/authorizeGroupLeader`,
                     {
                         conversation_id: id,
                         user_id: currentUserId,
