@@ -11,7 +11,7 @@ import passport from 'passport'
 
 import passportLocal from 'passport-local'
 const app = express()
-const port = 3001
+const port = 3000
 app.use(cors())
 
 import route from './routes/index.js'
