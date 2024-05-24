@@ -14,7 +14,7 @@ import {
 import React, { useEffect } from 'react'
 import { K2D_700Bold, useFonts } from '@expo-google-fonts/k2d'
 import { Inter_600SemiBold } from '@expo-google-fonts/inter'
-import { primaryColor } from '../utils/constant'
+import moment from 'moment'
 import {
     Entypo,
     AntDesign,
@@ -231,14 +231,111 @@ const Login = ({ navigation, route }) => {
         )
     }
 
+    const handleUndoDeleteAccount = async () => {
+        const token = await AsyncStorage.getItem('AuthToken')
+        const decodedToken = jwtDecode(token)
+        const account_id = decodedToken.accountId
+
+        Alert.alert(
+            'Xác nhận',
+            'Bạn có chắc chắn muốn hoàn tác xóa tài khoản?',
+            [
+                {
+                    text: 'Hủy',
+                    onPress: () => console.log('Cancel Pressed'),
+                    style: 'cancel',
+                },
+                {
+                    text: 'OK',
+                    onPress: () => {
+                        fetch(
+                            url +
+                                `/user/undoDeleteAccount?accountID=${account_id}`,
+                            {
+                                method: 'PUT',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                },
+                            },
+                        )
+                            .then((res) => {
+                                return res.json()
+                            })
+                            .then((data) => {
+                                console.log(data)
+                            })
+                            .catch((error) => {
+                                console.error('Error:', error)
+                            })
+                            .finally(() => {
+                                fetchUser()
+                            })
+                    },
+                },
+            ],
+        )
+    }
+
     return (
         <SafeAreaView style={styles.container}>
             <View
                 style={{
                     height: windowHeight - windowHeight * 0.08,
+                    position: 'relative',
                 }}
             >
                 <View>
+                    {user.deleted === true ? (
+                        <View
+                            style={{
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                                position: 'absolute',
+                                top: 0,
+                                left: 0,
+                                width: windowWidth,
+                                height: 'auto',
+                                backgroundColor: 'rgba(0,0,0,0.7)',
+                                zIndex: 100,
+                            }}
+                        >
+                            <Text
+                                style={{
+                                    textAlign: 'center',
+                                    color: 'red',
+                                    fontSize: 17,
+                                    fontWeight: 'bold',
+                                    marginVertical: 10,
+                                }}
+                            >
+                                Tài khoản của bạn sẽ bị xóa sau{' '}
+                                {moment(user.deletedAt)
+                                    .clone()
+                                    .add(30, 'days')
+                                    .diff(moment(), 'days')}{' '}
+                                ngày nữa
+                            </Text>
+                            <TouchableOpacity
+                                style={{
+                                    backgroundColor: 'white',
+                                    padding: 5,
+                                    borderRadius: 5,
+                                    paddingHorizontal: 20,
+                                    marginBottom: 10,
+                                }}
+                                onPress={handleUndoDeleteAccount}
+                            >
+                                <Text
+                                    style={{
+                                        fontWeight: 'bold',
+                                        fontSize: 15,
+                                    }}
+                                >
+                                    Hoàn tác
+                                </Text>
+                            </TouchableOpacity>
+                        </View>
+                    ) : null}
                     <Image
                         source={{
                             uri: user.coverImage,
@@ -401,6 +498,22 @@ const Login = ({ navigation, route }) => {
                                         Đổi mật khẩu
                                     </Text>
                                 </TouchableOpacity>
+                                <TouchableOpacity
+                                    style={styles.button}
+                                    onPress={() => {
+                                        navigation.navigate('DeleteAccount')
+                                        setModalVisible(!modalVisible)
+                                    }}
+                                >
+                                    <MaterialIcons
+                                        name="delete-forever"
+                                        size={24}
+                                        color="red"
+                                    />
+                                    <Text style={styles.buttonText}>
+                                        Xóa tài khoản
+                                    </Text>
+                                </TouchableOpacity>
                                 <Pressable
                                     style={styles.buttonClose}
                                     onPress={() =>
@@ -472,8 +585,8 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         margin: 10,
-        borderWidth: 2,
-        borderColor: primaryColor,
+        borderWidth: 1,
+        borderColor: '#ccc',
         flexDirection: 'row',
     },
     buttonMain: {

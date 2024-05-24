@@ -11,6 +11,7 @@ import {
 import React, { useContext } from 'react'
 import { Inter_600SemiBold, useFonts } from '@expo-google-fonts/inter'
 import Tab from '../components/Tab'
+import moment from 'moment'
 import {
     EvilIcons,
     MaterialCommunityIcons,
@@ -29,9 +30,16 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import LinearGradient from 'react-native-linear-gradient'
 
 const Message = ({ navigation, route }) => {
-    const { accountId, setAccountId, conversations, setConversations } =
-        useContext(UserType)
+    const {
+        accountId,
+        setAccountId,
+        conversations,
+        setConversations,
+        cloud,
+        setCloud,
+    } = useContext(UserType)
     const [userId, setUserId] = useState({})
+    const [user, setUser] = useState({})
     // const [conversations, setConversations] = useState([])
     useEffect(() => {
         const getUserIdByAccountId = async () => {
@@ -42,6 +50,7 @@ const Message = ({ navigation, route }) => {
                 .get(url + `/user/findUser?account_id=${accountId}`)
                 .then((res) => {
                     setUserId(res.data._id)
+                    setUser(res.data)
                 })
                 .catch((err) => {
                     console.log(err)
@@ -57,8 +66,51 @@ const Message = ({ navigation, route }) => {
                     console.log('error message', error)
                 })
         }
+        const fetchCloud = async () => {
+            if (userId !== undefined && userId !== '') {
+                axios
+                    .post(url + '/conversation/createMyCloudConversationWeb', {
+                        user_id: userId,
+                    })
+                    .then((response) => {
+                        if (
+                            response.data.message ===
+                            'Tạo ConversationCloud thành công!!!'
+                        ) {
+                            //alert('Tạo ConversationCloud đã tồn tại!!!')
+                            // toast.success('Tạo conversation thành công!!!')
+                            //setConversationMyCloud(response.data.conversation)
+                            // lưu biến conversationMyCloud vào localStorage
+                            // localStorage.setItem(
+                            // 'conversationMyCloud',
+                            // JSON.stringify(response.data.conversation),
+                            console.log(response.data.conversation._id)
+                            setCloud(response.data.conversation)
+                        }
+                        if (
+                            response.data.message ===
+                            'ConversationCloud đã tồn tại!!!'
+                        ) {
+                            // alert('ConversationCloud đã tồn tại!!!')
+                            // toast.success('Conversation đã tồn tại!!!')
+                            // setConversationMyCloud(response.data.conversation)
+                            // lưu biến conversationMyCloud vào localStorage
+                            // localStorage.setItem(
+                            // 'conversationMyCloud',
+                            // JSON.stringify(response.data.conversation),
+                            // )
+                            console.log(response.data.conversation._id)
+                            setCloud(response.data.conversation)
+                        }
+                    })
+                    .catch((error) => {
+                        console.error(error)
+                    })
+            }
+        }
         getUserIdByAccountId()
         getConversations(userId)
+        fetchCloud()
         const onFocused = navigation.addListener('focus', () => {
             getConversations(userId)
             getUserIdByAccountId()
@@ -110,7 +162,36 @@ const Message = ({ navigation, route }) => {
                         />
                     </TouchableOpacity>
                 </LinearGradient>
+
                 <ScrollView style={styles.body}>
+                    {user?.deleted ? (
+                        <View
+                            style={{
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                                width: windowWidth,
+                                height: 'auto',
+                                backgroundColor: 'red',
+                            }}
+                        >
+                            <Text
+                                style={{
+                                    fontSize: 20,
+                                    color: 'white',
+                                    paddingHorizontal: 30,
+                                    textAlign: 'center',
+                                    marginVertical: 5,
+                                }}
+                            >
+                                Tài khoản của bạn sẽ bị xóa sau{' '}
+                                {moment(user.deletedAt)
+                                    .clone()
+                                    .add(30, 'days')
+                                    .diff(moment(), 'days')}{' '}
+                                ngày nữa
+                            </Text>
+                        </View>
+                    ) : null}
                     {conversations.map((conversation) => {
                         return (
                             <Conversation

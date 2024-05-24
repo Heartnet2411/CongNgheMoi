@@ -22,7 +22,6 @@ const Message = new Schema(
         content: {
             type: String,
         },
-
         recalled: {
             type: Boolean,
             default: false,
@@ -33,9 +32,11 @@ const Message = new Schema(
                 ref: 'User',
             },
         ],
-        /*imageURL: {
-        type: String,
-    }*/
+        // thêm reply
+        replyTo: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Message',
+        },
     },
     { timestamps: true }
 )

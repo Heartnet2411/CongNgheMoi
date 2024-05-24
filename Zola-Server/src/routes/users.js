@@ -85,6 +85,7 @@ router.post('/getInfoFriendWeb', userController.getInfoFriendWeb)
 router.post('/getInfoByUserIDWeb', userController.getInfoByUserIDWeb)
 
 // Mobile
+// Mobile
 router.post('/register', userController.register)
 router.get('/findAllExceptCurrentUser', userController.GetAllUsers)
 
@@ -116,5 +117,13 @@ router.get(
 )
 router.post('/recallsentRequest', userController.cancelFriendRequest)
 router.post('/friend-request/reject', userController.deleteFriendRequest)
+
+router.delete('/deleteAccount', userController.deleteAccount)
+router.put('/undoDeleteAccount', userController.undoDeleteAccount)
+router.delete(
+    '/deleteAccountAfter30Days',
+    userController.deleteAccountAfter30Days
+)
+router.put('/updateNewPhoneNumber', userController.changeNewPhoneNumber)
 
 export default router

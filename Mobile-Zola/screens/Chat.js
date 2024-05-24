@@ -23,9 +23,7 @@ import {
     FontAwesome,
     Ionicons,
 } from '@expo/vector-icons'
-import Tab from '../components/Tab'
 import { url } from '../utils/constant'
-import { format } from 'timeago.js'
 import { io } from 'socket.io-client'
 import axios from 'axios'
 import { SafeAreaView } from 'react-native-safe-area-context'
@@ -36,14 +34,16 @@ import { Video, ResizeMode, Audio } from 'expo-av'
 import * as DocumentPicker from 'expo-document-picker'
 import * as FileSystem from 'expo-file-system'
 import * as Permissions from 'expo-permissions'
+import moment from 'moment'
 
 //const socketUrl = 'https://192.168.1.14:8800/'
 
 const Chat = ({ navigation, route }) => {
     const userData = route.params.userData
     const conver = route.params.conversation
+    console.log(conver)
     const currentUserId = route.params.currentUserId
-    const [conversation, setConversation] = useState(null)
+    const [conversation, setConversation] = useState(conver)
     const [messages, setMessages] = useState([])
     const [newMessage, setNewMessage] = useState('')
     const [onlineUsers, setOnlineUsers] = useState([])
@@ -325,7 +325,7 @@ const Chat = ({ navigation, route }) => {
     }
 
     useEffect(() => {
-        const newSocket = io('http://192.168.1.125:3005')
+        const newSocket = io('http://192.168.1.19:3005')
         newSocket.emit('conversation_id', conversation?._id)
 
         newSocket.on('receive-message', (data) => {
@@ -374,7 +374,13 @@ const Chat = ({ navigation, route }) => {
             const response = await fetch(url + `/message/${conversation?._id}`)
             const data = await response.json()
 
-            setMessages(data.reverse())
+            // lọc những tin nhắn có trong mảng deleteBy
+            // nếu currentUserId có trong mảng deleteBy thì không hiển thị tin nhắn đó
+            const filterMessages = data.filter(
+                (message) => !message?.deletedBy?.includes(currentUserId),
+            )
+
+            setMessages(filterMessages.reverse())
         } catch (error) {
             console.log(error)
         }
@@ -393,21 +399,14 @@ const Chat = ({ navigation, route }) => {
     }
 
     useEffect(() => {
-        const fetchData = async () => {
-            try {
-                // Fetch conversation data
-                fetchConversation()
-                // Fetch message data
-                fetchMessages()
-            } catch (error) {
-                console.log(error)
-            }
-        }
+        setConversation(conver)
 
-        fetchData()
+        fetchMessages()
 
         const onFocused = navigation.addListener('focus', () => {
-            fetchData()
+            fetchConversation()
+
+            fetchMessages()
         })
 
         return () => {
@@ -423,22 +422,26 @@ const Chat = ({ navigation, route }) => {
     //console.log(messages)
     const handleSend = async (e) => {
         // console.log(newMessage)
-        e.preventDefault()
-        const message = {
-            senderId: currentUserId,
-            content: newMessage,
-            conversation_id: conversation?._id,
-            contentType: 'text',
-        }
-        //send message to database
-        try {
-            const { data } = await axios.post(url + `/message/`, message)
-            socket.emit('send-message', data)
-            setMessages([data, ...messages])
+        if (newMessage === '') {
+            e.preventDefault()
+            Alert.alert('Thông báo', 'Vui lòng nhập tin nhắn')
+        } else {
+            const message = {
+                senderId: currentUserId,
+                content: newMessage,
+                conversation_id: conversation?._id,
+                contentType: 'text',
+            }
+            //send message to database
+            try {
+                const { data } = await axios.post(url + `/message/`, message)
+                socket.emit('send-message', data)
+                setMessages([data, ...messages])
 
-            setNewMessage('')
-        } catch (error) {
-            console.log(error)
+                setNewMessage('')
+            } catch (error) {
+                console.log(error)
+            }
         }
     }
 
@@ -464,13 +467,33 @@ const Chat = ({ navigation, route }) => {
         // return
         // } else {
         try {
-            const { data } = await axios.put(
-                url + `/message/recallMessage/${messageId}`,
-            )
-            fetchMessages()
-            //setMessages([data, ...messages])
-            setIsShowModalSend(false)
-            socket.emit('message-recalled', data)
+            if (Date.now() - new Date(date).getTime() > 86400000) {
+                Alert.alert('Thông báo', 'Không thể thu hồi tin nhắn sau 24h')
+            } else {
+                Alert.alert(
+                    'Thu hồi tin nhắn',
+                    'Bạn có muốn thu hồi tin nhắn đã gửi hay không?',
+                    [
+                        {
+                            text: 'Hủy',
+                            onPress: () => setIsShowModalSend(false),
+                            style: 'cancel',
+                        },
+                        {
+                            text: 'Đồng ý',
+                            onPress: async () => {
+                                const { data } = await axios.put(
+                                    url + `/message/recallMessage/${messageId}`,
+                                )
+                                fetchMessages()
+                                //setMessages([data, ...messages])
+                                setIsShowModalSend(false)
+                                socket.emit('message-recalled', data)
+                            },
+                        },
+                    ],
+                )
+            }
         } catch (error) {
             console.log(error)
         }
@@ -528,12 +551,6 @@ const Chat = ({ navigation, route }) => {
     }
 
     const ItemSend = ({ content, createdAt, messageId, recall, type }) => {
-        const date = new Date(createdAt)
-        const hours = date.getHours()
-        let minutes = date.getMinutes()
-        if (minutes < 10) {
-            minutes = '0' + minutes
-        }
         return (
             <View style={styles.RightMsg}>
                 <View
@@ -552,7 +569,11 @@ const Chat = ({ navigation, route }) => {
                             onPress={() => {
                                 setIsShowModalSend(true)
                                 setModalMessage(content)
-                                setModalTime(`${hours}:${minutes}`)
+                                setModalTime(
+                                    moment(createdAt)
+                                        .utcOffset('+07:00')
+                                        .format('DD/MM/YYYY HH:mm'),
+                                )
                                 setMessageId(messageId)
                                 setDate(createdAt)
                                 setType(type)
@@ -708,14 +729,46 @@ const Chat = ({ navigation, route }) => {
                                 </TouchableOpacity>
                             </View>
                         ) : null}
-                        <Text
-                            style={{
-                                fontSize: 15,
-                                color: '#737373',
-                            }}
-                        >
-                            {hours}:{minutes}
-                        </Text>
+                        {
+                            // kiểm tra createdAt có phải là hôm nay không
+                            moment(createdAt).isSame(new Date(), 'day') ? (
+                                <Text
+                                    style={{
+                                        fontSize: 15,
+                                        color: '#737373',
+                                    }}
+                                >
+                                    {moment(createdAt)
+                                        .utcOffset('+07:00')
+                                        .format('HH:mm')}
+                                </Text>
+                            ) : !moment(createdAt).isSame(
+                                  new Date(),
+                                  'year',
+                              ) ? (
+                                <Text
+                                    style={{
+                                        fontSize: 15,
+                                        color: '#737373',
+                                    }}
+                                >
+                                    {moment(createdAt)
+                                        .utcOffset('+07:00')
+                                        .format('DD/MM/YYYY HH:mm')}
+                                </Text>
+                            ) : (
+                                <Text
+                                    style={{
+                                        fontSize: 15,
+                                        color: '#737373',
+                                    }}
+                                >
+                                    {moment(createdAt)
+                                        .utcOffset('+07:00')
+                                        .format('DD/MM HH:mm')}
+                                </Text>
+                            )
+                        }
                     </View>
                 </View>
             </View>
@@ -732,12 +785,6 @@ const Chat = ({ navigation, route }) => {
         avatar,
         lastName,
     }) => {
-        const date = new Date(createdAt)
-        const hours = date.getHours()
-        let minutes = date.getMinutes()
-        if (minutes < 10) {
-            minutes = '0' + minutes
-        }
         return (
             <View style={styles.LeftMsg}>
                 <View
@@ -899,14 +946,46 @@ const Chat = ({ navigation, route }) => {
                                 </TouchableOpacity>
                             </View>
                         ) : null}
-                        <Text
-                            style={{
-                                fontSize: 15,
-                                color: '#737373',
-                            }}
-                        >
-                            {hours}:{minutes}
-                        </Text>
+                        {
+                            // kiểm tra createdAt có phải là hôm nay không
+                            moment(createdAt).isSame(new Date(), 'day') ? (
+                                <Text
+                                    style={{
+                                        fontSize: 15,
+                                        color: '#737373',
+                                    }}
+                                >
+                                    {moment(createdAt)
+                                        .utcOffset('+07:00')
+                                        .format('HH:mm')}
+                                </Text>
+                            ) : !moment(createdAt).isSame(
+                                  new Date(),
+                                  'year',
+                              ) ? (
+                                <Text
+                                    style={{
+                                        fontSize: 15,
+                                        color: '#737373',
+                                    }}
+                                >
+                                    {moment(createdAt)
+                                        .utcOffset('+07:00')
+                                        .format('DD/MM/YYYY HH:mm')}
+                                </Text>
+                            ) : (
+                                <Text
+                                    style={{
+                                        fontSize: 15,
+                                        color: '#737373',
+                                    }}
+                                >
+                                    {moment(createdAt)
+                                        .utcOffset('+07:00')
+                                        .format('DD/MM HH:mm')}
+                                </Text>
+                            )
+                        }
                     </View>
                     {recall ? null : (
                         <TouchableOpacity
@@ -917,7 +996,11 @@ const Chat = ({ navigation, route }) => {
                             onPress={() => {
                                 setIsShowModalRecive(true)
                                 setModalMessage(content)
-                                setModalTime(`${hours}:${minutes}`)
+                                setModalTime(
+                                    moment(createdAt)
+                                        .utcOffset('+07:00')
+                                        .format('DD/MM/YYYY HH:mm'),
+                                )
                                 setModalAvatar(userData?.avatar)
                                 setMessageId(messageId)
                                 setType(type)

@@ -25,6 +25,8 @@ router.put(
     '/updatePasswordByPhone',
     accountController.updatePasswordByPhoneNumber
 )
+router.delete('/delete-account', accountController.deleteAccount)
+router.put('/updateNewPhoneNumber', accountController.updatePhoneNumber)
 //----
 
 export default router

@@ -18,8 +18,6 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import Chat from './screens/Chat'
 import { UserContext } from './UserContext'
 import AddFriend from './components/AddFriend'
-import ForgotPassword from './components/ForgotPassword'
-import ConfirmForgot from './components/ConfirmForgot'
 import EditNewPassword from './components/EditNewPassword'
 import Conversation from './components/Conversation'
 import ForwardMessage from './components/ForwardMessage'
@@ -31,6 +29,9 @@ import MemberInfo from './components/MemberInfo'
 import MemberKey from './components/MemberKey'
 import AddMemToGroup from './components/AddMemToGroup'
 import LoadMember from './components/LoadMember'
+import DeleteAccount from './components/DeleteAccount'
+import FriendRequest from './components/FriendRequest'
+import ChangePhoneNumber from './components/ChangePhoneNumber'
 
 import TextEncoding from 'text-encoding'
 global.TextEncoder = TextEncoding.TextEncoder
@@ -43,6 +44,21 @@ export default function App() {
         <UserContext>
             <NavigationContainer>
                 <Stack.Navigator initialRouteName="Login">
+                    <Stack.Screen
+                        name="ChangePhoneNumber"
+                        component={ChangePhoneNumber}
+                        options={{ headerTitle: 'Thay đổi số điện thoại' }}
+                    />
+                    <Stack.Screen
+                        name="FriendRequest"
+                        component={FriendRequest}
+                        options={{ headerTitle: 'Lời mời kết bạn' }}
+                    />
+                    <Stack.Screen
+                        name="DeleteAccount"
+                        component={DeleteAccount}
+                        options={{ headerTitle: 'Xóa tài khoản' }}
+                    />
                     <Stack.Screen
                         name="LoadMember"
                         component={LoadMember}
@@ -168,16 +184,7 @@ export default function App() {
                         component={CreateUser}
                         options={{ headerShown: false }}
                     />
-                    <Stack.Screen
-                        name="ForgotPassword"
-                        component={ForgotPassword}
-                        options={{ headerShown: false }}
-                    />
-                    <Stack.Screen
-                        name="ConfirmForgot"
-                        component={ConfirmForgot}
-                        options={{ headerShown: false }}
-                    />
+
                     <Stack.Screen
                         name="EditNewPassword"
                         component={EditNewPassword}

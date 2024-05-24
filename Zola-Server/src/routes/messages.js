@@ -72,6 +72,7 @@ router.post(
     '/getMessageReplyContentWeb',
     messageController.getMessageReplyContentWeb
 )
+router.post('/getLastMessageWeb', messageController.getLastMessageWeb)
 // //add mobile
 router.post('/', messageController.addMessage)
 router.get('/:conversation_id', messageController.getMessagesByConversationID)

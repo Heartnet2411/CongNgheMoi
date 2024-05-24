@@ -12,6 +12,7 @@ import { useContext } from 'react'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import axios from 'axios'
 import jwtDecode from 'jwt-decode'
+import { url } from '../utils/constant'
 
 const User = ({ item }) => {
     const { accountId, setAccountId } = useContext(UserType)
@@ -22,9 +23,7 @@ const User = ({ item }) => {
     useEffect(() => {
         const getUserIdByAccountId = async () => {
             axios
-                .get(
-                    `http://localhost:3000/user/findUser?account_id=${accountId}`,
-                )
+                .get(url + `/user/findUser?account_id=${accountId}`)
                 .then((res) => {
                     setUserId(res.data._id)
                 })
@@ -52,16 +51,13 @@ const User = ({ item }) => {
     console.log(userId)
     const sendFriendRequest = async (currentUserId, selectedUserId) => {
         try {
-            const response = await fetch(
-                'http://localhost:3000/user/friend-request',
-                {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ currentUserId, selectedUserId }),
+            const response = await fetch(url + '/user/friend-request', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
                 },
-            )
+                body: JSON.stringify({ currentUserId, selectedUserId }),
+            })
 
             if (response.ok) {
                 setRequestSent(true)
@@ -73,26 +69,29 @@ const User = ({ item }) => {
     console.log('friend requests sent', friendRequests)
     console.log('user friends', userFriends)
     return (
-        <TouchableOpacity style={styles.user}>
-            <Image source={item.avatar} style={styles.avatar} />
-            <Text style={styles.name}>{item.firstName}</Text>
+        <View style={styles.user}>
+            <Image src={item.avatar} style={styles.avatar} />
+            <Text style={styles.name}>{item.userName}</Text>
             <TouchableOpacity
                 style={styles.add}
                 onPress={() => sendFriendRequest(userId, item._id)}
             >
                 <Text style={styles.txtAdd}>Kết bạn</Text>
             </TouchableOpacity>
-        </TouchableOpacity>
+        </View>
     )
 }
 
 export default User
 
+const windowHeight = Dimensions.get('window').height
+const windowWidth = Dimensions.get('window').width
+
 const styles = StyleSheet.create({
     user: {
         flexDirection: 'row',
         alignItems: 'center',
-        margin: 10,
+        marginVertical: 10,
     },
     avatar: {
         width: 50,
@@ -100,7 +99,7 @@ const styles = StyleSheet.create({
         borderRadius: 25,
     },
     name: {
-        marginLeft: 30,
+        marginLeft: 15,
         fontFamily: 'Inter_600SemiBold',
         fontSize: 18,
         color: 'black',
@@ -108,7 +107,7 @@ const styles = StyleSheet.create({
     },
     add: {
         backgroundColor: '#1B96CB',
-        width: 120,
+        width: windowWidth * 0.25,
         height: 40,
         borderRadius: 10,
         justifyContent: 'center',
@@ -118,6 +117,6 @@ const styles = StyleSheet.create({
     },
     txtAdd: {
         color: 'white',
-        fontSize: 18,
+        fontSize: 17,
     },
 })

@@ -14,6 +14,12 @@ import { url } from '../utils/constant'
 
 const PhoneInput = ({ navigation, route }) => {
     const [phoneNumber, setPhoneNumber] = React.useState('')
+    const type = route.params.type
+    let oldPhoneNumber = ''
+    if (route.params.oldPhoneNumber)
+        oldPhoneNumber = route.params.oldPhoneNumber
+
+    console.log(type)
 
     const signUpPhoneNumber = async (phoneNumber) => {
         try {
@@ -24,13 +30,33 @@ const PhoneInput = ({ navigation, route }) => {
                 .then((res) => res.json())
                 .then((data) => {
                     console.log(data)
-                    if (!data) {
-                        Alert.alert('Thông báo', 'Tài khoản đã tồn tại')
-                    } else {
-                        // sendOPT(phoneNumber)
-                        navigation.navigate('Register', {
-                            phoneNumber: phoneNumber,
-                        })
+                    if (type === 'register') {
+                        if (data === 'Account not found!!!') {
+                            sendOPT(phoneNumber)
+                            // navigation.navigate('Register', {
+                            //     phoneNumber: phoneNumber,
+                            // })
+                        } else {
+                            Alert.alert('Thông báo', 'Số điện thoại đã tồn tại')
+                        }
+                    } else if (type === 'forgotPassword') {
+                        if (data === 'Account not found!!!') {
+                            Alert.alert('Thông báo', 'Tài khoản không tồn tại.')
+                        } else {
+                            sendOPT(phoneNumber)
+                            // navigation.navigate('EditNewPassword', {
+                            //     phoneNumber: phoneNumber,
+                            // })
+                        }
+                    } else if (type === 'changePhoneNumber') {
+                        if (data === 'Account not found!!!') {
+                            sendOPT(phoneNumber)
+                            // navigation.navigate('ChangePhoneNumber', {
+                            //     phoneNumber: phoneNumber,
+                            // })
+                        } else {
+                            Alert.alert('Thông báo', 'Số điện thoại đã tồn tại')
+                        }
                     }
                 })
                 .catch((err) => {
@@ -51,6 +77,8 @@ const PhoneInput = ({ navigation, route }) => {
             navigation.navigate('ConfirmCode', {
                 confirm: confirm,
                 phoneNumber: phoneNumber,
+                type: type,
+                oldPhoneNumber: oldPhoneNumber,
             })
         } catch (error) {
             Alert.alert('Thông báo', 'Có lỗi xảy ra xin vui lòng thử lại sau.')
@@ -74,11 +102,12 @@ const PhoneInput = ({ navigation, route }) => {
         <SafeAreaView style={styles.screenWrap}>
             <SafeAreaView style={styles.container}>
                 <View style={styles.textWrap}>
-                    <Text style={styles.headerText}>Đăng ký tài khoản</Text>
+                    <Text style={styles.headerText}>Nhập số điện thoại</Text>
                     <Text style={styles.info}>
-                        Hãy nhập số điện thoại của bạn để đăng ký tài khoản. Để
-                        xác nhận đây không phải là số điện thoại giả mạo, chúng
-                        tôi sẽ gửi mã xác nhận đến số điện thoại của bạn.
+                        Để tiếp tục, vui lòng nhập số điện thoại của bạn. Chúng
+                        tôi sẽ gửi mã xác nhận đến số điện thoại của bạn. Hãy
+                        chắc chắn rằng bạn có thể truy cập vào số điện thoại
+                        này.
                     </Text>
                 </View>
                 <View style={styles.input}>

@@ -11,6 +11,7 @@ import {
 import React, { useRef } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import auth from '@react-native-firebase/auth'
+import { url } from '../utils/constant'
 
 LogBox.ignoreLogs([
     'Non-serializable values were found in the navigation state',
@@ -19,6 +20,8 @@ LogBox.ignoreLogs([
 const ConfirmCode = ({ navigation, route }) => {
     let confirm = route.params.confirm
     const phoneNumber = route.params.phoneNumber
+    const type = route.params.type
+    const oldPhoneNumber = route.params.oldPhoneNumber
 
     const [code, setCode] = React.useState('')
     const [time, setTime] = React.useState(60)
@@ -39,7 +42,17 @@ const ConfirmCode = ({ navigation, route }) => {
         try {
             const isConfirm = await confirm.confirm(code)
             if (isConfirm) {
-                navigation.navigate('Register', { phoneNumber: phoneNumber })
+                if (type === 'register') {
+                    navigation.navigate('Register', {
+                        phoneNumber: phoneNumber,
+                    })
+                } else if (type === 'forgotPassword') {
+                    navigation.navigate('EditNewPassword', {
+                        phoneNumber: phoneNumber,
+                    })
+                } else if (type === 'changePhoneNumber') {
+                    handleChangeNewPhoneNumber()
+                }
             } else {
                 Alert.alert('Thông báo', 'Mã xác nhận không hợp lệ')
             }
@@ -47,6 +60,55 @@ const ConfirmCode = ({ navigation, route }) => {
             Alert.alert('Thông báo', 'Mã xác nhận không hợp lệ')
             console.log(error)
         }
+    }
+
+    const handleChangeNewPhoneNumber = () => {
+        fetch(
+            url +
+                `/account/find-account-by-phone-number?phoneNumber=${oldPhoneNumber}`,
+        )
+            .then((res) => res.json())
+            .then((data) => {
+                console.log(data)
+                fetch(url + `/user/updateNewPhoneNumber`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        account_id: data._id,
+                        newPhoneNumber: phoneNumber,
+                    }),
+                })
+                    .then((res) => res.json())
+                    .then((data) => {
+                        console.log(data)
+                    })
+                    .catch((err) => {
+                        console.log(err)
+                    })
+
+                fetch(url + `/account/updateNewPhoneNumber`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        account_id: data._id,
+                        newPhoneNumber: phoneNumber,
+                    }),
+                })
+                    .then((res) => res.json())
+                    .then((data) => {
+                        console.log(data)
+                    })
+            })
+            .finally(() => {
+                navigation.navigate('Personal')
+            })
+            .catch((err) => {
+                console.log(err)
+            })
     }
 
     const handleSubmit = () => {
@@ -63,7 +125,18 @@ const ConfirmCode = ({ navigation, route }) => {
     const onAuthStateChanged = (user) => {
         if (user) {
             auth().currentUser.delete()
-            navigation.navigate('Register', { phoneNumber: phoneNumber })
+
+            if (type === 'register') {
+                navigation.navigate('Register', {
+                    phoneNumber: phoneNumber,
+                })
+            } else if (type === 'forgotPassword') {
+                navigation.navigate('EditNewPassword', {
+                    phoneNumber: phoneNumber,
+                })
+            } else if (type === 'changePhoneNumber') {
+                handleChangeNewPhoneNumber()
+            }
         }
     }
 

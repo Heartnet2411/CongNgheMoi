@@ -344,6 +344,37 @@ class AccountController {
             res.status(HTTP_STATUS_BAD_REQUEST).json('Account not found!!!')
         }
     }
+    //delete account
+    async deleteAccount(req, res) {
+        const id = req.query.account_id
+
+        const account = await Account.findOne({ _id: id })
+        if (account) {
+            account.phoneNumber = account.phoneNumber + '_deleted' + Date.now()
+            res.json('Delete account successfully!!!')
+        } else {
+            res.status(HTTP_STATUS_BAD_REQUEST).json('Account not found!!!')
+        }
+    }
+    //put /updatePhoneNumber
+    async updatePhoneNumber(req, res) {
+        const id = req.body.account_id
+        const phoneNumber = req.body.newPhoneNumber
+        const account = await Account.findOne({ _id: id })
+        if (account) {
+            account.phoneNumber = phoneNumber
+            await account
+                .save()
+                .then(() => {
+                    res.json('Update phone number successfully!!!')
+                })
+                .catch((err) => {
+                    res.json('Update phone number failure!!!')
+                })
+        } else {
+            res.status(HTTP_STATUS_BAD_REQUEST).json('Account not found!!!')
+        }
+    }
 }
 
 export default new AccountController()

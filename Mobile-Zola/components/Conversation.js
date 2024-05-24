@@ -10,9 +10,10 @@ import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 import { url } from '../utils/constant'
 import { useNavigation, useRoute } from '@react-navigation/native'
+import moment from 'moment'
 
 const Conversation = ({ data, currentUserId }) => {
-    console.log(data)
+    console.log('data', data._id)
     const [userData, setUserData] = useState(null)
     const navigation = useNavigation()
     const [newestMessage, setNewestMessage] = useState('')
@@ -36,9 +37,7 @@ const Conversation = ({ data, currentUserId }) => {
                 .then((res) => {
                     setNewestMessage(res.data)
                     setNewestMessageTime(
-                        new Date(res.data.createdAt).getHours() +
-                            ':' +
-                            new Date(res.data.createdAt).getMinutes(),
+                        moment(res.data.createdAt).format('HH:mm'),
                     )
                 })
                 .catch((error) => {

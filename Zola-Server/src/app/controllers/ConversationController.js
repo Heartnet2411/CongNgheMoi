@@ -1,35 +1,7 @@
 import Conversation from '../models/Conversation.js'
 import User from '../models/User.js'
+
 class ConversationController {
-    // // post /create
-    // async create(req, res) {
-    //     const member = req.body.member
-    //     const message_id = req.body.message_id
-    //     const groupName = req.body.groupName
-    //     const groupAvatar = req.body.groupAvatar
-    //     const memberCount = req.body.memberCount
-    //     const conversation = new Conversation({
-    //         member,
-    //         message_id,
-    //         groupName,
-    //         groupAvatar,
-    //         memberCount,
-    //     })
-    //     await conversation
-    //         .save()
-    //         .then(() => {
-    //             res.json('Create conversation successfully!!!')
-    //         })
-    //         .catch((err) => {
-    //             res.json('Create conversation failure!!!')
-    //         })
-    // }
-
-    // async findAllConversations(req, res) {
-    //     const conversations = await Conversation.find()
-    //     res.json(conversations)
-    // }
-
     // post createConversationsWeb http://localhost:3001/conversation/createConversationsWeb
     async createConversationsWeb(req, res) {
         const user_id = req.body.user_id
@@ -73,6 +45,67 @@ class ConversationController {
                     error: err.message, // thêm chi tiết lỗi
                 })
             })
+    }
+
+    // api get all conversations từ user_id
+    async getConversationsByUserIDWeb(req, res) {
+        const user_id = req.body.user_id
+        try {
+            const conversation = await Conversation.find({
+                members: { $all: [user_id] },
+            })
+            const list_conversation = conversation.map(
+                (conversation) => conversation._id
+            )
+            res.status(200).json({
+                message: 'Lấy all conversation thành công!!!',
+                conversation: list_conversation,
+            })
+        } catch (err) {
+            res.status(500).json(err)
+        }
+    }
+
+    // api xây dựng 1 conversation chỉ có 1 thành viên là bản thân giống như cloud của tôi
+    async createMyCloudConversationWeb(req, res) {
+        //console.log('đã vào createMyCloudConversationWeb')
+        const user_id = req.body.user_id
+        const conversationName = 'Cloud của tôi'
+        const avatar =
+            'https://res-zalo.zadn.vn/upload/media/2021/6/4/2_1622800570007_369788.jpg'
+        // kiểm tra xem đã có conversation nào có member là user_id và conversationName tên là 'Cloud của tôi' chưa nếu có thì trả về thông báo
+        const checkConversation = await Conversation.find({
+            members: { $all: [user_id] },
+            conversationName: conversationName,
+        })
+        if (checkConversation.length > 0) {
+            return res.status(200).json({
+                message: 'ConversationCloud đã tồn tại!!!',
+                conversation: checkConversation[0],
+            })
+        } else {
+            const conversation = new Conversation({
+                members: [user_id],
+                conversationName,
+                avatar,
+            })
+            await conversation
+                .save()
+                .then(() => {
+                    console.log('Tạo conversation thành công!!!')
+                    return res.status(200).json({
+                        message: 'Tạo ConversationCloud thành công!!!',
+                        conversation: conversation,
+                    })
+                })
+                .catch((err) => {
+                    console.error(err) // log lỗi
+                    return res.status(200).json({
+                        message: 'Lỗi khi tạo conversation!!!',
+                        error: err.message, // thêm chi tiết lỗi
+                    })
+                })
+        }
     }
 
     //api tạo nhóm trò chuyện
@@ -873,7 +906,11 @@ class ConversationController {
                     .status(404)
                     .json({ message: 'Conversation not found' })
             }
-            if (conversation.groupLeader || conversation.conversationName) {
+            if (
+                conversation.groupLeader ||
+                (conversation.conversationName &&
+                    conversation.conversationName !== 'Cloud của tôi')
+            ) {
                 return res.status(200).json({
                     message: 'Conversation là nhóm!!!',
                 })
@@ -886,6 +923,8 @@ class ConversationController {
             res.status(500).json({ message: error.message })
         }
     }
+    // viết 1 api lấy tin nhắn cuối cùng của conversation nếu mà là của user mình nhắn sẽ hiện àlaf "Bạn : message" còn néu của người khác thì hiện là "userName : message"
+
     // viết 1 api check nhóm chung giữa user_id và friend_id ta sẽ check xem 2 user_id và friend_id có chung 1 nhóm nào không nếu có thì trả về số lượng nhóm chung và tên nhóm cùng với avatar của nhóm
     async checkGroupCommonWeb(req, res) {
         const user_id = req.body.user_id

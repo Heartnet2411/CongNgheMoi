@@ -15,6 +15,24 @@ const Friend = new Schema({
 const Conversation = new Schema({
     conversation_id: { type: String },
 })
+// const User = new Schema(
+//     {
+//         account_id: { type: String, required: true, unique: true },
+//         conversation_id: [Conversation],
+//         userName: { type: String, required: true },
+//         firstName: { type: String, required: true },
+//         lastName: { type: String, required: true },
+//         phoneNumber: { type: String, required: true, unique: true },
+//         dateOfBirth: { type: String, required: true },
+//         gender: { type: String, required: true },
+//         avatar: { type: String, required: true },
+//         friendRequests: [FriendRequests],
+//         friend: [Friend],
+//         deleteFriend: [Friend],
+//     },
+//     { timestamps: true }
+// )
+
 const User = new Schema(
     {
         account_id: { type: String, required: true, unique: true },
@@ -26,6 +44,7 @@ const User = new Schema(
         dateOfBirth: { type: String, required: true },
         gender: { type: String, required: true },
         avatar: { type: String, required: true },
+        coverImage: { type: String },
         sentFriendRequests: [
             {
                 type: mongoose.Schema.Types.ObjectId,
@@ -40,6 +59,8 @@ const User = new Schema(
         ],
         friend: [Friend],
         deleteFriend: [Friend],
+        deleted: { type: Boolean, default: false },
+        deletedAt: { type: Date },
     },
     { timestamps: true }
 )

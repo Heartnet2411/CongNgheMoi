@@ -72,10 +72,19 @@ router.post(
 router.post('/checkGroupWeb', conversationController.checkGroupWeb)
 // api check giữa user_id và friend_id
 router.post('/checkGroupCommonWeb', conversationController.checkGroupCommonWeb)
+//api tạo conversation cloud của tôi
+router.post(
+    '/createMyCloudConversationWeb',
+    conversationController.createMyCloudConversationWeb
+)
+//api get all getConversationsByUserIDWeb
+router.post(
+    '/getConversationsByUserIDWeb',
+    conversationController.getConversationsByUserIDWeb
+)
 
 //-------------------------------------------------
 // add mobile
-
 router.post('/', conversationController.createConversation)
 router.post(
     '/create-group',

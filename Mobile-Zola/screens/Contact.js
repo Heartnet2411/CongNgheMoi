@@ -1,5 +1,4 @@
 import {
-    SafeAreaView,
     StyleSheet,
     Text,
     View,
@@ -9,6 +8,7 @@ import {
     ScrollView,
 } from 'react-native'
 import React, { useEffect, useContext, useState } from 'react'
+import { SafeAreaView } from 'react-native-safe-area-context'
 import {
     MaterialIcons,
     EvilIcons,
@@ -21,6 +21,7 @@ import { UserType } from '../UserContext'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import axios from 'axios'
 import { jwtDecode } from 'jwt-decode'
+import { url } from '../utils/constant'
 
 const Contact = ({ navigation }) => {
     const { accountId, setAccountId } = useContext(UserType)
@@ -35,9 +36,7 @@ const Contact = ({ navigation }) => {
             const accountId = decodedToken.accountId
             setAccountId(accountId)
             axios
-                .get(
-                    `http://localhost:3001/user/findUser?account_id=${accountId}`,
-                )
+                .get(url + `/user/findUser?account_id=${accountId}`)
                 .then((res) => {
                     setUserId(res.data._id)
                 })
@@ -49,9 +48,7 @@ const Contact = ({ navigation }) => {
     }, [])
     const fetchFriends = async () => {
         try {
-            const response = await axios.get(
-                `http://localhost:3001/user/getFriends/${userId}`,
-            )
+            const response = await axios.get(url + `/user/getFriends/${userId}`)
             if (response.status === 200) {
                 const friendsData = response.data.map((friend) => ({
                     _id: friend._id,
@@ -60,6 +57,7 @@ const Contact = ({ navigation }) => {
                     avatar: friend.avatar,
                 }))
                 setFriends(friendsData)
+                console.log(friends)
             }
         } catch (error) {
             console.log('error message', error)
@@ -143,7 +141,7 @@ const Contact = ({ navigation }) => {
                                 <TouchableOpacity style={styles.contact}>
                                     <View style={styles.avatarWrap}>
                                         <Image
-                                            source={item.avatar}
+                                            src={item.avatar}
                                             style={styles.avatar}
                                         />
                                     </View>
@@ -260,9 +258,9 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     avatar: {
-        width: 50,
-        height: 50,
-        borderRadius: 25,
+        width: 40,
+        height: 40,
+        borderRadius: 20,
     },
     name: {
         fontSize: 18,

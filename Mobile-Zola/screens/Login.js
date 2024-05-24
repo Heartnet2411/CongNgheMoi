@@ -30,7 +30,11 @@ const Login = ({ navigation, route }) => {
                 </TouchableOpacity>
                 <TouchableOpacity
                     style={styles.btnRegis}
-                    onPress={() => navigation.navigate('PhoneInput')}
+                    onPress={() =>
+                        navigation.navigate('PhoneInput', {
+                            type: 'register',
+                        })
+                    }
                 >
                     <Text style={styles.txtRegis}>Đăng ký</Text>
                 </TouchableOpacity>

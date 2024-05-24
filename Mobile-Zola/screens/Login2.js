@@ -13,6 +13,8 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import { AntDesign, Entypo } from '@expo/vector-icons'
 import axios from 'axios'
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import { jwtDecode } from 'jwt-decode'
+import { decode } from 'base-64'
 import { url } from '../utils/constant'
 import LinearGradient from 'react-native-linear-gradient'
 
@@ -33,6 +35,16 @@ const Login2 = ({ navigation }) => {
         }
         checkLoginStatus()
     }, [])
+
+    checkUser = async () => {
+        try {
+            const token = await AsyncStorage.getItem('AuthToken')
+            if (token) {
+            }
+        } catch (error) {
+            console.log(error)
+        }
+    }
 
     const handleLogin = () => {
         //kiểm tra hợp lệ
@@ -135,7 +147,11 @@ const Login2 = ({ navigation }) => {
                     </View>
                     <TouchableOpacity
                         style={styles.getPwd}
-                        onPress={() => navigation.navigate('ForgotPassword')}
+                        onPress={() =>
+                            navigation.navigate('PhoneInput', {
+                                type: 'forgotPassword',
+                            })
+                        }
                     >
                         <Text style={styles.txtGetPwd}>Lấy lại mật khẩu</Text>
                     </TouchableOpacity>

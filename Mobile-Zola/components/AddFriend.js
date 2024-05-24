@@ -17,11 +17,12 @@ import axios from 'axios'
 import { jwtDecode } from 'jwt-decode'
 import { UserType } from '../UserContext'
 import User from './User'
+import { url } from '../utils/constant'
 
 const AddFriend = ({ navigation, route }) => {
     const { accountId, setAccountId } = useContext(UserType)
     const [phoneNumber, setPhoneNumber] = useState('')
-    const [user, setUser] = useState({})
+    const [user, setUser] = useState()
     // useEffect(() => {
     // const fetchUser= async()=>{
     // const token=await AsyncStorage.getItem('AuthToken')
@@ -41,7 +42,7 @@ const AddFriend = ({ navigation, route }) => {
     const handleSearch = async () => {
         try {
             const response = await axios.get(
-                `http://localhost:3001/user/findUserByPhoneNumber/${phoneNumber}`,
+                url + `/user/findUserByPhoneNumber/${phoneNumber}`,
             )
             if (response.status === 200) {
                 setUser(response.data)
@@ -59,6 +60,7 @@ const AddFriend = ({ navigation, route }) => {
                     style={styles.input}
                     placeholder="Nhập số điện thoại"
                     onChangeText={(text) => setPhoneNumber(text)}
+                    keyboardType="numeric"
                     // defaultValue={phoneNumber}
                 />
                 <TouchableOpacity>
@@ -74,13 +76,21 @@ const AddFriend = ({ navigation, route }) => {
             </View>
             <View style={styles.recommend}>
                 <Text style={styles.txtRecommend}>Kết quả</Text>
-                <ScrollView>
-                    <View style={styles.list}>
-                        {user.length === 0 && (
-                            <Text>Không tìm thấy người dùng</Text>
-                        )}
-                        {user && <User item={user} />}
-                    </View>
+                <ScrollView style={styles.list}>
+                    {!user ? (
+                        <Text
+                            style={{
+                                fontSize: 17,
+                                marginHorizontal: 10,
+                                textAlign: 'center',
+                                marginTop: 10,
+                            }}
+                        >
+                            Không tìm thấy người dùng
+                        </Text>
+                    ) : (
+                        <User item={user} />
+                    )}
                 </ScrollView>
             </View>
         </SafeAreaView>
@@ -90,6 +100,8 @@ const AddFriend = ({ navigation, route }) => {
 export default AddFriend
 
 const windowHeight = Dimensions.get('window').height
+const windowWidth = Dimensions.get('window').width
+
 const styles = StyleSheet.create({
     container: {
         flex: 1,
@@ -97,20 +109,26 @@ const styles = StyleSheet.create({
     },
     search: {
         flexDirection: 'row',
-        justifyContent: 'space-between',
+        justifyContent: 'center',
         alignItems: 'center',
-        marginHorizontal: 10,
-        marginTop: 10,
+        marginHorizontal: 20,
+        width: windowWidth * 0.9,
+        alignSelf: 'center',
     },
     input: {
-        width: 300,
+        width: windowWidth * 0.7,
         height: 40,
         backgroundColor: '#E5E5E5',
         borderRadius: 10,
-        paddingLeft: 10,
+        paddingHorizontal: 10,
+        fontSize: 16,
+        marginRight: 20,
     },
     recommend: {
         marginTop: 10,
+        paddingHorizontal: 10,
+        width: windowWidth * 0.9,
+        alignSelf: 'center',
     },
     txtRecommend: {
         fontSize: 20,

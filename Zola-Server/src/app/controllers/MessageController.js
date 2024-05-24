@@ -11,7 +11,7 @@ dotenv.config()
 import uploadDefaultAvatar from '../../util/uploadDefaultAvatar.js'
 import { error } from 'console'
 // require('dotenv').config()
-//import { io } from '../../index.js'
+import { io } from '../../index.js'
 AWS.config.update({
     accessKeyId: process.env.Acces_Key,
     secretAccessKey: process.env.Secret_Acces_Key,
@@ -20,7 +20,7 @@ AWS.config.update({
 
 const S3 = new AWS.S3()
 const bucketname = process.env.s3_bucket
-console.log('bucketname nhận là : ', bucketname)
+// console.log('bucketname nhận là : ', bucketname)
 
 const storage = multer.memoryStorage({
     destination: function (req, file, callback) {
@@ -341,6 +341,104 @@ class MessageController {
         }
     }
 
+    async getLastMessageWeb(req, res) {
+        // console.log('heeqweqwe')
+        const conversation_id = req.body.conversation_id
+        const user_id = req.body.user_id
+        try {
+            const conversation = await Conversation.findOne({
+                _id: conversation_id,
+            })
+            if (!conversation) {
+                return res
+                    .status(404)
+                    .json({ message: 'Conversation not found' })
+            }
+            const lastMessage = await Message.findOne({
+                conversation_id: conversation_id,
+            }).sort({ createdAt: -1 })
+            if (!lastMessage) {
+                return res
+                    .status(404)
+                    .json({ message: 'No messages found in this conversation' })
+            }
+            // if (lastMessage.senderId.toString() === user_id) {
+            if (
+                lastMessage.senderId &&
+                lastMessage.senderId.toString() === user_id
+            ) {
+                let content
+                if (lastMessage.recalled) {
+                    content = 'Tin nhắn đã bị thu hồi'
+                } else {
+                    switch (lastMessage.contentType) {
+                        case 'image':
+                            content = 'hình ảnh'
+                            break
+                        case 'video':
+                            const urlParts123 = lastMessage.content.split('/')
+                            content = urlParts123[urlParts123.length - 1]
+                            break
+                        case 'audio':
+                            content = 'audio'
+                            break
+                        case 'file':
+                            // Extract file name from URL
+                            const urlParts = lastMessage.content.split('/')
+                            content = urlParts[urlParts.length - 1]
+                            break
+                        case 'notify':
+                            content = lastMessage.content
+                            break
+                        default:
+                            content = lastMessage.content
+                    }
+                }
+                return res.status(200).json({
+                    thongbao: 'Tìm thấy tin nhắn!!!',
+                    message: 'Bạn : ' + content,
+                })
+            } else {
+                const user = await User.findOne({
+                    _id: lastMessage.senderId,
+                })
+                let content
+                if (lastMessage.recalled) {
+                    content = 'Tin nhắn đã bị thu hồi'
+                } else {
+                    switch (lastMessage.contentType) {
+                        case 'image':
+                            content = 'hình ảnh'
+                            break
+                        case 'video':
+                            const urlParts123 = lastMessage.content.split('/')
+                            content = urlParts123[urlParts123.length - 1]
+                            break
+                        case 'audio':
+                            content = 'audio'
+                            break
+                        case 'file':
+                            // Extract file name from URL
+                            const urlParts = lastMessage.content.split('/')
+                            content = urlParts[urlParts.length - 1]
+                            break
+                        case 'notify':
+                            content = lastMessage.content
+                            break
+                        default:
+                            content = lastMessage.content
+                    }
+                }
+                return res.status(200).json({
+                    thongbao: 'Tìm thấy tin nhắn!!!',
+                    message: user.userName + ' : ' + content,
+                })
+            }
+        } catch (error) {
+            res.status(500).json({ message: error.message })
+        }
+    }
+
     // api lấy content tin nhắn dựa vào replyTo có nội dung là message_id
     async getMessageReplyContentWeb(req, res) {
         const replyTo = req.body.replyTo
@@ -627,6 +725,7 @@ class MessageController {
             res.status(200).send({
                 message: 'Tạo thông báo thành công',
                 notification: notification.content,
+                noti: notification,
             })
         } catch (err) {
             res.status(500).send({ message: 'Lỗi khi tạo thông báo.' })

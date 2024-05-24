@@ -97,7 +97,7 @@ class UserController {
 
         // từ account đã đăng nhập thành công thì tìm ra user tương ứng với account đó
         const user = await User.findOne({ account_id: account_id })
-        console.log('user: ' + user)
+        //console.log('user: ' + user)
         const user_id = user._id
 
         if (user) {
@@ -287,6 +287,37 @@ class UserController {
         } else {
             // in ra lỗi
             res.json('Không thể xóa bạn bè !!!')
+        }
+    }
+
+    // showw cho mobile và web
+    async showFriendRequests(req, res) {
+        //  res.status(200).json('show friend requests')
+        try {
+            const { userId } = req.params
+            //const user = await User.findById({_id:userId})
+            const user = await User.findById({ _id: userId })
+                .populate('friendRequests', 'userName phoneNumber avatar')
+                .lean()
+            // const friendRequests = user.friendRequests;
+            res.status(200).json(user.friendRequests)
+            //res.status(200).json(user);
+        } catch (error) {
+            console.log(error)
+            //res.sendStatus(500).json('Interval server error');
+        }
+    }
+    async showSentFriendRequests(req, res) {
+        try {
+            const { userId } = req.params
+            //const user = await User.findById({_id:userId})
+            const user = await User.findById({ _id: userId })
+                .populate('sentFriendRequests', 'userName phoneNumber avatar')
+                .lean()
+            res.status(200).json(user.sentFriendRequests)
+        } catch (error) {
+            console.log(error)
+            res.sendStatus(500).json('Interval server error')
         }
     }
 
@@ -501,15 +532,24 @@ class UserController {
         console.log('friend: ', friend)
 
         if (friend) {
-            friend.friendRequests.push({
-                friend_id: user_id,
-                friendName: user.userName,
-                avatar: user.avatar,
-                phoneNumber: user.phoneNumber,
-            })
-            console.log('friend sau khi thêm là: ', friend)
+            if (!friend.friendRequests) {
+                friend.friendRequests = []
+            }
+
+            friend.friendRequests.push(user_id)
+
+            // thêm vào friendRequests của user
+
+            if (!user.sentFriendRequests) {
+                user.sentFriendRequests = []
+            }
+
+            user.sentFriendRequests.push(friend_id)
+            console.log('user sau khi thêm là: ', user.friendRequests)
+            console.log('friend sau khi thêm là: ', friend.friendRequests)
             console.log('Gửi yêu cầu kết bạn thành công!!!')
             await friend.save()
+            await user.save()
             return res.status(200).json({
                 message: 'Gửi yêu cầu kết bạn thành công!!!',
                 friend: friend,
@@ -529,7 +569,10 @@ class UserController {
         console.log('Friend trước khi thu hồi là: ', friend)
         if (user && friend) {
             friend.friendRequests = friend.friendRequests.filter(
-                (request) => request.friend_id !== user_id
+                (request) => request.toString() !== user_id
+            )
+            user.sentFriendRequests = user.sentFriendRequests.filter(
+                (request) => request.toString() !== friend_id
             )
             // Save user after removing friend request
             console.log('Friend sau khi thu hồi là: ', friend)
@@ -545,7 +588,7 @@ class UserController {
             res.json('Không thể Huỷ lời mời kết bạn !!!')
         }
     }
-
+    // từ chối lời mời kết bạn thành công
     async deleteFriendRequestWeb(req, res) {
         const user_id = req.body.user_id
         const friend_id = req.body.friend_id
@@ -556,11 +599,19 @@ class UserController {
         if (user && friend) {
             // Remove friend request
             user.friendRequests = user.friendRequests.filter(
-                (request) => request.friend_id !== friend_id
+                (request) => request.toString() !== friend_id
             )
+            // Remove sent friend request
+            friend.sentFriendRequests = friend.sentFriendRequests.filter(
+                (request) => request.toString() !== user_id
+            )
+
+            // Ở trong
+
             await user.save()
+            await friend.save()
             return res.status(200).json({
-                message: 'Xóa lời mời kết bạn thành công!!!',
+                message: 'Từ chối lời mời kết bạn thành công!!!',
                 user: user,
             })
         } else {
@@ -808,39 +859,6 @@ class UserController {
             res.status(500).json('Error retrieving user')
         }
     }
-    // sent a request to a friend to a user
-    async friendRequest(req, res) {
-        const { currentUserId, selectedUserId } = req.body
-        try {
-            //update receiver's friendRequestArray
-            await User.findByIdAndUpdate(selectedUserId, {
-                $push: { friendRequests: currentUserId },
-            })
-            //update sender's sentRequestArray
-            await User.findByIdAndUpdate(currentUserId, {
-                $push: { sentFriendRequests: selectedUserId },
-            })
-            res.sendStatus(200)
-        } catch (err) {
-            res.sendStatus(500)
-        }
-    }
-    //show all friend requests sent by a user
-    async showFriendRequests(req, res) {
-        try {
-            const { userId } = req.params
-            //const user = await User.findById({_id:userId})
-            const user = await User.findById({ _id: userId })
-                .populate('friendRequests', 'userName phoneNumber avatar')
-                .lean()
-            // const friendRequests = user.friendRequests;
-            res.status(200).json(user.friendRequests)
-            //res.status(200).json(user);
-        } catch (error) {
-            console.log(error)
-            //res.sendStatus(500).json('Interval server error');
-        }
-    }
     //accept a friend request
     async acceptFriendRequest(req, res) {
         try {
@@ -886,7 +904,6 @@ class UserController {
         }
     }
 
-    // thu hồi lời mời kết bạn
     async cancelFriendRequest(req, res) {
         const user_id = req.body.user_id
         const friend_id = req.body.friend_id
@@ -916,7 +933,6 @@ class UserController {
             res.json('Không thể Huỷ lời mời kết bạn !!!')
         }
     }
-
     async deleteFriendRequest(req, res) {
         const user_id = req.body.user_id
         const friend_id = req.body.friend_id
@@ -939,37 +955,79 @@ class UserController {
             res.json('Không thể xóa lời mời kết bạn !!!')
         }
     }
-    async getInfoFriend(req, res) {
+    async deleteAccount(req, res) {
+        const account_id = req.query.accountID
         try {
-            const { userId } = req.params
-            const user = await User.findOne({ _id: userId })
-            if (!user) {
-                return res.status(404).json({ message: 'User not found' })
-            }
-
-            const friendIds = user.friend.map((friend) => friend.friend_id)
-            const friends = await User.find(
-                { _id: { $in: friendIds } },
-                'userName phoneNumber avatar'
-            )
-
-            res.status(200).json(friends)
-        } catch (error) {
-            console.error(error)
-            res.status(500).json({ message: 'Internal server error' })
-        }
-    }
-    async showSentFriendRequests(req, res) {
-        try {
-            const { userId } = req.params
-            //const user = await User.findById({_id:userId})
-            const user = await User.findById({ _id: userId })
-                .populate('sentFriendRequests', 'userName phoneNumber avatar')
-                .lean()
-            res.status(200).json(user.sentFriendRequests)
+            const user = await User.findOne({ account_id: account_id })
+            user.deleted = true
+            user.deletedAt = Date.now()
+            await user.save()
+            res.status(200).json('Delete account successfully')
         } catch (error) {
             console.log(error)
-            res.sendStatus(500).json('Interval server error')
+            res.status(500).json('Error deleting account')
+        }
+    }
+
+    //undo delete account
+    async undoDeleteAccount(req, res) {
+        const account_id = req.query.accountID
+        try {
+            const user = await User.findOne({ account_id: account_id })
+            user.deleted = false
+            await user.save()
+            res.status(200).json('Undo delete account successfully')
+        } catch (error) {
+            console.log(error)
+            res.status(500).json('Error undo delete account')
+        }
+    }
+
+    // after 30 day delete account
+    async deleteAccountAfter30Days(req, res) {
+        const account_id = req.query.account_id
+        try {
+            const user = await User.findOne({ account_id: account_id })
+            user.phoneNumber = user.phoneNumber + 'deleted' + Date.now()
+            user.avatar =
+                'https://res.cloudinary.com/dpj4kdkxj/image/upload/v1716562765/zfooawvf7n83qtkhh0by.jpg'
+            user.userName = 'Tài khoản người dùng'
+            res.status(200).json('Delete account successfully')
+        } catch (error) {
+            console.log(error)
+            res.status(500).json('Error deleting account')
+        }
+    }
+
+    // put /changeNewPhoneNumber
+    async changeNewPhoneNumber(req, res) {
+        const account_id = req.body.account_id
+
+        const newPhoneNumber = req.body.newPhoneNumber
+
+        const user = await User.findOne({ account_id: account_id })
+        if (user) {
+            user.phoneNumber = newPhoneNumber
+            await user.save()
+            res.json('Change new phone number successfully!!!')
+        } else {
+            res.json('User doesn`t exits !!!')
+        }
+    }
+    async friendRequest(req, res) {
+        const { currentUserId, selectedUserId } = req.body
+        try {
+            //update receiver's friendRequestArray
+            await User.findByIdAndUpdate(selectedUserId, {
+                $push: { friendRequests: currentUserId },
+            })
+            //update sender's sentRequestArray
+            await User.findByIdAndUpdate(currentUserId, {
+                $push: { sentFriendRequests: selectedUserId },
+            })
+            res.sendStatus(200)
+        } catch (err) {
+            res.sendStatus(500)
         }
     }
 
