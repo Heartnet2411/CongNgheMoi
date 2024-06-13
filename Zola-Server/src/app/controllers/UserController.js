@@ -884,20 +884,20 @@ class UserController {
                 await user.save()
                 await friend.save()
                 //create conversation
-                // await ConversationController.createConversation({
-                // body: {
-                // senderId: user_id,
-                // receiverId: friend_id,
-                // },
-                // })
-                // return res.status(200).json({
-                // message: 'Đã chấp nhận yêu cầu kết bạn!!!',
-                // user: user,
-                // friend: friend,
-                // })
-                // } else {
-                //in ra lỗi
-                // res.json('Không thể chấp nhận yêu cầu kết bạn !!!')
+                await ConversationController.createConversation({
+                    body: {
+                        senderId: user_id,
+                        receiverId: friend_id,
+                    },
+                })
+                return res.status(200).json({
+                    message: 'Đã chấp nhận yêu cầu kết bạn!!!',
+                    user: user,
+                    friend: friend,
+                })
+            } else {
+                // in ra lỗi
+                res.json('Không thể chấp nhận yêu cầu kết bạn !!!')
             }
         } catch (error) {
             console.log(error)

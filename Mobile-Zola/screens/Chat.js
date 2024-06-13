@@ -204,6 +204,7 @@ const Chat = ({ navigation, route }) => {
                     .post(url + `/message/`, message)
                     .then(({ data }) => {
                         setMessages([data, ...messages])
+                        socket.emit('send-message', data)
                     })
                     .catch((error) => {
                         console.log(error)
@@ -248,6 +249,7 @@ const Chat = ({ navigation, route }) => {
                     .post(url + `/message/`, message)
                     .then(({ data }) => {
                         setMessages([data, ...messages])
+                        socket.emit('send-message', data)
                     })
                     .catch((error) => {
                         console.log(error)
@@ -292,6 +294,7 @@ const Chat = ({ navigation, route }) => {
                     .post(url + `/message/`, message)
                     .then(({ data }) => {
                         setMessages([data, ...messages])
+                        socket.emit('send-message', data)
                     })
                     .catch((error) => {
                         console.log(error)
@@ -325,7 +328,7 @@ const Chat = ({ navigation, route }) => {
     }
 
     useEffect(() => {
-        const newSocket = io('http://192.168.1.19:3005')
+        const newSocket = io('http://54.169.104.224:3005')
         newSocket.emit('conversation_id', conversation?._id)
 
         newSocket.on('receive-message', (data) => {
