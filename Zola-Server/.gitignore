@@ -1,3 +1,6 @@
-/node_modules/
+.vscode
 
-/src/config/db/
+src/config/db/*
+node_modules/
+
+.env
