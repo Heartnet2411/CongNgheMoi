@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "155144054562",
+    "project_id": "auth-zola",
+    "storage_bucket": "auth-zola.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:155144054562:android:487f5a3aaea0d57e67677b",
+        "android_client_info": {
+          "package_name": "com.heartnet.mobilezola"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDH3l9tHMIReDKQKQA38ZXkd8Y6FuWzFpI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
