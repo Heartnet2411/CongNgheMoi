@@ -8,3 +8,8 @@
   + Lê Thế Vinh
   + Nguyễn Thúy Tình
   + Nguyễn Đức Tài
+- Công nghệ đã được sử dụng:
+  + Web Front-end: React
+  + Mobile: React Native
+  + Server: NodeJS, ExpressJS
+  + Database: MongoDB
